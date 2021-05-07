@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Running LAMMPS on HPC Systems -  Lesson Outline
+title: Running HemeLB on HPC Systems -  Lesson Outline
 ---
 
 ## How to use this outline
@@ -9,6 +9,8 @@ The following list of items is meant as a guide on what content should go where 
 This should work as a guide where you can contribute. If a bullet point is prefixed by a
 file name, this is the lesson where the listed content should go into. This document is
 meant as a concept map converted into a flow learning goals and questions.
+
+Intentional spppell check.
 
 ## Accelerating LAMMPS on a HPC
 
