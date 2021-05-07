@@ -100,7 +100,7 @@ workshop_interactive_queues:
 carpentry: "swc"
 
 # Overall title for pages.
-title: "Running LAMMPS on HPC systems"
+title: "Running HemeLB on HPC systems"
 
 # Email address, no mailto:
 email: "a.ocais@fz-juelich.de"
