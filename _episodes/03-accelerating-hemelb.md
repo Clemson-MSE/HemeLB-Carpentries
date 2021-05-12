@@ -63,7 +63,7 @@ The **ONLY** accelerator package that supports all
 kinds of hardware is **KOKKOS**. KOKKOS is a templated C++ library developed in Sandia National
 Laboratory and this helps to create an abstraction that allows a *single implementation* of a
 software application on different kinds of hardware. This will be discussed in detail in the
-[next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
+[next lesson].
 
 In the meantime, we'll touch a few key points about other accelerator packages to give you a feel
 about what these packages offer. To do this we will learn:
@@ -179,18 +179,18 @@ submission script. Thus the GPU package can provide a balanced mix of GPU and CP
 particular simulation to achieve a performance gain.
 
 A list of functionalities enabled with this package can be found
-[here]({{page.root}}/reference/#package-GPU).
+[here].
 
 ### **KOKKOS** package
 
 The KOKKOS package in LAMMPS is implemented to gain performance with portability. This will be
 discussed in more depth in the
-[next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
+[next lesson].
 
 ## How to invoke a package in LAMMPS run?
 
 Let us now come back to the *Rhodopsin* example for which we showed a thorough scaling
-study in the [previous episode]({{ page.root }}{% link _episodes/04-lammps-bottlenecks.md %}).
+study in the [previous episode].
 We found that the `Kspace` and `Neigh` calculations
 suffer from poor scalability as you increase number of cores to do the calculations. In
 such situation a hybrid approach combining parallelizing over domains (i.e. MPI-based)
@@ -300,7 +300,7 @@ i.e. through the command-line.
 >
 > We shall use the same input file for the rhodopsin system with lipid bilayer that was
 > described in the [case study of our previous
-> episode]({{page.root}}{% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system).
+> episode].
 > In this episode, we'll run this using the **USER-OMP** package to mix MPI and OpenMP. For
 > all the runs we will use the default value for the `neigh` keyword (which means we can
 > exclude it from the command line).
@@ -532,7 +532,7 @@ this run.
 #### **Performance section**
 
 The following screen-output tells you all about the performance. Some of these terms are already
-discussed in the [previous episode]({{page.root}}{% link _episodes/04-lammps-bottlenecks.md %}).
+discussed in the [previous episode].
 When you use the
 **GPU** package you see an extra block
 of information known as `Device Time Info (average)`. This gives you a breakdown of how
