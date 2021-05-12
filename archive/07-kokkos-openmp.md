@@ -21,8 +21,7 @@ multi-core CPUs. First we'll get familiarized with the command-line options to r
 **KOKKOS** OpenMP job in LAMMPS. This will be followed by a case study to gain some
 hands-on experience to use this package. For the hands-on part, we'll take the same
 rhodopsin system which we have [used previously as a case study]
-<!--{{page.root}}{% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system).
--->
+
 We shall use the same input
 file and repeat similar scalability studies for the mixed MPI/OpenMP
 settings as we did it for the **USER-OMP** package.
@@ -96,9 +95,7 @@ arguments for hardware settings as shown below:
 >
 > Try to create a job script to submit a LAMMPS job for the
 > 
-<!--[rhodopsin case study]({{page.root}}
-> {% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system)) such that it
--->
+
 > invokes KOKKOS with OpenMP threading to accelerate the job using 2 nodes, 2 MPI ranks
 > per node with half the available cores on a node used as OpenMP threads per rank, and the
 > *default* package options.
@@ -127,8 +124,7 @@ arguments for hardware settings as shown below:
 There is some more work to do before we can jump into a thorough scalability study when
 we use OpenMP in **KOKKOS** which comes with a few extra `package` arguments and
 corresponding keywords (see the
-<!--[previous episode]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}) for
--->
+
 a list of all options) as compared to that offered by the **USER-OMP** package. These
 are `neigh`, `newton`, `comm` and `binsize`.  The first thing that we need to do here is to
 find what values of these keywords offer the fastest runs. Once we know the optimum
@@ -147,9 +143,7 @@ how these `package` related keywords can be invoked in your LAMMPS run would be
 > ## The optimum values of the keywords
 >
 > Using the rhodopsin input files (`in.rhodo` and `data.rhodo` as provided in the
-<!--[rhodopsin case study]({{page.root}}
-> {% link _episodes/04-lammps-bottlenecks.md %}#case-study-rhodopsin-system)),
--->
+
 > run LAMMPS jobs for 1 OpenMP thread on 1 node using the
 > following two set of parameters for the `package` command:
 >
@@ -207,7 +201,7 @@ how these `package` related keywords can be invoked in your LAMMPS run would be
 > study would again require a total of 80 calculations for 10 nodes. Below is the result
 > of such a study on an available system (**FIX SCALES**)
 >
-> <p align="center"><img src="../fig/07/scaling_rhodo_kokkos_omp.png" width="75%"/></p>
+> 
 >
 > Compare this plot with the plot given in a
 > 
