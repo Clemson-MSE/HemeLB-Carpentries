@@ -16,9 +16,7 @@ keypoints:
 usemathjax: true
 ---
 
-<!---
-[Earlier]({{ page.root }}{% link _episodes/02-hardware-performance.md %}),)
--->
+
 you have
 learnt the basic philosophies behind various parallel
 computing methods (like MPI, OpenMP and CUDA). LAMMPS is a massively-parallel molecular
@@ -49,10 +47,7 @@ timesteps.
 LAMMPS provides a timing breakdown table printed at the end of log file
 and also within the screen output file generated at the end of each LAMMPS run. The
 timing breakdown table has already been introduced in
-<!--
-[the previous episode]({{ page.root }}{% link _episodes/03-benchmark-and-scaling.md %})
-but let's take a look at it again:
--->
+
 ~~~
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
@@ -255,9 +250,6 @@ we can perform a scalability study for each of the components.
 > While running with multiple cores, we're using only MPI only as parallelization method.
 >
 > You can use the job scripts from
-<!--
-  [the previous episode]({{ page.root }}{% link _episodes/03-benchmark-and-scaling.md %}) 
--->
 > as a starting point.
 >
 > 1. Using the `log.lammps` (or `mpi-out.XXXXX`) files, write down the
@@ -294,8 +286,6 @@ breakdown table to identify performance bottlenecks in a LAMMPS run. But identif
 the bottleneck is not enough, you need to decide what strategy would 'probably' be more
 sensible to apply in order to unblock the bottlenecks. The usual method of speeding
 up a calculation is to employ some form of *parallelization*. We have already discussed in
-<!--[a previous episode]({{ page.root }}{% link _episodes/02-hardware-performance.md %})
--->
 that there are many ways to implement parallelism in a
 code.
 
@@ -377,11 +367,11 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 > skin cutoff is 1.0 sigma, number of neighbors per atom is 440. NPT time integration
 > is performed for 20,000 timesteps.
 >
-> <p align="center"><img src="../fig/04/rhodo.png" width="25%"/></p>
+> 
 >
 > Let's look at a scalability study of this system,
 >
-> <p align="center"><img src="../fig/04/rhodo_speedup_factor_scaling.png" width="50%"/></p>
+> 
 >
 > This was carried out on an Intel Skylake processor which has 2 sockets and 20 cores each,
 > meaning 40 physical cores per node. Here jobs were run with 1, 4, 8, 16, 32, 40 processors, and
