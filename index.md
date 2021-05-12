@@ -4,12 +4,11 @@ root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # only page that doesn't follow the pattern /:path/index.html
 ---
 
-This workshop is specifically aimed at running the [LAMMPS](https://lammps.sandia.gov/)
-software on an HPC system. You may be running LAMMPS on either a desktop, laptop or
-already on an HPC system, however ineffective use of LAMMPS can lead to running jobs for
-(far) longer than necessary. Configuring LAMMPS to use an HPC system effectively can
-speed up your LAMMPS simulations significantly and vastly improve it's performance. We
-aim to cover how to do this in this workshop.
+This workshop is specifically aimed at running the [HemeLB](http://hemelb.org.s3-website.eu-west-2.amazonaws.com/)
+software on an HPC system. You may be running HemeLB on either a desktop, laptop or
+already on an HPC system, however ineffective use of HemeLB can lead to running jobs for
+(far) longer than necessary. Being able configure HemeLB on an HPC system effectively can speed up 
+simulations significantly and vastly improve it's performance. This workshop will look to address these issues.
 
 Some questions that you may ask yourself are;
 
@@ -47,8 +46,11 @@ running on an HPC is very, very different.
 >   these types of systems we recommend participants to go through the
 >   [Introduction to High-Performance Computing](https://hpc-carpentry.github.io/hpc-intro/)
 >   from [HPC Carpentry](https://hpc-carpentry.github.io/).
-> - You should be familiar with working with LAMMPS, have a [basic understanding of its
->   input files](https://lammps.sandia.gov/doc/Commands.html) and be able to
->   [run a LAMMPS simulation](https://lammps.sandia.gov/doc/Run_head.html).
+> - You should ahve some familiarity with the concepts behind MPI and OpenMP as they are useful
+>   tools for benchmarking and scalability studies.
+> - You should be familiar with working with HemeLB, how to install it and how to
+>   [run a basic HemeLB simulation](http://hemelb.org.s3-website.eu-west-2.amazonaws.com/tutorials/simulation/). 
+>   For running on HPC systems and submitting a bash script, you can refer to the HemeLB
+>   [documentation](https://github.com/hemelb-codes/hemelb/raw/main/Doc/hemelb_documentation.doc)
 >
 {: .prereq}
