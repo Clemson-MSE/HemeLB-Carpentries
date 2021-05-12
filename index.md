@@ -27,7 +27,7 @@ components. Terms that might be familiar are CPU, RAM and GPU since you can find
 in your own laptop or server. There are other commonly used terms such as "shared
 memory", "distributed computing", "accelerator", "interconnect" and "high performance
 storage" that may be a little less familiar. In this course we will try to cover the
-subset of these that are relevant to your use case with LAMMPS.
+subset of these that are relevant to your use case with HemeLB.
 
 On any HPC system with a variety of hardware components, software performance will vary
 depending on what components it is using, and how optimized the code is for those
