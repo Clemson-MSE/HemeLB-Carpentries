@@ -91,7 +91,7 @@ about what these packages offer. To do this we will learn:
 ### **OPT** package
 
 * Only a handful of pair styles can be accelerated using this package (the list can be found
-  [here]({{page.root}}/reference/#package-OPT)).
+  
 * Acceleration, in this case, is achieved by using a templated C++ library to reduce computational
   overheads due to `if` tests and other conditional code blocks.
   * This also provides better vectorization operations as compared to its regular CPU version.
@@ -127,7 +127,7 @@ There are, however, a number of conditions:
   and higher is required on both multi-core CPUs and Phi systems.
 
 There are many LAMMPS features that are supported by this accelerator package, the list can be
-found [here]({{page.root}}/reference/#package-USER-INTEL).
+found .
 
 Performance enhancement using this package depends on many considerations, such as the
 hardware that is available to you, the various styles that you are using in the input,
@@ -148,7 +148,7 @@ support multi-threading then also you can still use it as an optimized serial co
 
 A large sub-set of the LAMMPS routines can be used with this accelerator. A list of
 functionalities enabled with this package can be found
-[here]({{page.root}}/reference/#package-USER-OMP).
+.
 
 Generally, one can expect 5-20% performance boost when using this package even in serial!
 You should always test to figure out what the optimal number of OpenMP threads

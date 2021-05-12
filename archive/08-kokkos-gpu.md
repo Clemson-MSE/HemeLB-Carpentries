@@ -17,7 +17,7 @@ keypoints:
 
 In this episode, we shall learn to how to use GPU acceleration using the **KOKKOS**
 package in LAMMPS. In a
-[previous episode]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}), we
+[previous episode], we
 have learnt the basic syntax of the `package` command that
 is used to invoke the **KOKKOS** package in a LAMMPS run. The main arguments and the
 corresponding keywords were discussed briefly in that chapter. In this episode, we shall
@@ -50,7 +50,7 @@ arguments for hardware settings as shown below:
 >
 > Create a job script to submit a LAMMPS job for the [LJ system that you studied for the
 > **GPU**
-> package]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#learn-to-call-the-gpu-package-from-the-command-line)
+> package]#learn-to-call-the-gpu-package-from-the-command-line)
 > such that it invokes the KOKKOS GPU to
 > * accelerate the job using 1 node,
 > * uses all available GPU devices on the node,
@@ -181,7 +181,7 @@ code is the primary objective of KOKKOS.
 > Let us see now see how the current KOKKOS/GPU implementation within LAMMPS (version
 > `3Mar20`) achieves this goal by comparing its performance with the CPU and GPU package.
 > For this, we shall repeat the same set of tasks as described in
-> [episode 5]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#cpu-versus-gpu).
+> .
 > Take an
 > LJ-system with ~11 million atoms by choosing `x = y = z = 140` and `t = 500`.
 >

@@ -118,7 +118,8 @@ KOKKOS are released.
 
 ## How to invoke **KOKKOS** package in a LAMMPS run?
 
-In the [previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) you
+<!--In the [previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) you
+-->
 learned how to call an accelerator package in LAMMPS.
 The basic syntax of this command is;
 
@@ -190,7 +191,8 @@ be useful:
 ## Invoking KOKKOS through input file or through command-line?
 
 Unlike the *USER-OMP* or the *GPU* package in the
-[previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) which
+<!--[previous episode]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}) which
+-->
 supports *either* OpenMP
 *or* GPU, the **KOKKOS** package supports both OpenMP and GPUs. This adds additional
 complexity to the command-line to invoke appropriate execution mode (OpenMP or GPU) when
@@ -200,7 +202,8 @@ OpenMP or GPU specific command-line switches will be discussed in later episodes
 
 Let us recall the command-line to submit a LAMMPS job that uses USER-OMP as an
 accelerator package (see
-[here]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#how-to-invoke-the-user-omp-package)
+<!--[here]({{page.root}}{% link _episodes/05-accelerating-lammps.md %}#how-to-invoke-the-user-omp-package)
+-->
 to refresh your memory).
 
 {% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
