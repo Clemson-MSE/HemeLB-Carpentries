@@ -26,7 +26,7 @@ meant as a concept map converted into a flow learning goals and questions.
     * What is meant by flops, walltime and CPU hours?
     * What can affect performance?
 
-* [02-benchmark-and-scaling.md: How do I benchmark software performance in HPC?](_episodes/02-hardware-performance.md):
+* [02-hemelb-bottlenecks.md: What are the common limitations to getting peak performance](_episodes/02-hemelb-bottlenecks.md):
   about benchmark and scaling
     * What is benchmarking?
     * What are the factors that can affect a benchmark?
