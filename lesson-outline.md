@@ -12,8 +12,6 @@ meant as a concept map converted into a flow learning goals and questions.
 
 ## Accelerating HemeLB on a HPC
 
-* []
-
 * [index.md: Prelude](index.md):Why should I take this course?
     * Why should I bother about software performance?
     * What can I expect to learn from this course?
