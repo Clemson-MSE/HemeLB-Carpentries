@@ -327,7 +327,6 @@ i.e. through the command-line.
 >
 >    Thankfully, you don’t need to do the 80 calculations right now! Here's an example
 >    plot for what that picture might look like:
->    <p align="center"><img src="../fig/05/scaling_rhodo_user_omp.png" width="60%"/></p>
 >
 >    Write down your observations based on this plot and make comments on any performance
 >    enhancement when you compare these results with the pure MPI runs.
@@ -595,7 +594,6 @@ before starting the production runs. This might save you a lot of resources and 
 > Across all GPU/MPI combinations and system sizes (4K, 256K, 11M), there are a total of 18 runs.
 > The final plot is shown below.
 >
-> <p align="center"><img src="../fig/05/gpu_mpi_counts.png" width="50%"/></p>
 >
 > What observations can you make about this plot?
 >
@@ -645,7 +643,6 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > We can see how the plot has changed significantly due to dynamic load balancing
 > increasing the performance.
 >
-> <p align="center"><img src="../fig/05/gpu_mpi_counts_LB.png" width="50%"/></p>
 >
 {: .callout}
 
@@ -669,7 +666,6 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > with up to 8 nodes. Performance data was extracted from the log files in the unit of
 > `timesteps/s`, and speed-up factors were calculated for each node.
 >
-> <p align="center"><img src="../fig/05/CPUvsGPU.png" width="50%"/></p>
 >
 > We can see a reasonable acceleration when we use the GPU package for all the runs
 > consistently. The calculated speed-up factors show that we obtain maximum speed-up

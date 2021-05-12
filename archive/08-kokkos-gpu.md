@@ -205,7 +205,6 @@ code is the primary objective of KOKKOS.
 > (i.e. without any accelerator package) and the **GPU** runs (i.e. with the **GPU**
 > package enabled) with various numbers of nodes:
 >
-> <p align="center"><img src="../fig/08/CPUvsGPUvsKKGPU.png" width="50%"/></p>
 >
 > Discuss the main observations you can make from this plots.
 >

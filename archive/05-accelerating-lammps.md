@@ -63,8 +63,7 @@ The **ONLY** accelerator package that supports all
 kinds of hardware is **KOKKOS**. KOKKOS is a templated C++ library developed in Sandia National
 Laboratory and this helps to create an abstraction that allows a *single implementation* of a
 software application on different kinds of hardware. This will be discussed in detail in the
-<!--[next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
--->
+
 In the meantime, we'll touch a few key points about other accelerator packages to give you a feel
 about what these packages offer. To do this we will learn:
 * how to invoke an accelerator package in a LAMMPS run
@@ -183,13 +182,11 @@ A list of functionalities enabled with this package can be found
 
 The KOKKOS package in LAMMPS is implemented to gain performance with portability. This will be
 discussed in more depth in the
-<!--[next lesson]({{page.root}}{% link _episodes/06-invoking-kokkos.md %}).
--->
+
 ## How to invoke a package in LAMMPS run?
 
 Let us now come back to the *Rhodopsin* example for which we showed a thorough scaling
-<!--study in the [previous episode]({{ page.root }}{% link _episodes/04-lammps-bottlenecks.md %}).
--->
+
 We found that the `Kspace` and `Neigh` calculations
 suffer from poor scalability as you increase number of cores to do the calculations. In
 such situation a hybrid approach combining parallelizing over domains (i.e. MPI-based)
@@ -326,7 +323,6 @@ i.e. through the command-line.
 >
 >    Thankfully, you don’t need to do the 80 calculations right now! Here's an example
 >    plot for what that picture might look like:
->    <p align="center"><img src="../fig/05/scaling_rhodo_user_omp.png" width="60%"/></p>
 >
 >    Write down your observations based on this plot and make comments on any performance
 >    enhancement when you compare these results with the pure MPI runs.
@@ -531,8 +527,7 @@ this run.
 #### **Performance section**
 
 The following screen-output tells you all about the performance. Some of these terms are already
-<!--discussed in the [previous episode]({{page.root}}{% link _episodes/04-lammps-bottlenecks.md %}).
--->
+
 When you use the
 **GPU** package you see an extra block
 of information known as `Device Time Info (average)`. This gives you a breakdown of how
@@ -595,7 +590,7 @@ before starting the production runs. This might save you a lot of resources and 
 > Across all GPU/MPI combinations and system sizes (4K, 256K, 11M), there are a total of 18 runs.
 > The final plot is shown below.
 >
-> <p align="center"><img src="../fig/05/gpu_mpi_counts.png" width="50%"/></p>
+
 >
 > What observations can you make about this plot?
 >
@@ -645,7 +640,7 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > We can see how the plot has changed significantly due to dynamic load balancing
 > increasing the performance.
 >
-> <p align="center"><img src="../fig/05/gpu_mpi_counts_LB.png" width="50%"/></p>
+
 >
 {: .callout}
 
@@ -669,7 +664,6 @@ balancing. This means that LAMMPS selects the split factor dynamically.
 > with up to 8 nodes. Performance data was extracted from the log files in the unit of
 > `timesteps/s`, and speed-up factors were calculated for each node.
 >
-> <p align="center"><img src="../fig/05/CPUvsGPU.png" width="50%"/></p>
 >
 > We can see a reasonable acceleration when we use the GPU package for all the runs
 > consistently. The calculated speed-up factors show that we obtain maximum speed-up

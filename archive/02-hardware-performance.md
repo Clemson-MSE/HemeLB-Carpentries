@@ -45,7 +45,6 @@ is known as a shared memory platform. However, when you partition the available 
 each partition as a private memory space to CPU cores, then we call this a distributed memory
 platform. A simple graphic for this is shown below:
 
-<p align="center"><img src="../fig/02/memory-pattern.png" width="50%"/></p>
 
 Depending upon what kind of memory a computer has, the parallelization approach of a code could
 vary. For example, in a distributed memory platform, when a CPU core needs data from its private
@@ -94,7 +93,6 @@ Task parallelism is when we can decompose the larger task
 into multiple independent sub-tasks, each of which we then assign to different cores. A
 simple graphical representation is given below:
 
-<p align="center"><img src="../fig/02/task-data-parallelism.png" width="50%"/></p>
 
 As application **users**, we need to know if our application actually offers control over
 which parallelization methods (and tools) we can use. If so,
@@ -108,7 +106,6 @@ commonly found choice on HPC systems. The main parallelization technique one fin
 decomposition method. In this approach, the global domain is divided into many sub-domains
 and then each sub-domain is assigned to a processor.
 
-<p align="center"><img src="../fig/02/DD_cartoon.png" width="50%"/></p>
 
 If your computer has `N` physical
 processors, you could initiate
@@ -140,7 +137,6 @@ example OpenMP directives) which can
 offer additional parallelisation within a subdomain. The basic working principle in OpenMP
 is based the "Fork-Join" model, as shown below.
 
-<p align="center"><img src="../fig/02/fork_join.png" width="50%"/></p>
 
 In the 'Fork-Join' model, there exists a master thread which "fork"s into multiple threads.
 Each of these forked-threads executes a part of the whole job and when all the threads are
@@ -164,7 +160,6 @@ contrary, a GPU
 has thousands of cores that are highly efficient at doing simple repetitive jobs in parallel. See
 below on how a CPU and GPU works together.
 
-<p align="center"><img src="../fig/02/CPUplusGPU.png" width="50%"/></p>
 
 > ## Using all available resources
 >
