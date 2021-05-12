@@ -46,7 +46,7 @@ running on an HPC is very, very different.
 >   these types of systems we recommend participants to go through the
 >   [Introduction to High-Performance Computing](https://hpc-carpentry.github.io/hpc-intro/)
 >   from [HPC Carpentry](https://hpc-carpentry.github.io/).
-> - You should ahve some familiarity with the concepts behind MPI and OpenMP as they are useful
+> - You should have some familiarity with the concepts behind MPI and OpenMP as they are useful
 >   tools for benchmarking and scalability studies.
 > - You should be familiar with working with HemeLB, how to install it and how to
 >   [run a basic HemeLB simulation](http://hemelb.org.s3-website.eu-west-2.amazonaws.com/tutorials/simulation/). 
