@@ -54,31 +54,6 @@ sched:
   queue:
     default: "batch"
 
-lammps:
-  version: "3Mar2020"
-  exec: "lmp"
-  kokkos:
-    env:
-      - "module purge"
-      - "module use /usr/local/software/jureca/OtherStages"
-      - "module load Stages/Devel-2019a"
-      - "module load intel-para/2019a LAMMPS/9Jan2020-kokkos"
-    exec: "lmp"
-  gpu:
-    env:
-      - "module purge"
-      - "module use /usr/local/software/jureca/OtherStages"
-      - "module load Stages/Devel-2019a"
-      - "module load intel-para/2019a LAMMPS/9Jan2020-cuda"
-    exec: "lmp"
-  openmp:
-    env:
-      - "module purge"
-      - "module use /usr/local/software/jureca/OtherStages"
-      - "module load Stages/Devel-2019a"
-      - "module load intel-para/2019a LAMMPS/9Jan2020-cuda"
-    exec: "lmp"
-
 mpi_runtime:
   implementation: "ParaStation"
   launcher: "srun"
