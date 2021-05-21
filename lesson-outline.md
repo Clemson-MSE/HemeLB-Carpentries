@@ -41,7 +41,6 @@ title: Running HemeLB on HPC Systems -  Lesson Outline
     * What can I expect to learn from this course?
 
 * [01-benchmarking-and-scaling.md: How to do a benchmarking and scaling analysis](_episodes/01-benchmarking-and-scaling.md): 
-    * JMcC, IZ
     * What is benchmarking?
         - worth expanding on [previous work](https://fzj-jsc.github.io/tuning_lammps/03-benchmark-and-scaling/index.html)
     * What are the factors that can affect a benchmark?
@@ -77,25 +76,38 @@ title: Running HemeLB on HPC Systems -  Lesson Outline
 - May 24th 
   - discussion of existing material
   - reach consensus/finalise workplan (excluding GPU material) as outlined in `lesson-outline.md`
-  - 
+  - Plan Sprint 1 May 31st - June 14th
+    - 01-benchmarking-and-scaling - exercises + content
+    - 02-hemelb-bottlenecks - exercises
 
 - May 31st
-  - 
+  - Start Sprint 1
 
 - June 14
+  - Start Sprint 2
+    - 02-hemelb-bottlenecks - content
+    - 04-invoking-packages-in-hemelb - explore possibilities
 
 - June 28
   - Episodes 01, 02, finished
+  - Start Sprint 3
+    - 03-accelerating-hemelb - excercises + content
+
 
 - July 12
+  - Episode 03 exercises finished
+  - Start Sprint 4
+    - 03-accelerating-hemelb - content
+    - 04-invoking-pacakges-with-hemelb remain
 
 - July 26
-  - Episdes 03, 04(?)
+  - Start Sprint 5
+    - Finish ep 3,4
 
 - August 9
   - LEAST PUBLISHABLE UNIT (episodes 1,2,3,4)
+  - Iron out final details
   - Revisit GPU (episode 5)
 
 - August 23
-
-- September 6th
+  - Finalise GPU material
