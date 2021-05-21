@@ -20,8 +20,9 @@ title: Running HemeLB on HPC Systems -  Lesson Outline
 4. Tests have been implemented with the repo, and should run once commit is staged on GitHub or pushed
    from local machine. These checks include spelling, and page build checks.
 
-5. To see how your page builds head to; Settings -> Pages and see the link highlighted in green. It will 
-   be of the form `https://{youraccount}.github.io/HemeLB-Carpentries`. The main repo page build is located
+5. To see how your page builds, head to; Settings -> Pages and see the link highlighted in green. It will 
+   be of the form `https://{youraccount}.github.io/HemeLB-Carpentries`. Copy and paste it into About on the
+   left hand side of the main screen of your forked repo to see how it turns out. The main repo page build is located
    [here](https://hemelb-dev.github.io/HemeLB-Carpentries/).
 
 6. Chris will review material before merging your forked repo with the 
