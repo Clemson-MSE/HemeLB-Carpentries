@@ -8,9 +8,9 @@ title: Running HemeLB on HPC Systems -  Lesson Outline
 1. The Carpentries style works by backward design;
     - Identify practical skills to teach
     - Design challenges to give opportunity for learners to practice and integrate skills
-    - Identify what needs to be taught for learners to aquire the skills 
+    - Identify what needs to be taught for learners to acquire the skills 
 
-2. Those that wish to learn HemeLB will undoubtedly find wierd (and sometimes completely bizzare) 
+2. Those that wish to learn HemeLB will undoubtedly find weird (and sometimes completely bizarre) 
    ways of doing things. So, be aware of 
    [expert awareness gap](https://carpentries.github.io/instructor-training/03-expertise/index.html#expertise-and-teaching)
    
@@ -91,7 +91,7 @@ title: Running HemeLB on HPC Systems -  Lesson Outline
 - June 28
   - Episodes 01, 02, finished
   - Start Sprint 3
-    - 03-accelerating-hemelb - excercises + content
+    - 03-accelerating-hemelb - exercises + content
 
 
 - July 12
