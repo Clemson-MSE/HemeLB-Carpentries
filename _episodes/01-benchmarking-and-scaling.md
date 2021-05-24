@@ -69,9 +69,7 @@ included file
   of each steps)
 
 ~~~
-{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
-{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
-{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
+included from snippets
 ~~~
 {: .language-bash}
 
