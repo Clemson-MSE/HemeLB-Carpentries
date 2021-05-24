@@ -90,7 +90,36 @@ example with which you can follow the same workflow and compare your results wit
 
 The input file we need for the LJ-system is reproduced below:
 ~~~
-{% include {{ site.snippets }}/ep03/in.lj %}
+# 3d Lennard-Jones melt
+
+variable	x index 1
+variable	y index 1
+variable	z index 1
+
+variable	xx equal 20*$x
+variable	yy equal 20*$y
+variable	zz equal 20*$z
+
+units		lj
+atom_style	atomic
+
+lattice		fcc 0.8442
+region		box block 0 ${xx} 0 ${yy} 0 ${zz}
+create_box	1 box
+create_atoms	1 box
+mass		1 1.0
+
+velocity	all create 1.44 87287 loop geom
+
+pair_style	lj/cut 2.5
+pair_coeff	1 1 1.0 1.0 2.5
+
+neighbor	0.3 bin
+neigh_modify	delay 0 every 20 check no
+
+fix		1 all nve
+
+run		100
 ~~~
 {: .source}
 
@@ -107,7 +136,21 @@ example job scripts to let you get started. We'll do the same and provide you wi
 
 First we need to tell the batch system what resources we need:
 ~~~
-{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
+#!/bin/bash -x
+
+# Ask for 2 nodes of resources for an MPI job for 10 minutes
+
+#SBATCH --account=ecam
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=24
+#SBATCH --output=mpi-out.%j
+#SBATCH --error=mpi-err.%j
+#SBATCH --time=00:10:00
+
+# Let's use the devel partition for faster queueing time since we have a tiny job.
+# (For a more substantial job we should use --partition=batch)
+
+#SBATCH --partition=devel
 ~~~
 {: .source}
 in this case, we've asked for all the cores on 2 nodes of the system for 5 minutes.
@@ -119,30 +162,40 @@ a software package - it contains the settings required to run a software package
 usually, encodes required dependencies on other software packages. See below for an
 example set of `module` commands to load LAMMPS for this course:
 ~~~
-{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
+# Prepare the execution environment
+module purge
+module use /usr/local/software/jureca/OtherStages
+module load Stages/Devel-2019a
+module load intel-para/2019a
+module load LAMMPS/3Mar2020-Python-3.6.8-kokkos
 ~~~
 {: .language-bash}
 
 And finally we tell it how to actually run the LAMMPS executable on the system.
 If we were using a single CPU core, we can invoke LAMMPS directly with
 ~~~
-{{ site.lammps.exec }} -in in.lj
+lmp -in in.lj
 ~~~
 {: .language-bash}
 but in our case we are interested in using the MPI runtime across 2 nodes. On our system
-we will use the {{ site.mpi_runtime.implementation }} MPI implementation using
-`{{ site.mpi_runtime.launcher }}` to launch the MPI processes. Let's see how that looks
+we will use the ParaStation MPI implementation using
+`srun` to launch the MPI processes. Let's see how that looks
 like for our current use case (with `in.lj` as the input file):
 ~~~
-{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
+# Run our application ('srun' handles process distribution)
+srun lmp -in in.lj
 ~~~
 {: .language-bash}
 
 Now let's put all that together to make our job script:
 ~~~
-{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
-{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
-{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
+# Prepare the execution environment
+module purge
+module use /usr/local/software/jureca/OtherStages
+module load Stages/Devel-2019a
+module load intel-para/2019a
+module load LAMMPS/3Mar2020-Python-3.6.8-kokkos
+srun lmp -in in.lj
 ~~~
 {: .language-bash}
 
@@ -154,21 +207,67 @@ Now let's put all that together to make our job script:
 > Make a new directories (called `4core_lj` and `1core_lj`) and for each directory *copy*
 > inside your input file and the relevant job script. For each case, enter that directory
 > (so that all output from your job is stored in the same place) and run the job script on
-> {{ site.remote.name }}.
+> JURECA.
 >
 > > ## Solution
 > > Our single core version is
-> > {% capture mycode %}{% include {{ site.snippets }}/ep03/1core_job_script %}{% endcapture %}
-> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> > ~~~{% for member in lines_of_code %}
-> > {{ member }}{% endfor %}
+> > ~~~
+> > #!/bin/bash -x
+> > 
+> > # Ask for 1 nodes (1 CPU) of resources for an MPI job for 10 minutes
+> > 
+> > #SBATCH --account=ecam
+> > #SBATCH --nodes=1
+> > #SBATCH --ntasks-per-node=1
+> > #SBATCH --output=mpi-out.%j
+> > #SBATCH --error=mpi-err.%j
+> > #SBATCH --time=00:10:00
+> > 
+> > # Let's use the devel partition for faster queueing time since we have a tiny job.
+> > # (For a more substantial job we should use --partition=batch)
+> > 
+> > #SBATCH --partition=devel
+> > 
+> > # Prepare the execution environment
+> > module purge
+> > module use /usr/local/software/jureca/OtherStages
+> > module load Stages/Devel-2019a
+> > module load intel-para/2019a
+> > module load LAMMPS/3Mar2020-Python-3.6.8-kokkos
+> > 
+> > # Run our application ('srun' handles process distribution)
+> > srun lmp -in in.lj
 > > ~~~
 > > {: .language-bash}
-> > and our 4 core version is
-> > {% capture mycode %}{% include {{ site.snippets }}/ep03/4core_job_script %}{% endcapture %}
-> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> > ~~~{% for member in lines_of_code %}
-> > {{ member }}{% endfor %}
+> >
+> > and our 4 core version is; 
+> >
+> > ~~~
+> > #!/bin/bash -x
+> > 
+> > # Ask for 1 nodes (4 CPUs) of resources for an MPI job for 10 minutes
+> > 
+> > #SBATCH --account=ecam
+> > #SBATCH --nodes=1
+> > #SBATCH --ntasks-per-node=4
+> > #SBATCH --output=mpi-out.%j
+> > #SBATCH --error=mpi-err.%j
+> > #SBATCH --time=00:10:00
+> > 
+> > # Let's use the devel partition for faster queueing time since we have a tiny job.
+> > # (For a more substantial job we should use --partition=batch)
+> > 
+> > #SBATCH --partition=devel
+> > 
+> > # Prepare the execution environment
+> > module purge
+> > module use /usr/local/software/jureca/OtherStages
+> > module load Stages/Devel-2019a
+> > module load intel-para/2019a
+> > module load LAMMPS/3Mar2020-Python-3.6.8-kokkos
+> > 
+> > # Run our application ('srun' handles process distribution)
+> > srun lmp -in in.lj
 > > ~~~
 > > {: .language-bash}
 > {: .solution}
@@ -187,7 +286,7 @@ are concerned with there is also stored in our `mpi-out.xxxxx` file.
 
 Once you open `log.lammps`, you will notice that it contains most of the important
 information starting from the LAMMPS version (in our case we are using
-`{{ site.lammps.version }}`), the number of processors used for runs,
+3 Mar 2020), the number of processors used for runs,
 the processor lay out, thermodynamic steps, and some timings. The header of your
 `log.lammps` file
 should be somewhat similar to this:
@@ -344,7 +443,7 @@ resources.
 
 > ## Plotting strong scalability
 >
-> Use the original job script for 2 nodes and run it on {{ site.remote.name }}.
+> Use the original job script for 2 nodes and run it on JURECA.
 >
 > Now that
 > you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with

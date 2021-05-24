@@ -59,12 +59,7 @@ arguments for hardware settings as shown below:
 >
 > > ## Solution
 > >
-> > {% capture mycode %}{% include {{ site.snippets }}/ep08/gpu_kokkos_job_script %}{% endcapture %}
-> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> > ~~~{% for member in lines_of_code %}
-> > {{ member }}{% endfor %}
-> > ~~~
-> > {: .language-bash}
+> > 
 > > If you run it how does the execution time compare to the times you have seen for the
 > > **GPU** package?
 > {: .solution}

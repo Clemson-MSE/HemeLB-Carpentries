@@ -203,7 +203,7 @@ accelerator package (see
 [here]#how-to-invoke-the-user-omp-package)
 to refresh your memory).
 
-{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
+
 ~~~
 {{ mycode | strip }} -sf omp -pk omp $OMP_NUM_THREADS neigh no
 ~~~
@@ -221,10 +221,6 @@ appropriate for a **KOKKOS** run. A few points to keep in mind:
 With these points in mind, the above command-line could be modified
 to start making it ready for KOKKOS:
 
-~~~{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
-{{ mycode | strip }} -k on -sf kk
-~~~
-{: .language-bash}
 
 But, unfortunately, this above command-line is still *incomplete*. We have not yet passed any
 information about the `package` `<arguments>` yet. These might include information about

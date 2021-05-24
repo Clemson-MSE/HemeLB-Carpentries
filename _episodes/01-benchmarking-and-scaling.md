@@ -61,7 +61,7 @@ The input file we need for the LJ-system is reproduced below:
 **EDITME**
 
 ~~~
-{% include {{ site.snippets }}/ep03/in.lj %}
+included file
 ~~~
 {: .source}
 
@@ -69,9 +69,7 @@ The input file we need for the LJ-system is reproduced below:
   of each steps)
 
 ~~~
-{% include {{ site.snippets }}/ep03/job_resources_2nodeMPI.snip %}
-{% include {{ site.snippets }}/ep03/job_environment_lammps.snip %}
-{% include {{ site.snippets }}/ep03/job_execution_2nodeMPI.snip %}
+included from snippets
 ~~~
 {: .language-bash}
 

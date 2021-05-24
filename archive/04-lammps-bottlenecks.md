@@ -73,7 +73,40 @@ large, almost 10 million atoms. The following input file is for a LJ-system with
 lattice:
 
 ~~~
-{% include {{ site.snippets }}/ep04/in.lj %}
+# 3d Lennard-Jones melt
+variable        x index 10
+variable        y index 10
+variable        z index 10
+variable        t index 1000
+
+variable        xx equal 1*$x
+variable        yy equal 1*$y
+variable        zz equal 1*$z
+
+variable        interval equal $t/2
+
+units           lj
+atom_style      atomic
+
+lattice         fcc 0.8442
+region          box block 0 ${xx} 0 ${yy} 0 ${zz}
+create_box      1 box
+create_atoms    1 box
+mass            1 1.0
+
+velocity        all create 1.44 87287 loop geom
+
+pair_style      lj/cut 2.5
+pair_coeff      1 1 1.0 1.0 2.5
+
+neighbor        0.3 bin
+neigh_modify    delay 0 every 20 check no
+
+fix             1 all nve
+
+thermo ${interval}
+thermo_style custom step time  temp press pe ke etotal density
+run             $t
 ~~~
 {: .source}
 
@@ -350,14 +383,46 @@ Let us now build some hands-on experience to develop some feeling on how this wo
 > The following input file, `in.rhodo`, is one of the inputs provided in the *bench*
 > directory of the LAMMPS distribution (version `7Aug2019`):
 >
-> {% capture mycode %}{% include {{ site.snippets }}/ep04/in.rhodo %}{% endcapture %}
-> {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> ~~~{% for member in lines_of_code %}
-> {{ member }}{% endfor %}
+> ~~~
+> # Rhodopsin model
+> 
+> variable	x index 1
+> variable	y index 1
+> variable	z index 1
+> variable	t index 2000
+> 
+> units           real
+> neigh_modify    delay 5 every 1
+> 
+> atom_style      full
+> # atom_modify	map hash
+> bond_style      harmonic
+> angle_style     charmm
+> dihedral_style  charmm
+> improper_style  harmonic
+> pair_style      lj/charmm/coul/long 8.0 10.0
+> pair_modify     mix arithmetic
+> kspace_style    pppm 1e-4
+> 
+> read_data       data.rhodo
+> 
+> replicate	$x $y $z
+> 
+> fix             1 all shake 0.0001 5 0 m 1.0 a 232
+> fix             2 all npt temp 300.0 300.0 100.0 &
+> 		z 0.0 0.0 1000.0 mtk no pchain 0 tchain 1
+> 
+> special_bonds   charmm
+> 
+> thermo          500
+> thermo_style    multi
+> timestep        2.0
+> 
+> run		$t
 > ~~~
 > {: .source}
 > Note that this input file requires an additional data file
->[`data.rhodo`](https://github.com/lammps/lammps/raw/master/bench/data.rhodo).
+> [`data.rhodo`](https://github.com/lammps/lammps/raw/master/bench/data.rhodo).
 >
 > Using this you can perform a simulation
 > of an all-atom rhodopsin protein in solvated lipid bilayer with CHARMM force field,
@@ -400,7 +465,37 @@ Let us take a look at another example from the LAMMPS `bench` directory with the
 below which is run with
 1 core (i.e., in *serial*) with `x = y = z = 1`, and `t = 10,000`.
 ~~~
-{% include {{ site.snippets }}/ep04/in.chain %}
+variable        x index 1
+variable        y index 1
+variable        z index 1
+variable        t index 10000
+
+units           lj
+atom_style      bond
+atom_modify     map hash
+special_bonds   fene
+
+read_data       data.chain
+
+replicate       $x $y $z
+
+neighbor        0.4 bin
+neigh_modify    every 1 delay 1
+
+bond_style      fene
+bond_coeff      1 30.0 1.5 1.0 1.0
+
+pair_style      lj/cut 1.12
+pair_modify     shift yes
+pair_coeff      1 1 1.0 1.0 1.12
+
+fix             1 all nve
+fix             2 all langevin 1.0 1.0 10.0 904297
+
+thermo          10000
+timestep        0.012
+
+run             $t
 ~~~
 {: .source}
 
