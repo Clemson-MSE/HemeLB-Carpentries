@@ -61,7 +61,7 @@ The input file we need for the LJ-system is reproduced below:
 **EDITME**
 
 ~~~
-{% include {{ site.snippets }}/ep03/in.lj %}
+included file
 ~~~
 {: .source}
 
