@@ -236,7 +236,7 @@ srun lmp -in in.lj
 > > module load LAMMPS/3Mar2020-Python-3.6.8-kokkos
 > > 
 > > # Run our application ('srun' handles process distribution)
-> > srun lmp -in in.lj}{% endfor %}
+> > srun lmp -in in.lj
 > > ~~~
 > > {: .language-bash}
 > >
