@@ -203,9 +203,8 @@ accelerator package (see
 
 to refresh your memory).
 
-{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
 ~~~
-{{ mycode | strip }} -sf omp -pk omp $OMP_NUM_THREADS neigh no
+srun lmp -in in.lj -sf omp -pk omp $OMP_NUM_THREADS neigh no
 ~~~
 {: .language-bash}
 
@@ -221,8 +220,8 @@ appropriate for a **KOKKOS** run. A few points to keep in mind:
 With these points in mind, the above command-line could be modified
 to start making it ready for KOKKOS:
 
-~~~{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
-{{ mycode | strip }} -k on -sf kk
+~~~
+srun lmp -in in.lj -k on -sf kk
 ~~~
 {: .language-bash}
 

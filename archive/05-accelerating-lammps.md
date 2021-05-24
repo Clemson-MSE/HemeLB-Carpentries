@@ -272,8 +272,8 @@ There are two alternate ways to add these options to your simulation:
 * A simpler way to do this is through the command-line when launching LAMMPS using the
   `-pk` command-line switch. The syntax would be essentially the same as when used in an
   input script:
-  ~~~{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
-  {{ mycode | strip }} -sf omp -pk omp $OMP_NUM_THREADS neigh no
+  ~~~
+  srun lmp -in in.lj -sf omp -pk omp $OMP_NUM_THREADS neigh no
   ~~~
   {: .language-bash}
   where `OMP_NUM_THREADS` is now an *environment variable* that we can use to control the
@@ -309,10 +309,40 @@ i.e. through the command-line.
 >    Here we have a job script to run the rhodopsin case with 2 OpenMP threads per MPI
 >    task, choose another MPI/OpenMP combination and adapt (and run) the job script:
 >
->    {% capture mycode %}{% include {{ site.snippets }}/ep05/2omp_job_script %}{% endcapture %}
->    {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
->    ~~~{% for member in lines_of_code %}
->    {{ member }}{% endfor %}
+>    ~~~
+>    #!/bin/bash -x
+>    
+>    # Ask for 1 nodes of resources for an MPI/OpenMP job for 5 minutes
+>    
+>    #SBATCH --account=ecam
+>    #SBATCH --nodes=1
+>    #SBATCH --output=mpi-out.%j
+>    #SBATCH --error=mpi-err.%j
+>    #SBATCH --time=00:10:00
+>    
+>    # Let's use the devel partition for faster queueing time since we have a tiny job.
+>    # (For a more substantial job we should use --partition=batch)
+>    
+>    #SBATCH --partition=devel
+>    
+>    # Make sure that the multiplying the following 2 gives ncpus per node (24)
+>    
+>    #SBATCH --ntasks-per-node=12
+>    #SBATCH --cpus-per-task=2
+>    
+>    # Prepare the execution environment
+>    module purge
+>    module use /usr/local/software/jureca/OtherStages
+>    module load Stages/Devel-2019a
+>    module load intel-para/2019a
+>    module load LAMMPS/3Mar2020-Python-3.6.8-kokkos
+>    
+>    # Also need to export the number of OpenMP threads so the application knows about it
+>    export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+>    
+>    # srun handles the MPI placement based on the choices in the job script file
+>    srun lmp -in in.rhodo -sf omp -pk omp $OMP_NUM_THREADS
+>    
 >    ~~~
 >    {: .language-bash}
 >
@@ -430,9 +460,8 @@ could be useful.
 
 Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 
-{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
 ~~~
-{{ mycode | strip }} -sf gpu -pk gpu 2 neigh yes newton off split 1.0
+srun lmp -in in.lj -sf gpu -pk gpu 2 neigh yes newton off split 1.0
 ~~~
 {: .language-bash}
 
@@ -448,18 +477,49 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > * Neighbour lists built on CPUs
 > * Dynamic load balancing between CPUs and GPUs
 >
-> {% capture mycode %}{% include {{ site.snippets }}/ep05/in.lj %}{% endcapture %}
-> {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
->
-> ~~~{% for member in lines_of_code %}
-> {{ member }}{% endfor %}
+> ~~~
+> # 3d Lennard-Jones melt
+> variable        x index 60
+> variable        y index 60
+> variable        z index 60
+> variable        t index 500
+> 
+> variable        xx equal 1*$x
+> variable        yy equal 1*$y
+> variable        zz equal 1*$z
+> 
+> variable        interval equal $t/2
+> 
+> units           lj
+> atom_style      atomic
+> 
+> lattice         fcc 0.8442
+> region          box block 0 ${xx} 0 ${yy} 0 ${zz}
+> create_box      1 box
+> create_atoms    1 box
+> mass            1 1.0
+> 
+> velocity        all create 1.44 87287 loop geom
+> 
+> pair_style      lj/cut 2.5
+> pair_coeff      1 1 1.0 1.0 2.5
+> 
+> neighbor        0.3 bin
+> neigh_modify    delay 0 every 20 check no
+> 
+> fix             1 all nve
+> 
+> thermo          ${interval}
+> thermo_style custom step time  temp press pe ke etotal density
+> run             $t
+> 
 > ~~~
 > {: .source}
 >
 > > ## Solution
 > >
-> > ~~~{% capture mycode %}{% include {{ site.snippets }}/ep05/job_execution_1nodeMPI.snip %}{% endcapture %}
-> > {{ mycode | strip }} -sf gpu -pk gpu 2 neigh no newton off split -1.0
+> > ~~~
+> > srun lmp -in in.lj-sf gpu -pk gpu 2 neigh no newton off split -1.0
 > > ~~~
 > > {: .language-bash}
 > >
@@ -477,12 +537,35 @@ Not surprisingly, the syntax we use is similar to that of **USER-OMP** package:
 > >
 > > How to request and configure GPU resources is usually quite specific to the HPC
 > > system you have access to. Below you will find an example of how to
-> > submit the job we just constructed to {{ site.remote.name }}.
+> > submit the job we just constructed to JURECA.
 > >
-> > {% capture mycode %}{% include {{ site.snippets }}/ep05/gpu_job_script %}{% endcapture %}
-> > {% assign lines_of_code = mycode | strip |newline_to_br | strip_newlines | split: "<br />" %}
-> > ~~~{% for member in lines_of_code %}
-> > {{ member }}{% endfor %}
+> > ~~~
+> > #!/bin/bash -x
+> > 
+> > # Ask for 1 nodes of resources for an MPI/GPU job for 10 minutes
+> > 
+> > #SBATCH --account=ecam
+> > #SBATCH --nodes=1
+> > #SBATCH --output=mpi-out.%j
+> > #SBATCH --error=mpi-err.%j
+> > #SBATCH --time=00:10:00
+> > 
+> > # Configure the GPU usage (we request to use all 4 GPUs on a node)
+> > #SBATCH --partition=develgpus
+> > #SBATCH --gres=gpu:4
+> > 
+> > # Use this many MPI tasks per node (maximum 24)
+> > #SBATCH --ntasks-per-node=24
+> > 
+> > module purge
+> > module use /usr/local/software/jureca/OtherStages
+> > module load Stages/Devel-2019a
+> > module load intel-para/2019a
+> > # Note we are loading a different LAMMPS package
+> > module load LAMMPS/9Jan2020-cuda
+> > 
+> > srun lmp -in in.lj -sf gpu -pk gpu 4 neigh no newton off split -1.0
+> > 
 > > ~~~
 > > {: .language-bash}
 > {: .solution}
@@ -498,7 +581,28 @@ It prints about the device information both in the screen-output and the log fil
 something similar to;
 
 ~~~
-{% include {{ site.snippets }}/ep05/lammps-gpu-output-1.txt %}
+-------------------------------------------------------------------------------
+- Using acceleration for lj/cut:
+-  with 12 proc(s) per device.
+-  with 1 thread(s) per proc.
+-------------------------------------------------------------------------------
+Device 0: Tesla K80, 13 CUs, 10/11 GB, 0.82 GHZ (Double Precision)
+Device 1: Tesla K80, 13 CUs, 0.82 GHZ (Double Precision)
+-------------------------------------------------------------------------------
+
+Initializing Device and compiling on process 0...Done.
+Initializing Devices 0-1 on core 0...Done.
+Initializing Devices 0-1 on core 1...Done.
+Initializing Devices 0-1 on core 2...Done.
+Initializing Devices 0-1 on core 3...Done.
+Initializing Devices 0-1 on core 4...Done.
+Initializing Devices 0-1 on core 5...Done.
+Initializing Devices 0-1 on core 6...Done.
+Initializing Devices 0-1 on core 7...Done.
+Initializing Devices 0-1 on core 8...Done.
+Initializing Devices 0-1 on core 9...Done.
+Initializing Devices 0-1 on core 10...Done.
+Initializing Devices 0-1 on core 11...Done.
 ~~~
 {: .output}
 
@@ -520,7 +624,11 @@ command-line switch. This automatically ensures that the correct accelerated ver
 this run.
 
 ~~~
-{% include {{ site.snippets }}/ep05/lammps-gpu-output-2.txt %}
+(1) pair lj/cut/gpu, perpetual
+    attributes: full, newton off
+    pair build: full/bin/anomaly
+    stencil: full/bin/3d
+    bin: standard
 ~~~
 {: .output}
 
@@ -534,7 +642,56 @@ of information known as `Device Time Info (average)`. This gives you a breakdown
 the devices (GPUs) have been utilised to do various parts of the job.
 
 ~~~
-{% include {{ site.snippets }}/ep05/lammps-gpu-output-3.txt %}
+Loop time of 7.56141 on 24 procs for 500 steps with 864000 atoms
+
+Performance: 28566.100 tau/day, 66.125 timesteps/s
+95.3% CPU use with 24 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2.2045     | 2.3393     | 2.6251     |   6.1 | 30.94
+Neigh   | 2.8258     | 2.8665     | 3.0548     |   2.9 | 37.91
+Comm    | 1.6847     | 1.9257     | 2.0968     |   6.8 | 25.47
+Output  | 0.0089157  | 0.028466   | 0.051726   |   6.7 |  0.38
+Modify  | 0.26308    | 0.27673    | 0.29318    |   1.5 |  3.66
+Other   |            | 0.1247     |            |       |  1.65
+
+Nlocal:    36000 ave 36186 max 35815 min
+Histogram: 1 2 3 4 2 3 3 4 1 1
+Nghost:    21547.7 ave 21693 max 21370 min
+Histogram: 1 1 0 5 5 2 4 1 2 3
+Neighs:    0 ave 0 max 0 min
+Histogram: 24 0 0 0 0 0 0 0 0 0
+FullNghs:  2.69751e+06 ave 2.71766e+06 man 2.6776e+06 min
+Histogram: 1 1 4 4 3 2 3 4 1 1 
+
+Total # of neighbors = 64740192
+Ave neighs/atom = 74.9308
+Neighbor list builds = 25
+Dangerous builds not checked
+
+
+---------------------------------------------------------------
+      Device Time Info (average):
+---------------------------------------------------------------
+Data Transfer:   0.9243 s.
+Data Cast/Pack:  0.6464 s.
+Neighbor copy:   0.5009 s.
+Neighbor unpack: 0.0000 s.
+Force calc:      0.6509 s.
+Device Overhead: 0.5445 s.
+Average split:   0.9960.
+Threads / atom:  4.
+Max Mem / Proc:  53.12 MB.
+CPU Driver_Time: 0.5243 s.
+CPU Idle_Time:   0.9986 s.
+---------------------------------------------------------------
+
+
+Please see the log.cite file for references relevant to this simulation
+
+Total wall time: 0:00:15
 ~~~
 {: .output}
 
