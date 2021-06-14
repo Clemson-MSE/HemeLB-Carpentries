@@ -48,7 +48,6 @@ of things: software, hardware or the computer itself and it’s architecture.
 > 
 > Modify this copied submission script, editing it in such a way to include multiple nodes.
 >
-> 
 {: .challenge}
 
 > ## Callout: Local vs system-wide installations
@@ -61,7 +60,7 @@ of things: software, hardware or the computer itself and it’s architecture.
 > that system. If you can't easily find your application, contact user support for the
 > system to help you.
 >
-> You should still check the benchmark case though! Sometimes administrators are short
+> You should still check the benchmark case though! Sometimes system administrators are short
 > on time or background knowledge of applications and do not do thorough testing.
 {: .callout}
 
@@ -75,7 +74,7 @@ let us overview the concepts of benchmarking.
 > Benchmarking is a process that judges how well a piece of software runs on a system. Based on what you have learned
 > thus far from running your own benchmarks, which of the following would represent a good benchmarking analysis?
 >
-> **EDITME** Add graphs
+> **EDITME** Add graphs CW
 >
 > 1. Linear increase in core count to 64 cores (x-axis) ~10 points
 > 2. Increase by x2 by core count up to 2048 cores (x-axis), 12 points
@@ -116,13 +115,85 @@ cores/nodes that are assigned to a series of tasks.
 
 Scalability can also be looked as in terms of parallelisation efficiency, which is the ratio between the actual
 speedup and the ideal speedup obtained when using a certain number of processes. The overall term of speedup in HPC
-can be defined with the formula `Speedup = t(1)/t(N)`
+can be defined with the formula `Speedup = t(1)/t(N)`.
 
 Here, `t(1)` is the computational time for running the software using one processor and `t(N)` is the comptational time
 running the software with N proceeses. An ideal situation is to have a linear speedup, equal to the number of
 processors (speedup = N), so every processor contributes 100% of its computational power. In most cases, as an
 idealised situation this is very hard to attain.
 
+### Weak scaling vs Strong scaling
+
+Applications can be divided into either **strong scaling** or **weak scaling** applications.
+
+For **weak scaling**, the problem size increases as does the number of processors. In this situation, we usually want
+to increase our workload without increasing our *walltime*, and we do that by using additional resources.
+
+> ## Gustafson-Barsis' Law
+>
+> *Speedup should be measured by scaling the problem to the number of processes, not by fixing the problem size.*
+> 
+> `Speedup = s + p * N`
+>
+> where `s` is the proportion of the execution time spent on serial code, `p` is the amount of time spent on 
+> parallelised code and `N` is the number of processes.
+>
+{: .callout}
+
+For **strong scaling**, the number of processes is increased whilst the problem size remains the same, resulting in a
+reduced workload for each processor. 
+
+> ## Amdahl's Law
+>
+> The speedup is limited by the fraction of the seria part of the software that is not amenable to parallelisation
+>
+> `Speedup = 1/( s + p / N )`
+> 
+> where `s` is the proportion of the execution time spent on serial code, `p` is the amount of time spent on 
+> parallelised code and `N` is the number of processes.
+>
+{: .callout}
+
+Whether one is dealing with a strong or weak scaling 
+
+> ## Determine best performance from a scalability study
+> 
+> Consider the following scalability plot for a random application
+> 
+> |          /
+> |         /
+> |        /
+> |       /  
+> |      / 2
+> |     / _._
+> |   1/_/   \3
+> |   //
+> |  //
+> |_//_________
+> #processors/nodes
+> 
+> At what point would you consider to be peak performance in this example.
+>
+> - 1. 
+> - 2.
+> - 3.
+> - 4. None of the above 
+> 
+> You may find that this graph would differ if you ran the same code on a different machine. Why?
+> 
+> > # Solution
+> > 
+> > 1. No, the performance is still increasing, at this point we are no longer achieving perfect scalability.
+> > 2. Yes, the performance peaks at this location, and one cannot get higher speed up with this set up.
+> > 3. No, peak performance has already been achieved, and increasing the core count will onlt reduce performance.
+> > 4. No, although you can run extra benchmarks to find the exact number of cores at which the inflection point truly
+> >    lies, there is no real purpose for doing so.
+> >
+> > Tying into the answer for #4, if you produce scalability studies on different machines, they will be different
+> > because of the different setup, hardware of the machine. You are never going to get two scalability studies which
+> > are identical, but they will agree to some point.
+> {: .solution}
+{: .challenge}
 
 **EDITME** (This section needs more expandid)
 
