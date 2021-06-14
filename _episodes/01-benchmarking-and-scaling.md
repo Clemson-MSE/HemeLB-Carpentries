@@ -17,16 +17,38 @@ keypoints:
 
 ## What is benchmarking?
 
-- **EDITME** (Insert information on benchmarking. This can be copied from the LAMMPS material or modified accordlingly.
-  Ideally expanded upon given the nature of the library.)
+To get an idea of what we mean by benchmarking, let’s take the example of a sprint athlete. 
+The athlete runs a predetermined distance on a particular surface, and a time is recorded. Based on different
+conditions, such as how dry or wet the surface is, or what the surface is made of (grass, sand, or track) the times
+of the sprinter to cover a distance (100m, 200m, 400m etc) will differ. If you know where the sprinter is running,
+and what the conditions were like, when the sprinter sets a certain time you can cross-correlate it with the known 
+times associated with certain surfaces (our benchmarks) to judge how well they are performing.
 
-## Case study: Benchmarking with HemeLB
+Benchmarking in computing works in a similar way: it is a way of assessing the performance of a program (or set of
+programs), and benchmark tests are designed to mimic a particular type of workload on a component or system. They can
+also be used to measure differing performance across different systems. Usually codes are tested on different computer
+architectures to see how a code performs on each one. Like our sprinter, the times of benchmarks depends on a number
+of things: software, hardware or the computer itself and it’s architecture.
 
-As an example, let's create some benchmarks for you to compare the performance of some
-'standard' systems in HemeLB. Using a 'standard' system is a good idea as a first attempt, since
-we can measure our benchmarks against (published) information from others.  Knowing that
-our installation is "sane" is a critical first step before we embark on generating **our
-own benchmarks for our own use case**.
+> ## Running a HemeLB job on your HPC
+> 
+> **EDITME** Use 10 core example for bifurcation, 5000 steps
+>
+> Put the job script, input files and outputs into a folder called `10c-bif`.
+>
+{: .challenge}
+
+## Understanding your output files
+
+**EDITME** How to understand your output files, and gain understanding of where most time is spent. Use examples.
+
+> ## Editing the submission script
+>
+> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
+> 
+> Modify this copied submission script, editing it in such a way to include multiple nodes.
+>
+{: .challenge}
 
 > ## Callout: Local vs system-wide installations
 >
@@ -38,79 +60,142 @@ own benchmarks for our own use case**.
 > that system. If you can't easily find your application, contact user support for the
 > system to help you.
 >
-> You should still check the benchmark case though! Sometimes administrators are short
+> You should still check the benchmark case though! Sometimes system administrators are short
 > on time or background knowledge of applications and do not do thorough testing.
 {: .callout}
 
-> ## Exercise 1: Running a HemeLB job on an HPC system
+## Benchmarking in HemeLB: A case study
+
+In the next section we will look at how we can use all this information to perform a scalability study, but first
+let us overview the concepts of benchmarking.
+
+> ## The ideal benchmarking study
 >
-> Can you list the bare minimum files that you need to schedule a HemeLB job on an HPC
-> system?
+> Benchmarking is a process that judges how well a piece of software runs on a system. Based on what you have learned
+> thus far from running your own benchmarks, which of the following would represent a good benchmarking analysis?
 >
-> > ## Solution
-> > For running a HemeLB job, we need:
-> > 1. File 1 
-> > 2. File 2
-> >
-> > **EDITME** Additional explanations
-> {: .solution}
-{: .challenge}
-
-The input file we need for the LJ-system is reproduced below:
-
-**EDITME**
-
-~~~
-included file
-~~~
-{: .source}
-
-- How to go about making a job file for HemeLB (include starting point and explanation
-  of each steps)
-
-~~~
-included from snippets
-~~~
-{: .language-bash}
-
-> ## Exercise 2: Edit a submission script for a HemeLB job
+> **EDITME** Add graphs CW
 >
-> Duplicate the job script we just created so that we have versions that will run on
-> 1 core and 4 cores.
->
+> 1. Linear increase in core count to 64 cores (x-axis) ~10 points
+> 2. Increase by x2 by core count up to 2048 cores (x-axis), 12 points
+> 3. Increase by x2 by core count up to 131072 cores (x-axis), 18 points
+> 4. Increase by 10 cores up to 2000 cores (200 points)
+> 5. Linear increase 1-20 nodes ~20 points
+> 6. **EDITME** Another wrong answer
+> 
 >
 > > ## Solution
+> > 
+> > 1. No, the core counts that are being benchmarked are too low and the number of points is not sufficient
+> > 2. Yes, but depends on the software you are working with, how you want to use it, and how big your system is.
+> >    This does not give a true view how scalable it is at higher core counts.
+> > 3. Yes. If the system allows it and you have more cores at your disposal, this is the ideal benchmark to run. But
+> >    as with #2, it depends on how you wish to utlise the software.
+> > 4. No, although it increases by a factor of 10 to 2000 cores, there are too many points on the graph and therefore
+> >    would be highly impractical. Benchmarks are used to get an idea of scalability, the exact performance will vary
+> >    with every benchmark run.
+> > 5. Yes. This is also a suitable metric for benchmarking, similar to response #3.
 > >
 > {: .solution}
-{: .challenge}
-
-### Understanding the output files
-
-- Any information about versions, OMP, MPI variables
-
-Useful keywords to search for include:
-
-  * **`EDITME...`** 
-
-
-> ## Exercise 3: Now run a benchmark...
->
-> From the jobs that you ran previously,
-> extract the loop times for your runs and see how they compare
-> with the HemeLB standard benchmark and with the performance for two other HPC systems.
->
-> | HPC system | 1 core (sec) | 4 core (sec) |
-> |----------- | ------------ |------------- |
-> | HemeLB     | 2.26185      | 0.635957     |
-> | HPC 1      | 2.24207      | 0.592148     |
-> | HPC 2      | 1.76553      | 0.531145     |
-> | MY HPC     |     ?        |     ?        |
->
-> Why might these results differ?
->
 {: .challenge}
 
 ## Scaling 
+
+Going back to our athelete example from earlier, we may have determined the conditions and done a few benchmarks on
+his/her performance over different distances, we might have learned a few things.
+
+- how fast the athelete can run over short, medium and long distances
+- the point at which the athelete can no longer perform at peak performance
+
+In computational sense, scalability is defined as **the ability to handle more work as the size of the computer**
+**application grows**. This term of scalability or scaling is widely used to indicate the ability of hardware and
+software to deliver greater comptational power when the amount of resources is increased. When you are working on an
+HPC cluster, it is very important that it is scalable, i.e. that the performance doesn't rapidly decrease the more 
+cores/nodes that are assigned to a series of tasks.
+
+Scalability can also be looked as in terms of parallelisation efficiency, which is the ratio between the actual
+speedup and the ideal speedup obtained when using a certain number of processes. The overall term of speedup in HPC
+can be defined with the formula `Speedup = t(1)/t(N)`.
+
+Here, `t(1)` is the computational time for running the software using one processor and `t(N)` is the comptational time
+running the software with N proceeses. An ideal situation is to have a linear speedup, equal to the number of
+processors (speedup = N), so every processor contributes 100% of its computational power. In most cases, as an
+idealised situation this is very hard to attain.
+
+### Weak scaling vs Strong scaling
+
+Applications can be divided into either **strong scaling** or **weak scaling** applications.
+
+For **weak scaling**, the problem size increases as does the number of processors. In this situation, we usually want
+to increase our workload without increasing our *walltime*, and we do that by using additional resources.
+
+> ## Gustafson-Barsis' Law
+>
+> *Speedup should be measured by scaling the problem to the number of processes, not by fixing the problem size.*
+> 
+> `Speedup = s + p * N`
+>
+> where `s` is the proportion of the execution time spent on serial code, `p` is the amount of time spent on 
+> parallelised code and `N` is the number of processes.
+>
+{: .callout}
+
+For **strong scaling**, the number of processes is increased whilst the problem size remains the same, resulting in a
+reduced workload for each processor. 
+
+> ## Amdahl's Law
+>
+> The speedup is limited by the fraction of the seria part of the software that is not amenable to parallelisation
+>
+> `Speedup = 1/( s + p / N )`
+> 
+> where `s` is the proportion of the execution time spent on serial code, `p` is the amount of time spent on 
+> parallelised code and `N` is the number of processes.
+>
+{: .callout}
+
+Whether one is dealing with a strong or weak scaling 
+
+> ## Determine best performance from a scalability study
+> 
+> Consider the following scalability plot for a random application
+> ~~~
+> |          /
+> |         /
+> |        /
+> |       /  
+> |      / b
+> |     / _._
+> |   a/_/   \c
+> |   //
+> |  //
+> |_//_________
+> ~~~
+> {: .language-bash}
+> #processors/nodes
+> 
+> At what point would you consider to be peak performance in this example.
+>
+> - 1. a
+> - 2. b
+> - 3. c
+> - 4. None of the above 
+> 
+> You may find that this graph would differ if you ran the same code on a different machine. Why?
+> 
+> > # Solution
+> > 
+> > 1. No, the performance is still increasing, at this point we are no longer achieving perfect scalability.
+> > 2. Yes, the performance peaks at this location, and one cannot get higher speed up with this set up.
+> > 3. No, peak performance has already been achieved, and increasing the core count will onlt reduce performance.
+> > 4. No, although you can run extra benchmarks to find the exact number of cores at which the inflection point truly
+> >    lies, there is no real purpose for doing so.
+> >
+> > Tying into the answer for #4, if you produce scalability studies on different machines, they will be different
+> > because of the different setup, hardware of the machine. You are never going to get two scalability studies which
+> > are identical, but they will agree to some point.
+> {: .solution}
+{: .challenge}
 
 **EDITME** (This section needs more expandid)
 
