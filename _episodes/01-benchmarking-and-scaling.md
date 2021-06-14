@@ -177,8 +177,8 @@ Whether one is dealing with a strong or weak scaling
 > At what point would you consider to be peak performance in this example.
 >
 > - 1. 
-> - 2.
-> - 3.
+> - 2. 
+> - 3. 
 > - 4. None of the above 
 > 
 > You may find that this graph would differ if you ran the same code on a different machine. Why?
