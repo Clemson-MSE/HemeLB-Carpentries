@@ -159,7 +159,7 @@ Whether one is dealing with a strong or weak scaling
 > ## Determine best performance from a scalability study
 > 
 > Consider the following scalability plot for a random application
-> 
+> ~~~
 > |          /
 > |         /
 > |        /
@@ -170,6 +170,8 @@ Whether one is dealing with a strong or weak scaling
 > |   //
 > |  //
 > |_//_________
+> ~~~
+> {: .language-bash}
 > #processors/nodes
 > 
 > At what point would you consider to be peak performance in this example.
