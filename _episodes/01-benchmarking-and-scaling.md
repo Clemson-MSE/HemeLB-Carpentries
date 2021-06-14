@@ -34,7 +34,7 @@ of things: software, hardware or the computer itself and it’s architecture.
 > 
 > **EDITME** Use 10 core example for bifurcation, 5000 steps
 >
-> Put the job script, input files and ouputs into a folder called `10c-bif`.
+> Put the job script, input files and outputs into a folder called `10c-bif`.
 >
 {: .challenge}
 
