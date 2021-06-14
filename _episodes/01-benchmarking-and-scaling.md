@@ -164,9 +164,9 @@ Whether one is dealing with a strong or weak scaling
 > |         /
 > |        /
 > |       /  
-> |      / 2
+> |      / b
 > |     / _._
-> |   1/_/   \3
+> |   a/_/   \c
 > |   //
 > |  //
 > |_//_________
@@ -176,9 +176,9 @@ Whether one is dealing with a strong or weak scaling
 > 
 > At what point would you consider to be peak performance in this example.
 >
-> - 1. 
-> - 2. 
-> - 3. 
+> - 1. a
+> - 2. b
+> - 3. c
 > - 4. None of the above 
 > 
 > You may find that this graph would differ if you ran the same code on a different machine. Why?
