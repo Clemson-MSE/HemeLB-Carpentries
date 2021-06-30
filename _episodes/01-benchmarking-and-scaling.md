@@ -30,25 +30,15 @@ also be used to measure differing performance across different systems. Usually 
 architectures to see how a code performs on each one. Like our sprinter, the times of benchmarks depends on a number
 of things: software, hardware or the computer itself and it’s architecture.
 
-> ## Running a HemeLB job on your HPC
-> 
-> **EDITME** Use 10 core example for bifurcation, 5000 steps
->
-> Put the job script, input files and outputs into a folder called `10c-bif`.
->
-{: .challenge}
-
-## Understanding your output files
-
-**EDITME** How to understand your output files, and gain understanding of where most time is spent. Use examples.
-
-> ## Editing the submission script
->
-> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
-> 
-> Modify this copied submission script, editing it in such a way to include multiple nodes.
->
-{: .challenge}
+## What is HemeLB?
+HemeLB is a 3D blood flow simulation code based on the lattice Boltzmann method. It is an open-source code built
+using C++ and MPI and has demonstrated excellent scaling performance on some of the largest and fastest supercomputers
+on the planet. One particular challenge for simulating the typically sparse domains characteristic of blood vessels is
+dealing with the sparse domain space - for a bounding box of a given domain maybe 1% (and often much less) actually 
+consists of fluid that you are interested in studying. During its development, HemeLB has been specifically optimised 
+to efficiently study such domains. The full feature version of HemeLB can be found at https://github.com/hemelb-codes/hemelb.
+However for this lesson, we recommend using HemePure - https://github.com/UCL-CCS/HemePure - a version of HemeLB that has
+further optimisations for scalable simulation on CPU based machines. **TODO** Fork HemePure to hemelb-codes for consistency of addresses.
 
 > ## Callout: Local vs system-wide installations
 >
@@ -60,9 +50,86 @@ of things: software, hardware or the computer itself and it’s architecture.
 > that system. If you can't easily find your application, contact user support for the
 > system to help you.
 >
-> You should still check the benchmark case though! Sometimes system administrators are short
-> on time or background knowledge of applications and do not do thorough testing.
+> For less widely used codes, such as HemeLB, you will have to compile the code on the HPC system
+> for your own use. Build scripts are available to help streamline this process but these must be
+> customised to the specific libraries and nomenclature of individual HPC systems
+>
+> In either case, you should still check the benchmark case though! Sometimes system administrators are short
+> on time or background knowledge of applications and do not do thorough testing. For locally compiled codes, the default options for compilers
+> and libraries may not necessarily be optimal for performance. Benchmark testing can allow the best option for that machine to be identified.
 {: .callout}
+
+> ## Compiling HemeLB on your HPC
+> 
+> 1) Clone or download the source code for HemePure to your HPC
+> 2) Edit the `FullBuildScript.sh` file to pass the correct C++ and MPI compiler shortcuts for your machine
+> **N.B.** HemeLB requires C++ and MPI to run, we have successfully tried several different compiler options/versions but cannot guarantee 
+> that every combination will work effectively. For open-source options, GNU 7.5.0 and OpenMPI 2.1.1 should provide a good starting point. Python 2.7 is also 
+> required for dependency compilation (**TODO??** update to Python3 version?)
+> 3) Run the `FullBuildScript.sh` from the HemePure directory. This will build both the necessary dependencies and the source code for some intial tests.
+> We will discuss compilation options for improving performance in a later episode. Unless you are changing compiler versions, it is not necessary to rebuild
+> the dependencies each time you wish to test some different code or compilation option.
+> 4) Cross your fingers for compilation to complete. Once finished, there should be the `hemepure` executable in the `src/build` folder.
+{: .callout}
+
+> ## Running a HemeLB job on your HPC
+> 
+> HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests from multiple users.
+> Common examples of schedulers include SLURM and PBS. 
+>
+> Examine the provided jobscripts for a simple HemeLB job. As can be seen, this tells the scheduler critical information about the job that
+> it uses to determine when it can run on the compute nodes. Particular information includes who submitted the jobs, how long it needs to 
+> run for, what resouces are required and which allocation needs to be charged for the job.
+> After this job information, the script loads the libraries necessary for supporting jobs execution. In particular, the compiler and MPI libraries need to be loaded. 
+> Finally the commands to launch the jobs are called. These may also include any pre- or post-processing jobs that need to be run on the compute nodes.
+>
+> This example submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where indicated, modify the script to the correct
+> settings for usernames and filepaths for your HPC system. It must be noted here that all HPC systems have subtle differences in the necessary commands to 
+> submit a job, please consult your local documentation for definitive advice on this for your HPC system.
+>
+> Submit this job and read on while it is completing (typical runtime of ~5mins).
+>
+{: .challenge}
+
+While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
+**callout of the full input file here**
+The HemeLB input file can be broken into three main regions: Simulation set-up; Boundary conditions; and Property output.
+In the simulation set-up section (**section callout nearby**) specifies global simulation information such as the discretisation parameters, total
+simulation steps and initialisation requirements. The boundary conditions specify the local parameters needed for the execution of the inlets and 
+outlets of the simulation domain. Finally, the property output section dictates the type and frequency of dumping simulation data to file for post-processing.
+
+The actual geometry being run by HemeLB is specified by the `bifurcation.gmy` file (**provide image of domain**) and represents the splitting of 
+a single cylinder into two. This can be seen as simplified representation of many vascular junctions presented throughout the network of 
+arteries and veins.
+
+## Understanding your output files
+
+Your job will typically generate a number of output files. Firstly, there will be job output and error files with names indicated in the job script
+- often involving the submitted job name and the job number assigned by the scheduler. These will generally be found in the same folder that the job
+script was submitted from. In a successful job, the error file should be empty (or only contain system specific, non-critical warnings) whilst the 
+output file will contain the screen based HemeLB output.
+
+Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the jobscript with the `-out` option. 
+Here both summary execution information and property output is contained in the folder `results/Extracted`. For further guide on using the `hemeXtract` 
+tool (https://github.com/UCL-CCS/hemeXtract) please see the tutorial on the HemeLB website.
+
+Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file is provided below:
+**ExampleReport.txt**
+
+**Breakdown of key parts of report - sites/node, simulation vs total job time, other areas of interest.**
+
+**EDITME** How to understand your output files, and gain understanding of where most time is spent. Use examples.
+
+
+> ## Editing the submission script
+>
+> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
+> 
+> Often we need to run simulations on a larger quantity of resources than that provided by a single node.  **indicate how done for SLURM/PBS**
+> Modify this copied submission script, editing it in such a way to include multiple nodes.
+>
+{: .challenge}
+
 
 ## Benchmarking in HemeLB: A case study
 
@@ -81,7 +148,7 @@ let us overview the concepts of benchmarking.
 > 3. Increase by x2 by core count up to 131072 cores (x-axis), 18 points
 > 4. Increase by 10 cores up to 2000 cores (200 points)
 > 5. Linear increase 1-20 nodes ~20 points
-> 6. **EDITME** Another wrong answer
+> 6. Three test cases: the smallest number of cores possible, the largest number of cores possible and a point at halfway
 > 
 >
 > > ## Solution
@@ -95,7 +162,9 @@ let us overview the concepts of benchmarking.
 > >    would be highly impractical. Benchmarks are used to get an idea of scalability, the exact performance will vary
 > >    with every benchmark run.
 > > 5. Yes. This is also a suitable metric for benchmarking, similar to response #3.
-> >
+> > 6. No. While this will cover the spread of simulation possibilities on the machine, it will be too sparse to permit
+> >    an appropriate characterisation of the the code on your system. Depending on the operational restrictions of your 
+> >    system, full machine jobs may not be possible to run or may require a long time before it launches. 
 > {: .solution}
 {: .challenge}
 
