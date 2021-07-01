@@ -104,8 +104,8 @@ arteries and veins.
 
 ## Understanding your output files
 
-Your job will typically generate a number of output files. Firstly, there will be job output and error files with names indicated in the job script
-- often involving the submitted job name and the job number assigned by the scheduler. These will generally be found in the same folder that the job
+Your job will typically generate a number of output files. Firstly, there will be job output and error files with names indicated in the job script. 
+Often these involve the submitted job name and the job number assigned by the scheduler. These will generally be found in the same folder that the job
 script was submitted from. In a successful job, the error file should be empty (or only contain system specific, non-critical warnings) whilst the 
 output file will contain the screen based HemeLB output.
 
@@ -125,8 +125,13 @@ Open the file `results/report.txt` to view a breakdown of statistics of the Heme
 >
 > Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
 > 
-> Often we need to run simulations on a larger quantity of resources than that provided by a single node.  **indicate how done for SLURM/PBS**
-> Modify this copied submission script, editing it in such a way to include multiple nodes.
+> Often we need to run simulations on a larger quantity of resources than that provided by a single node.  For HemeLB, this change does not require
+> any modification to the source code to achieve. Here we can easily request more nodes for our study by changing the resources requested in the 
+> job submission scripts **indicate the line to change SLURM/PBS**
+> When changing the resources requested, ensure that you also modify the execution line to use the desired resources. In SLURM, this can be automated
+> with the $SLURM_NTASKS shortcut.
+>
+> Modify this your submission script and investigate the effect of changing requested resources.
 >
 {: .challenge}
 
@@ -171,7 +176,7 @@ let us overview the concepts of benchmarking.
 ## Scaling 
 
 Going back to our athelete example from earlier, we may have determined the conditions and done a few benchmarks on
-his/her performance over different distances, we might have learned a few things.
+their performance over different distances, we might have learned a few things.
 
 - how fast the athelete can run over short, medium and long distances
 - the point at which the athelete can no longer perform at peak performance
@@ -190,6 +195,8 @@ Here, `t(1)` is the computational time for running the software using one proces
 running the software with N proceeses. An ideal situation is to have a linear speedup, equal to the number of
 processors (speedup = N), so every processor contributes 100% of its computational power. In most cases, as an
 idealised situation this is very hard to attain.
+
+
 
 ### Weak scaling vs Strong scaling
 
@@ -214,7 +221,7 @@ reduced workload for each processor.
 
 > ## Amdahl's Law
 >
-> The speedup is limited by the fraction of the seria part of the software that is not amenable to parallelisation
+> The speedup is limited by the fraction of the serial part of the software that is not amenable to parallelisation
 >
 > `Speedup = 1/( s + p / N )`
 > 
@@ -223,7 +230,9 @@ reduced workload for each processor.
 >
 {: .callout}
 
-Whether one is dealing with a strong or weak scaling 
+Whether one is most concerned with strong or weak scaling can depends on the type of problem being studied and the resources 
+available to the user. For large machines, where extra resources are relatively cheap, strong scaling ability can be more useful.
+This allows problems to be solved more quickly. 
 
 > ## Determine best performance from a scalability study
 > 
@@ -266,22 +275,30 @@ Whether one is dealing with a strong or weak scaling
 > {: .solution}
 {: .challenge}
 
-**EDITME** (This section needs more expandid)
+**EDITME** (This section needs more expandid) JM-Ok now?
 
 Scaling behaviour in computation is centred around the effective use of resources as you
 scale up the amount of computing resources you use. An example of "perfect" scaling would
-be that when we use twice as many CPUs, we get an answer in half the time. "Bad" scaling
-would be when the answer takes only 10% less time when we double the CPUs. This example
-is one of **strong scaling**, where the workload doesn't change as we increase our
-resources.
+be that when we use twice as many CPUs, we get an answer in half the time. "Poor" scaling
+would be when the answer takes only 10% less time when we double the CPUs. "Bad" scaling 
+may see a job take longer to complete when more nodes are provided. This example is one of
+ **strong scaling**, where we have a fixed problem size and need to know how quickly we can 
+solve it. The total workload doesn't change as we increase our resources. 
+
+The behaviour of a code in this strong scaling setting is a function of both code design and 
+hardware layout. "Good" strong scaling behaviour occurs when the time required for computing 
+a solution outweighs the time taken for communication to occur. Less desirable scaling performance
+is observed when this balance tips and communication time outweighs compute time. The point 
+at which this occurs varies between machines and again emphasise the need for benchmarking.
 
 > ## Plotting strong scalability
 >
-> Use the original job script for 2 nodes and run it.
+> Using the original job script run HemeLB jobs at least 6 different job sizes, preferably over 
+> multiple nodes. For the size of job provided here, we suggest aiming for a maximum of around
+> 200 cores. After each job, record the `Simulation Time` from the Report.txt file.
 >
-> Now that
-> you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
-> the number of CPU cores on the X-axis and the loop times on the Y-axis (use your
+> Now that you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
+> the number of CPU cores on the X-axis and the simulation times on the Y-axis (use your
 > favourite plotting tool, an online plotter or even pen and paper).
 >
 > Are you close to "perfect" scalability?
@@ -313,3 +330,8 @@ performance, you may have the resources, but the effective use of the resources 
 where the challenge lies. Having each chef cooking their specialised dishes would be
 good weak scaling: an effective use of your additional resources. Poor weak scaling
 will likely result from having your pastry chef doing the main dish.
+
+Weak scaling with HemeLB can be challenging to undertake as it is difficult to reliably
+guarantee an even division of work between processors for a given problem. This is due
+to the load partitioning algorithm used which must be able to deal with sparse and complex
+geometry shapes.
