@@ -36,9 +36,9 @@ using C++ and MPI and has demonstrated excellent scaling performance on some of 
 on the planet. One particular challenge for simulating the typically sparse domains characteristic of blood vessels is
 dealing with the sparse domain space - for a bounding box of a given domain maybe 1% (and often much less) actually 
 consists of fluid that you are interested in studying. During its development, HemeLB has been specifically optimised 
-to efficiently study such domains. The full feature version of HemeLB can be found at https://github.com/hemelb-codes/hemelb.
-However for this lesson, we recommend using HemePure - https://github.com/UCL-CCS/HemePure - a version of HemeLB that has
-further optimisations for scalable simulation on CPU based machines. **TODO** Fork HemePure to hemelb-codes for consistency of addresses.
+to efficiently study such domains. The full feature version of HemeLB can be found at https://github.com/hemelb-codes/.
+However for this lesson, we recommend using the HemePure example - a version of HemeLB that has
+further optimisations for scalable simulation on CPU based machines. 
 
 > ## Callout: Local vs system-wide installations
 >
