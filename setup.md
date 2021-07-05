@@ -4,8 +4,8 @@ title: Compiling HemeLB on your HPC
 
 1) Clone or download the source code for HemePure to your HPC.
 
-2) Edit the `FullBuildScript.sh` file to pass the correct C++ and MPI compiler shortcuts for  
-   your machine **N.B.** HemeLB requires C++ and MPI to run, we have successfully triedseveral different compiler
+2) Edit the `FullBuildScript.sh` file to pass the correct C++ and MPI compiler shortcuts for 
+   your machine **N.B.** HemeLB requires C++ and MPI to run, we have successfully tried several different compiler
    options/versions but cannot guarantee that every combination will work effectively. For open-source options, 
    GNU 7.5.0 and OpenMPI 2.1.1 should provide a good starting point. Python 2.7 is also required for dependency
    compilation (**TODO??** update to Python3 version?)
