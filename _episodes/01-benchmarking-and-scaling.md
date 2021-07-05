@@ -36,7 +36,7 @@ using C++ and MPI and has demonstrated excellent scaling performance on some of 
 on the planet. One particular challenge for simulating the typically sparse domains characteristic of blood vessels is
 dealing with the sparse domain space - for a bounding box of a given domain maybe 1% (and often much less) actually 
 consists of fluid that you are interested in studying. During its development, HemeLB has been specifically optimised 
-to efficiently study such domains. The full feature version of HemeLB can be found at https://github.com/hemelb-codes/.
+to efficiently study such domains. The full feature version of HemeLB can be found [here](https://github.com/hemelb-codes/).
 However for this lesson, we recommend using the HemePure example - a version of HemeLB that has
 further optimisations for scalable simulation on CPU based machines. 
 
@@ -57,19 +57,6 @@ further optimisations for scalable simulation on CPU based machines.
 > In either case, you should still check the benchmark case though! Sometimes system administrators are short
 > on time or background knowledge of applications and do not do thorough testing. For locally compiled codes, the default options for compilers
 > and libraries may not necessarily be optimal for performance. Benchmark testing can allow the best option for that machine to be identified.
-{: .callout}
-
-> ## Compiling HemeLB on your HPC
-> 
-> 1) Clone or download the source code for HemePure to your HPC
-> 2) Edit the `FullBuildScript.sh` file to pass the correct C++ and MPI compiler shortcuts for your machine
-> **N.B.** HemeLB requires C++ and MPI to run, we have successfully tried several different compiler options/versions but cannot guarantee 
-> that every combination will work effectively. For open-source options, GNU 7.5.0 and OpenMPI 2.1.1 should provide a good starting point. Python 2.7 is also 
-> required for dependency compilation (**TODO??** update to Python3 version?)
-> 3) Run the `FullBuildScript.sh` from the HemePure directory. This will build both the necessary dependencies and the source code for some initial tests.
-> We will discuss compilation options for improving performance in a later episode. Unless you are changing compiler versions, it is not necessary to rebuild
-> the dependencies each time you wish to test some different code or compilation option.
-> 4) Cross your fingers for compilation to complete. Once finished, there should be the `hemepure` executable in the `src/build` folder.
 {: .callout}
 
 > ## Running a HemeLB job on your HPC
