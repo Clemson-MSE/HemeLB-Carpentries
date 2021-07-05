@@ -30,25 +30,15 @@ also be used to measure differing performance across different systems. Usually 
 architectures to see how a code performs on each one. Like our sprinter, the times of benchmarks depends on a number
 of things: software, hardware or the computer itself and it’s architecture.
 
-> ## Running a HemeLB job on your HPC
-> 
-> **EDITME** Use 10 core example for bifurcation, 5000 steps
->
-> Put the job script, input files and outputs into a folder called `10c-bif`.
->
-{: .challenge}
-
-## Understanding your output files
-
-**EDITME** How to understand your output files, and gain understanding of where most time is spent. Use examples.
-
-> ## Editing the submission script
->
-> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
-> 
-> Modify this copied submission script, editing it in such a way to include multiple nodes.
->
-{: .challenge}
+## What is HemeLB?
+HemeLB is a 3D blood flow simulation code based on the lattice Boltzmann method. It is an open-source code built
+using C++ and MPI and has demonstrated excellent scaling performance on some of the largest and fastest supercomputers
+on the planet. One particular challenge for simulating the typically sparse domains characteristic of blood vessels is
+dealing with the sparse domain space - for a bounding box of a given domain maybe 1% (and often much less) actually 
+consists of fluid that you are interested in studying. During its development, HemeLB has been specifically optimised 
+to efficiently study such domains. The full feature version of HemeLB can be found [here](https://github.com/hemelb-codes/).
+However for this lesson, we recommend using the HemePure example - a version of HemeLB that has
+further optimisations for scalable simulation on CPU based machines. 
 
 > ## Callout: Local vs system-wide installations
 >
@@ -60,9 +50,78 @@ of things: software, hardware or the computer itself and it’s architecture.
 > that system. If you can't easily find your application, contact user support for the
 > system to help you.
 >
-> You should still check the benchmark case though! Sometimes system administrators are short
-> on time or background knowledge of applications and do not do thorough testing.
+> For less widely used codes, such as HemeLB, you will have to compile the code on the HPC system
+> for your own use. Build scripts are available to help streamline this process but these must be
+> customised to the specific libraries and nomenclature of individual HPC systems
+>
+> In either case, you should still check the benchmark case though! Sometimes system administrators are short
+> on time or background knowledge of applications and do not do thorough testing. For locally compiled codes, the default options for compilers
+> and libraries may not necessarily be optimal for performance. Benchmark testing can allow the best option for that machine to be identified.
 {: .callout}
+
+> ## Running a HemeLB job on your HPC
+> 
+> HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests from multiple users.
+> Common examples of schedulers include SLURM and PBS. 
+>
+> Examine the provided jobscripts for a simple HemeLB job. As can be seen, this tells the scheduler critical information about the job that
+> it uses to determine when it can run on the compute nodes. Particular information includes who submitted the jobs, how long it needs to 
+> run for, what resources are required and which allocation needs to be charged for the job.
+> After this job information, the script loads the libraries necessary for supporting jobs execution. In particular, the compiler and MPI libraries need to be loaded. 
+> Finally the commands to launch the jobs are called. These may also include any pre- or post-processing jobs that need to be run on the compute nodes.
+>
+> This example submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where indicated, modify the script to the correct
+> settings for usernames and filepaths for your HPC system. It must be noted here that all HPC systems have subtle differences in the necessary commands to 
+> submit a job, please consult your local documentation for definitive advice on this for your HPC system.
+>
+> Submit this job and read on while it is completing (typical runtime of ~5mins).
+>
+{: .challenge}
+
+While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
+**callout of the full input file here**
+The HemeLB input file can be broken into three main regions: Simulation set-up; Boundary conditions; and Property output.
+In the simulation set-up section (**section callout nearby**) specifies global simulation information such as the discretisation parameters, total
+simulation steps and initialisation requirements. The boundary conditions specify the local parameters needed for the execution of the inlets and 
+outlets of the simulation domain. Finally, the property output section dictates the type and frequency of dumping simulation data to file for post-processing.
+
+The actual geometry being run by HemeLB is specified by the `bifurcation.gmy` file (**provide image of domain**) and represents the splitting of 
+a single cylinder into two. This can be seen as simplified representation of many vascular junctions presented throughout the network of 
+arteries and veins.
+
+## Understanding your output files
+
+Your job will typically generate a number of output files. Firstly, there will be job output and error files with names indicated in the job script. 
+Often these involve the submitted job name and the job number assigned by the scheduler. These will generally be found in the same folder that the job
+script was submitted from. In a successful job, the error file should be empty (or only contain system specific, non-critical warnings) whilst the 
+output file will contain the screen based HemeLB output.
+
+Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the jobscript with the `-out` option. 
+Here both summary execution information and property output is contained in the folder `results/Extracted`. For further guide on using the `hemeXtract` 
+tool (https://github.com/UCL-CCS/hemeXtract) please see the tutorial on the HemeLB website.
+
+Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file is provided below:
+**ExampleReport.txt**
+
+**Breakdown of key parts of report - sites/node, simulation vs total job time, other areas of interest.**
+
+**EDITME** How to understand your output files, and gain understanding of where most time is spent. Use examples.
+
+
+> ## Editing the submission script
+>
+> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
+> 
+> Often we need to run simulations on a larger quantity of resources than that provided by a single node.  For HemeLB, this change does not require
+> any modification to the source code to achieve. Here we can easily request more nodes for our study by changing the resources requested in the 
+> job submission scripts **indicate the line to change SLURM/PBS**
+> When changing the resources requested, ensure that you also modify the execution line to use the desired resources. In SLURM, this can be automated
+> with the $SLURM_NTASKS shortcut.
+>
+> Modify this your submission script and investigate the effect of changing requested resources.
+>
+{: .challenge}
+
 
 ## Benchmarking in HemeLB: A case study
 
@@ -81,7 +140,7 @@ let us overview the concepts of benchmarking.
 > 3. Increase by x2 by core count up to 131072 cores (x-axis), 18 points
 > 4. Increase by 10 cores up to 2000 cores (200 points)
 > 5. Linear increase 1-20 nodes ~20 points
-> 6. **EDITME** Another wrong answer
+> 6. Three test cases: the smallest number of cores possible, the largest number of cores possible and a point at halfway
 > 
 >
 > > ## Solution
@@ -95,14 +154,16 @@ let us overview the concepts of benchmarking.
 > >    would be highly impractical. Benchmarks are used to get an idea of scalability, the exact performance will vary
 > >    with every benchmark run.
 > > 5. Yes. This is also a suitable metric for benchmarking, similar to response #3.
-> >
+> > 6. No. While this will cover the spread of simulation possibilities on the machine, it will be too sparse to permit
+> >    an appropriate characterisation of the the code on your system. Depending on the operational restrictions of your 
+> >    system, full machine jobs may not be possible to run or may require a long time before it launches. 
 > {: .solution}
 {: .challenge}
 
 ## Scaling 
 
 Going back to our athelete example from earlier, we may have determined the conditions and done a few benchmarks on
-his/her performance over different distances, we might have learned a few things.
+their performance over different distances, we might have learned a few things.
 
 - how fast the athelete can run over short, medium and long distances
 - the point at which the athelete can no longer perform at peak performance
@@ -121,6 +182,8 @@ Here, `t(1)` is the computational time for running the software using one proces
 running the software with N proceeses. An ideal situation is to have a linear speedup, equal to the number of
 processors (speedup = N), so every processor contributes 100% of its computational power. In most cases, as an
 idealised situation this is very hard to attain.
+
+
 
 ### Weak scaling vs Strong scaling
 
@@ -145,7 +208,7 @@ reduced workload for each processor.
 
 > ## Amdahl's Law
 >
-> The speedup is limited by the fraction of the seria part of the software that is not amenable to parallelisation
+> The speedup is limited by the fraction of the serial part of the software that is not amenable to parallelisation
 >
 > `Speedup = 1/( s + p / N )`
 > 
@@ -154,7 +217,9 @@ reduced workload for each processor.
 >
 {: .callout}
 
-Whether one is dealing with a strong or weak scaling 
+Whether one is most concerned with strong or weak scaling can depends on the type of problem being studied and the resources 
+available to the user. For large machines, where extra resources are relatively cheap, strong scaling ability can be more useful.
+This allows problems to be solved more quickly. 
 
 > ## Determine best performance from a scalability study
 > 
@@ -197,22 +262,30 @@ Whether one is dealing with a strong or weak scaling
 > {: .solution}
 {: .challenge}
 
-**EDITME** (This section needs more expandid)
+**EDITME** (This section needs more expandid) JM-Ok now?
 
 Scaling behaviour in computation is centred around the effective use of resources as you
 scale up the amount of computing resources you use. An example of "perfect" scaling would
-be that when we use twice as many CPUs, we get an answer in half the time. "Bad" scaling
-would be when the answer takes only 10% less time when we double the CPUs. This example
-is one of **strong scaling**, where the workload doesn't change as we increase our
-resources.
+be that when we use twice as many CPUs, we get an answer in half the time. "Poor" scaling
+would be when the answer takes only 10% less time when we double the CPUs. "Bad" scaling 
+may see a job take longer to complete when more nodes are provided. This example is one of
+ **strong scaling**, where we have a fixed problem size and need to know how quickly we can 
+solve it. The total workload doesn't change as we increase our resources. 
+
+The behaviour of a code in this strong scaling setting is a function of both code design and 
+hardware layout. "Good" strong scaling behaviour occurs when the time required for computing 
+a solution outweighs the time taken for communication to occur. Less desirable scaling performance
+is observed when this balance tips and communication time outweighs compute time. The point 
+at which this occurs varies between machines and again emphasise the need for benchmarking.
 
 > ## Plotting strong scalability
 >
-> Use the original job script for 2 nodes and run it.
+> Using the original job script run HemeLB jobs at least 6 different job sizes, preferably over 
+> multiple nodes. For the size of job provided here, we suggest aiming for a maximum of around
+> 200 cores. After each job, record the `Simulation Time` from the Report.txt file.
 >
-> Now that
-> you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
-> the number of CPU cores on the X-axis and the loop times on the Y-axis (use your
+> Now that you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
+> the number of CPU cores on the X-axis and the simulation times on the Y-axis (use your
 > favourite plotting tool, an online plotter or even pen and paper).
 >
 > Are you close to "perfect" scalability?
@@ -244,3 +317,8 @@ performance, you may have the resources, but the effective use of the resources 
 where the challenge lies. Having each chef cooking their specialised dishes would be
 good weak scaling: an effective use of your additional resources. Poor weak scaling
 will likely result from having your pastry chef doing the main dish.
+
+Weak scaling with HemeLB can be challenging to undertake as it is difficult to reliably
+guarantee an even division of work between processors for a given problem. This is due
+to the load partitioning algorithm used which must be able to deal with sparse and complex
+geometry shapes.
