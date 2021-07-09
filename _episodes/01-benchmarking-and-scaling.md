@@ -97,11 +97,15 @@ script was submitted from. In a successful job, the error file should be empty (
 output file will contain the screen based HemeLB output.
 
 Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the jobscript with the `-out` option. 
-Here both summary execution information and property output is contained in the folder `results/Extracted`. For further guide on using the `hemeXtract` 
-tool (https://github.com/UCL-CCS/hemeXtract) please see the tutorial on the HemeLB website.
+Here both summary execution information and property output is contained in the folder `results/Extracted`. For further
+guide on using the [`hemeXtract`tool](https://github.com/UCL-CCS/hemeXtract) please see the tutorial on the HemeLB website.
 
 Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file is provided below:
-**ExampleReport.txt**
+
+~~~
+{% include files/ExampleReport.txt %}
+~~~
+
 
 **Breakdown of key parts of report - sites/node, simulation vs total job time, other areas of interest.**
 
@@ -112,11 +116,11 @@ Open the file `results/report.txt` to view a breakdown of statistics of the Heme
 >
 > Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
 > 
-> Often we need to run simulations on a larger quantity of resources than that provided by a single node.  For HemeLB, this change does not require
-> any modification to the source code to achieve. Here we can easily request more nodes for our study by changing the resources requested in the 
-> job submission scripts **indicate the line to change SLURM/PBS**
-> When changing the resources requested, ensure that you also modify the execution line to use the desired resources. In SLURM, this can be automated
-> with the $SLURM_NTASKS shortcut.
+> Often we need to run simulations on a larger quantity of resources than that provided by a single node. For HemeLB, 
+> this change does not require any modification to the source code to achieve. Here we can easily request more nodes 
+> for our study by changing the resources requested in the job submission scripts **indicate the line to change SLURM/PBS**
+> When changing the resources requested, ensure that you also modify the execution line to use the desired resources. 
+> In SLURM, this can be automated with the `$SLURM_NTASKS` shortcut.
 >
 > Modify this your submission script and investigate the effect of changing requested resources.
 >
@@ -183,8 +187,6 @@ running the software with N proceeses. An ideal situation is to have a linear sp
 processors (speedup = N), so every processor contributes 100% of its computational power. In most cases, as an
 idealised situation this is very hard to attain.
 
-
-
 ### Weak scaling vs Strong scaling
 
 Applications can be divided into either **strong scaling** or **weak scaling** applications.
@@ -248,7 +250,7 @@ This allows problems to be solved more quickly.
 > 
 > You may find that this graph would differ if you ran the same code on a different machine. Why?
 > 
-> > # Solution
+> > ## Solution
 > > 
 > > 1. No, the performance is still increasing, at this point we are no longer achieving perfect scalability.
 > > 2. Yes, the performance peaks at this location, and one cannot get higher speed up with this set up.
