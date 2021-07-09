@@ -134,12 +134,12 @@ let us overview the concepts of benchmarking.
 >
 > <p align="center"><img src="../fig/01/ep1_ideal_benchmark.png" width="100%"/></p>
 >
-> 1. Linear increase in core count to 64 cores (x-axis) ~10 points
-> 2. Increase by x2 by core count up to 2048 cores (x-axis), 12 points
-> 3. Increase by x2 by core count up to 131072 cores (x-axis), 18 points
-> 4. Increase by 10 cores up to 2000 cores (200 points)
-> 5. Linear increase 1-20 nodes ~20 points
-> 6. Three test cases: the smallest number of cores possible, the largest number of cores possible and a point at halfway
+> 1. 7 benchmarks, core count increases by factor of 2
+> 2. 12 benchmarks, core count increases by factor of 2
+> 3. 18 benchmarks, core count increases by factor of 2
+> 4. 200 benchmarks, core count increases by 10
+> 5. 20 benchmarks, node count increases linearly
+> 6. 3 benchmarks; i) 1 core, ii) the maximum of cores possible, iii) a point at halfway
 > 
 >
 > > ## Solution
