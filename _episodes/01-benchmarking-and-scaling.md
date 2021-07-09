@@ -98,7 +98,7 @@ guide on using the [`hemeXtract`tool](https://github.com/UCL-CCS/hemeXtract) ple
 Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file is provided below:
 
 ~~~
-{% include files/ExampleReport.txt %}
+include files/ExampleReport.txt
 ~~~
 
 
