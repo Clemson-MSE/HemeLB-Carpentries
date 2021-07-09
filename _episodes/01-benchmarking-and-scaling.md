@@ -50,6 +50,7 @@ of things: software, hardware or the computer itself and it’s architecture.
 > allow the best option for that machine to be identified.
 {: .callout}
 
+
 > ## Running a HemeLB job on your HPC
 > 
 > HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests
@@ -73,32 +74,42 @@ of things: software, hardware or the computer itself and it’s architecture.
 
 While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
 **callout of the full input file here**
-The HemeLB input file can be broken into three main regions: Simulation set-up; Boundary conditions; and Property output.
-In the simulation set-up section (**section callout nearby**) specifies global simulation information such as the discretisation parameters, total
-simulation steps and initialisation requirements. The boundary conditions specify the local parameters needed for the execution of the inlets and 
-outlets of the simulation domain. Finally, the property output section dictates the type and frequency of dumping simulation data to file for post-processing.
+
+~~~
+
+~~~
+
+
+The HemeLB input file can be broken into three main regions: Simulation set-up; Boundary conditions; and Property
+output. In the simulation set-up section (**section callout nearby**) specifies global simulation information such as
+the discretisation parameters, total simulation steps and initialisation requirements. The boundary conditions specify
+the local parameters needed for the execution of the inlets and outlets of the simulation domain. Finally, the property
+output section dictates the type and frequency of dumping simulation data to file for post-processing.
 
 The actual geometry being run by HemeLB is specified by the `bifurcation.gmy` file and represents the splitting of 
-a single cylinder into two. This can be seen as simplified representation of many vascular junctions presented throughout the network of 
-arteries and veins.
+a single cylinder into two. This can be seen as simplified representation of many vascular junctions presented
+throughout the network of arteries and veins.
 
 <p align="center"><img src="../fig/01/BifurcationImage.png" width="60%"/></p>
 
 ## Understanding your output files
 
-Your job will typically generate a number of output files. Firstly, there will be job output and error files with names indicated in the job script. 
-Often these involve the submitted job name and the job number assigned by the scheduler. These will generally be found in the same folder that the job
-script was submitted from. In a successful job, the error file should be empty (or only contain system specific, non-critical warnings) whilst the 
-output file will contain the screen based HemeLB output.
+Your job will typically generate a number of output files. Firstly, there will be job output and error files with names
+indicated in the job script. Often these involve the submitted job name and the job number assigned by the scheduler. 
+These will generally be found in the same folder that the job script was submitted from. In a successful job, the error
+file should be empty (or only contain system specific, non-critical warnings) whilst the output file will contain the
+screen based HemeLB output.
 
-Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the jobscript with the `-out` option. 
-Here both summary execution information and property output is contained in the folder `results/Extracted`. For further
-guide on using the [`hemeXtract`tool](https://github.com/UCL-CCS/hemeXtract) please see the tutorial on the HemeLB website.
+Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the
+job script with the `-out` option. Here both summary execution information and property output is contained in the
+folder `results/Extracted`. For further guide on using the [`hemeXtract`tool](https://github.com/UCL-CCS/hemeXtract)
+please see the tutorial on the HemeLB website.
 
-Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file is provided below:
+Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file
+is provided below:
 
 ~~~
-include files/ExampleReport.txt
+include 01/ExampleReport.txt
 ~~~
 
 
@@ -221,29 +232,17 @@ This allows problems to be solved more quickly.
 > ## Determine best performance from a scalability study
 > 
 > Consider the following scalability plot for a random application
-> ~~~
-> |          /
-> |         /
-> |        /
-> |       /  
-> |      / b
-> |     / _._
-> |   a/_/   \c
-> |   //
-> |  //
-> |_//_________
-> ~~~
-> {: .language-bash}
-> #processors/nodes
+> 
+> <p align="center"><img src="../fig/01/scalability_study.png" width="100%"/></p>
 > 
 > At what point would you consider to be peak performance in this example.
 >
-> - 1. a
-> - 2. b
-> - 3. c
-> - 4. None of the above 
+> 1. A
+> 2. B
+> 3. C
+> 4. None of the above 
 > 
-> You may find that this graph would differ if you ran the same code on a different machine. Why?
+> You may find that a scalability graph my vary if you ran the same code on a different machine. Why?
 > 
 > > ## Solution
 > > 
