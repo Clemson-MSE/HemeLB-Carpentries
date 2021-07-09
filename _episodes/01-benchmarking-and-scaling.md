@@ -233,7 +233,7 @@ This allows problems to be solved more quickly.
 > 
 > Consider the following scalability plot for a random application
 > 
-> <p align="center"><img src="../fig/01/scalability_study.png" width="100%"/></p>
+> <p align="center"><img src="../fig/01/scalability_study.png" width="50%"/></p>
 > 
 > At what point would you consider to be peak performance in this example.
 >
