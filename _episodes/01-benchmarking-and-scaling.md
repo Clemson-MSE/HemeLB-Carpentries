@@ -317,7 +317,7 @@ computed by:
 `MLUPS = (NumSites * NumSimulationSteps)/(1e6 * SimulationTime * Cores)`
 
 When plotted over a number of simulation size for a given machine, this metric will display a
-steady plateau in the regime where comunication is masked by computation. When this declines, 
+steady plateau in the regime where communication is masked by computation. When this declines, 
 it illustrates when communication begins to take much longer to perform. The point at which this
 occurs will depend on the size of the geometry used and the performance characteristics of the 
 given machine. As an illustration we have generated examples of these plots for the test bifurcation
