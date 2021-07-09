@@ -30,16 +30,6 @@ also be used to measure differing performance across different systems. Usually 
 architectures to see how a code performs on each one. Like our sprinter, the times of benchmarks depends on a number
 of things: software, hardware or the computer itself and it’s architecture.
 
-## What is HemeLB?
-HemeLB is a 3D blood flow simulation code based on the lattice Boltzmann method. It is an open-source code built
-using C++ and MPI and has demonstrated excellent scaling performance on some of the largest and fastest supercomputers
-on the planet. One particular challenge for simulating the typically sparse domains characteristic of blood vessels is
-dealing with the sparse domain space - for a bounding box of a given domain maybe 1% (and often much less) actually 
-consists of fluid that you are interested in studying. During its development, HemeLB has been specifically optimised 
-to efficiently study such domains. The full feature version of HemeLB can be found [here](https://github.com/hemelb-codes/).
-However for this lesson, we recommend using the HemePure example - a version of HemeLB that has
-further optimisations for scalable simulation on CPU based machines. 
-
 > ## Callout: Local vs system-wide installations
 >
 > Whenever you get access to an HPC system, there are usually two ways to get access to
@@ -52,26 +42,29 @@ further optimisations for scalable simulation on CPU based machines.
 >
 > For less widely used codes, such as HemeLB, you will have to compile the code on the HPC system
 > for your own use. Build scripts are available to help streamline this process but these must be
-> customised to the specific libraries and nomenclature of individual HPC systems
+> customised to the specific libraries and nomenclature of individual HPC systems.
 >
 > In either case, you should still check the benchmark case though! Sometimes system administrators are short
-> on time or background knowledge of applications and do not do thorough testing. For locally compiled codes, the default options for compilers
-> and libraries may not necessarily be optimal for performance. Benchmark testing can allow the best option for that machine to be identified.
+> on time or background knowledge of applications and do not do thorough testing. For locally compiled codes, the 
+> default options for compilers and libraries may not necessarily be optimal for performance. Benchmark testing can
+> allow the best option for that machine to be identified.
 {: .callout}
 
 > ## Running a HemeLB job on your HPC
 > 
-> HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests from multiple users.
-> Common examples of schedulers include SLURM and PBS. 
+> HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests
+> from multiple users. Common examples of schedulers include SLURM and PBS. 
 >
-> Examine the provided jobscripts for a simple HemeLB job. As can be seen, this tells the scheduler critical information about the job that
-> it uses to determine when it can run on the compute nodes. Particular information includes who submitted the jobs, how long it needs to 
-> run for, what resources are required and which allocation needs to be charged for the job.
-> After this job information, the script loads the libraries necessary for supporting jobs execution. In particular, the compiler and MPI libraries need to be loaded. 
-> Finally the commands to launch the jobs are called. These may also include any pre- or post-processing jobs that need to be run on the compute nodes.
+> Examine the provided jobscripts for a simple HemeLB job. As can be seen, this tells the scheduler critical 
+> information about the job that it uses to determine when it can run on the compute nodes. Particular information
+> includes who submitted the jobs, how long it needs to run for, what resources are required and which allocation needs
+> to be charged for the job. After this job information, the script loads the libraries necessary for supporting jobs
+> execution. In particular, the compiler and MPI libraries need to be loaded. Finally the commands to launch the jobs
+> are called. These may also include any pre- or post-processing jobs that need to be run on the compute nodes.
 >
-> This example submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where indicated, modify the script to the correct
-> settings for usernames and filepaths for your HPC system. It must be noted here that all HPC systems have subtle differences in the necessary commands to 
+> (**CW CHANGE**) This example submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where
+> indicated, modify the script to the correct settings for usernames and filepaths for your HPC system. It must be 
+> noted here that all HPC systems have subtle differences in the necessary commands to 
 > submit a job, please consult your local documentation for definitive advice on this for your HPC system.
 >
 > Submit this job and read on while it is completing (typical runtime of ~5mins).
@@ -85,9 +78,11 @@ In the simulation set-up section (**section callout nearby**) specifies global s
 simulation steps and initialisation requirements. The boundary conditions specify the local parameters needed for the execution of the inlets and 
 outlets of the simulation domain. Finally, the property output section dictates the type and frequency of dumping simulation data to file for post-processing.
 
-The actual geometry being run by HemeLB is specified by the `bifurcation.gmy` file (**provide image of domain**) and represents the splitting of 
+The actual geometry being run by HemeLB is specified by the `bifurcation.gmy` file and represents the splitting of 
 a single cylinder into two. This can be seen as simplified representation of many vascular junctions presented throughout the network of 
 arteries and veins.
+
+<p align="center"><img src="../fig/01/BifurcationImage.png" width="40%"/></p>
 
 ## Understanding your output files
 
@@ -137,7 +132,7 @@ let us overview the concepts of benchmarking.
 > Benchmarking is a process that judges how well a piece of software runs on a system. Based on what you have learned
 > thus far from running your own benchmarks, which of the following would represent a good benchmarking analysis?
 >
-> **EDITME** Add graphs CW
+> <p align="center"><img src="../fig/01/ep1_ideal_benchmark.png" width="40%"/></p>
 >
 > 1. Linear increase in core count to 64 cores (x-axis) ~10 points
 > 2. Increase by x2 by core count up to 2048 cores (x-axis), 12 points

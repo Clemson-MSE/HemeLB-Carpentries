@@ -1,11 +1,11 @@
 #!/bin/bash --login
 
-# PBS job options (name, compute nodes (each node has 24 cores), job time)
-# PBS -N is the job name (e.g. Example_MPI_Job)
+#PBS job options (name, compute nodes (each node has 24 cores), job time)
+#PBS -N is the job name (e.g. Example_MPI_Job)
 #PBS -N jobname
-# PBS -l select is the number of nodes requested (here 2 nodes with 24 CPUs/node)
+#PBS -l select is the number of nodes requested (here 2 nodes with 24 CPUs/node)
 #PBS -l select=2:ncpus=24
-# PBS -l walltime, maximum walltime allowed (e.g. 15 minutes)
+#PBS -l walltime, maximum walltime allowed (e.g. 15 minutes)
 #PBS -l walltime=00:15:00
 
 # Replace [budget code] below with your project code (e.g. t01)
