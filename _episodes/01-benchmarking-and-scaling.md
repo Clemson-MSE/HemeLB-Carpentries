@@ -82,7 +82,7 @@ The actual geometry being run by HemeLB is specified by the `bifurcation.gmy` fi
 a single cylinder into two. This can be seen as simplified representation of many vascular junctions presented throughout the network of 
 arteries and veins.
 
-<p align="center"><img src="../fig/01/BifurcationImage.png" width="40%"/></p>
+<p align="center"><img src="../fig/01/BifurcationImage.png" width="60%"/></p>
 
 ## Understanding your output files
 
@@ -132,7 +132,7 @@ let us overview the concepts of benchmarking.
 > Benchmarking is a process that judges how well a piece of software runs on a system. Based on what you have learned
 > thus far from running your own benchmarks, which of the following would represent a good benchmarking analysis?
 >
-> <p align="center"><img src="../fig/01/ep1_ideal_benchmark.png" width="40%"/></p>
+> <p align="center"><img src="../fig/01/ep1_ideal_benchmark.png" width="100%"/></p>
 >
 > 1. Linear increase in core count to 64 cores (x-axis) ~10 points
 > 2. Increase by x2 by core count up to 2048 cores (x-axis), 12 points
