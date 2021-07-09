@@ -237,9 +237,9 @@ This allows problems to be solved more quickly.
 > 
 > At what point would you consider to be peak performance in this example.
 >
-> 1. A
-> 2. B
-> 3. C
+> 1. A: The point where performance gains are no longer linear
+> 2. B: The apex of the curve
+> 3. C: The maximum core count
 > 4. None of the above 
 > 
 > You may find that a scalability graph my vary if you ran the same code on a different machine. Why?
