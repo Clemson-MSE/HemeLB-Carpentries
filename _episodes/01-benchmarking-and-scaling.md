@@ -278,6 +278,12 @@ a solution outweighs the time taken for communication to occur. Less desirable s
 is observed when this balance tips and communication time outweighs compute time. The point 
 at which this occurs varies between machines and again emphasise the need for benchmarking.
 
+HemeLB is a code that has demonstrated very good strong scaling characteristics on several 
+large supercomputers up to full machine scale. **FIGURES here - files/SNG* plots** The plots below provide examples of such 
+performance on the German machine SuperMUC-NG. These demonstrate how the performance varies 
+between 864 and 309,120 CPU cores in terms of both walltime used in the simulation phase 
+and the speed-up observed compared to the smallest number of cores used. 
+
 > ## Plotting strong scalability
 >
 > Using the original job script run HemeLB jobs at least 6 different job sizes, preferably over 
@@ -291,6 +297,42 @@ at which this occurs varies between machines and again emphasise the need for be
 > Are you close to "perfect" scalability?
 >
 {: .challenge}
+
+In this exercise you have plotted performance against simulation time. However this is not
+the only way to assess the scalability performance of the code on your machine. Speed-up is 
+another commonly used measure. At a given core count, the speed-up can be computed by 
+
+`Speedup = SimTimeAtLeastCores/SimTimeAtCurrentCores`
+
+For a perfectly scaling code, the computational speed up will match the scale-up in cores used.
+This line can be used as an 'Ideal' measure to assess local machine performance. It can also
+be useful to construct a line of 'Good' scaling - 75% efficient for example - to further 
+assist in performance evaluation. 
+
+Some measure of algorithmic speed can also be useful for evaluating machine performance. For
+lattice Boltzmann method based codes such as HemeLB, a common metric is MLUPS - Millions of 
+Lattice site Updates Per Second - which is often expressed as a core based value and can be
+computed by:
+
+`MLUPS = (NumSites * NumSimulationSteps)/(1e6 * SimulationTime * Cores)`
+
+When plotted over a number of simulation size for a given machine, this metric will display a
+steady plateau in the regime where communication is masked by computation. When this declines, 
+it illustrates when communication begins to take much longer to perform. The point at which this
+occurs will depend on the size of the geometry used and the performance characteristics of the 
+given machine. As an illustration we have generated examples of these plots for the test bifurcation
+case on SuperMUC-NG. We have also illustrated the effect of different axes scaling can have on
+presenting scaling performance. The use of logarithmic scales can allow scaling to be easily 
+viewed but it can also make changes in values harder to assess. Linear scales make axes easier to 
+interpret but can also make it harder to distinguish between individual points. **fig/plots**
+
+These figures also highlight two other characteristics of assessing performance. In our SuperMUC-NG
+results, the four data points at the lowest core counts appear to have better performance than that
+at higher core counts. Here this is due to the the transition from one to multiple nodes on this machine 
+and this has a consequence on communication performance. Similarly is the presence of some seemingly
+unusual data results. The performance of computer hardware can be occasionally variable and a 
+single non-performant core will impact the result of the whole simulation. This emphasises the need 
+to repeat key benchmark tests to ensure a reliable measure of performance is obtained. 
 
 ### Weak scaling
 
