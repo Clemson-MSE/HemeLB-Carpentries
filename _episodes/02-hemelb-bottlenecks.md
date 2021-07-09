@@ -45,7 +45,7 @@ representative system having a modest system size and run for a few hundred/thou
 timesteps.
 
 Benchmark plots - particularly for speed-up and MLUPS/core - can help identify when a potential
-bottleneck becomes a problem for efficient simulation. If an apparent bottlenck is particularly
+bottleneck becomes a problem for efficient simulation. If an apparent bottleneck is particularly
 significant, timing data from a job can also be useful in identifying where the source of it 
 may be. HemeLB has a reporting mechanism that we introduced in Episode 1 that provides such 
 information. This file gets written to results/report.txt.  **ExampleReport.txt**
