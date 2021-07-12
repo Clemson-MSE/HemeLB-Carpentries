@@ -4,7 +4,7 @@
 # SITE specific configuration
 #------------------------------------------------------------
 # Cluster host and scheduler options: the defaults come from
-# Jureca at JSC, running SLURM. Other options can
+# SuperMUC-NG, running SLURM. Other options can
 # be found in the library of snippets_library,
 # `_includes/snippets_library`. To use one, replace options
 # below with those in `_config_options.yml` from the
@@ -17,7 +17,7 @@
 # copy an existing folder, rename it, and customize for your
 # installation. Remember to keep the leading slash on the
 # `snippets` variable below!
-snippets: "/snippets_library/JSC_JURECA_SLURM"
+snippets: "/snippets_library/SLURM-SuperMUC-NG"
 local:
   prompt: "[user@laptop ~]$"
 
@@ -50,6 +50,7 @@ sched:
   interactive: "srun"
   info: "sinfo"
   comment: "#SBATCH"
+  ntasks: "$SLURM_NTASKS"
   hist: "sacct -u yourUsername"
   queue:
     default: "batch"
