@@ -73,10 +73,9 @@ of things: software, hardware or the computer itself and it’s architecture.
 {: .challenge}
 
 While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
-**callout of the full input file here**
 
 ~~~
-
+{% include {{ site.snippets }}/01/10c-bif_input.xml %}
 ~~~
 
 
@@ -109,8 +108,9 @@ Open the file `results/report.txt` to view a breakdown of statistics of the Heme
 is provided below:
 
 ~~~
-include 01/ExampleReport.txt
+{% include {{ site.snippets }}/01/ExampleReport.txt %}
 ~~~
+{: .source}
 
 
 **Breakdown of key parts of report - sites/node, simulation vs total job time, other areas of interest.**
@@ -126,7 +126,7 @@ include 01/ExampleReport.txt
 > this change does not require any modification to the source code to achieve. Here we can easily request more nodes 
 > for our study by changing the resources requested in the job submission scripts **indicate the line to change SLURM/PBS**
 > When changing the resources requested, ensure that you also modify the execution line to use the desired resources. 
-> In SLURM, this can be automated with the `$SLURM_NTASKS` shortcut.
+> In {{ site.sched.name }}, this can be automated with the `{{ site.sched.ntasks }}` shortcut.
 >
 > Modify this your submission script and investigate the effect of changing requested resources.
 >
@@ -152,7 +152,6 @@ let us overview the concepts of benchmarking.
 > 5. 20 benchmarks, node count increases linearly
 > 6. 3 benchmarks; i) 1 core, ii) the maximum of cores possible, iii) a point at halfway
 > 
->
 > > ## Solution
 > > 
 > > 1. No, the core counts that are being benchmarked are too low and the number of points is not sufficient
@@ -265,7 +264,7 @@ scale up the amount of computing resources you use. An example of "perfect" scal
 be that when we use twice as many CPUs, we get an answer in half the time. "Poor" scaling
 would be when the answer takes only 10% less time when we double the CPUs. "Bad" scaling 
 may see a job take longer to complete when more nodes are provided. This example is one of
- **strong scaling**, where we have a fixed problem size and need to know how quickly we can 
+**strong scaling**, where we have a fixed problem size and need to know how quickly we can 
 solve it. The total workload doesn't change as we increase our resources. 
 
 The behaviour of a code in this strong scaling setting is a function of both code design and 
