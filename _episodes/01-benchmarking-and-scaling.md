@@ -87,10 +87,10 @@ your local documentation for definitive advice on this for your HPC system.
 
 While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
 
-~~~
+```xml
 {% include {{ site.snippets }}/01/10c-bif_input.xml %}
-~~~
-{: .xml}
+```
+
 
 The HemeLB input file can be broken into three main regions: 
 
