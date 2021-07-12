@@ -1,12 +1,12 @@
-# JSC, Julich Supercomputing Centre: Jureca + SBATCH
-host_name: "Jureca"
-host_login: "kay.ichec.ie"
-host_location: "JSC, Julich Supercomputing Centre"
-host_homedir: "/ichec/home/course01"  # watch out due to course accounts
+# LRZ, Leibniz Supercomputing Centre: Jureca + SBATCH
+host_name: "SuperMUC-NG"
+host_login: "" # EDIT ME
+host_location: "Leibniz Supercomputing Centre"
+host_homedir: ""  # EDIT ME
 host_prompt: "[user@laptop ~]$"
 sched_name: "SBATCH" # Check
 sched_submit: "sbatch"
-sched_submit_options: "-A course01" # check
+sched_submit_options: "-A course01" # EDITME
 sched_flag_time: "--time "
 sched_flag_node: "--nodes "
 sched_status: "sstat"
@@ -17,10 +17,7 @@ sched_comment: "#SBATCH"
 sched_flag_name: "-N" # EDITME
 sched_hist: "" # EDITME
 sched_flag_histdetail: "" # EDITME 
-module_lammps: "module load LAMMPS/9Jan2020-cuda"
-module_intel: "module load intel-para/2019a"
-module_devel: "module load Stages/Devel-2019a"
-module_usage: "module use /usr/local/software/jureca/OtherStages"
+module_options: "" #EDITME
 run_openmp: "srun"
 run_mpi: ""
 
