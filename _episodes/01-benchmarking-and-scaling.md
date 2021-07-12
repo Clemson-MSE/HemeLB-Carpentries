@@ -1,6 +1,6 @@
 ---
 title: "Benchmarking and Scaling"
-teaching: 15
+teaching: 30
 exercises: 15
 questions:
 - "What is benchmarking?"
@@ -51,24 +51,37 @@ of things: software, hardware or the computer itself and it’s architecture.
 {: .callout}
 
 
+## Creating a job file
+
+HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests
+from multiple users. Common examples of schedulers include SLURM and PBS. 
+
+We will now work on creating a job file which we can run on {{ site.remote.name }}. Writing a job file from scratch is
+error prone, and most supercomputing centres will have a basic one which you can modify. Below is a job file we can use
+and modify for the rest of the course.
+
+~~~
+{% include {{ site.snippets}}/01/JobScript_slurm.sh %}
+~~~
+{: .source}
+
+Particular information includes who submitted the jobs, how long it needs to run for, what resources are required
+and which allocation needs to be charged for the job. After this job information, the script loads the libraries
+necessary for supporting jobs execution. In particular, the compiler and MPI libraries need to be loaded. Finally the
+commands to launch the jobs are called. These may also include any pre- or post-processing jobs that need to be run on
+the compute nodes.
+
+The example above submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where
+indicated, modify the script to the correct settings for usernames and filepaths for your HPC system. It must be 
+noted here that all HPC systems have subtle differences in the necessary commands to submit a job, you should consult 
+your local documentation for definitive advice on this for your HPC system.
+
 > ## Running a HemeLB job on your HPC
 > 
-> HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests
-> from multiple users. Common examples of schedulers include SLURM and PBS. 
+> Examine the provided jobscript and run the job using `{{ site.sched.submit }} myjob.sh`. You can track the progress
+> of the job using `{{ site.sched.status}} {{ site.sched.user }}
 >
-> Examine the provided jobscripts for a simple HemeLB job. As can be seen, this tells the scheduler critical 
-> information about the job that it uses to determine when it can run on the compute nodes. Particular information
-> includes who submitted the jobs, how long it needs to run for, what resources are required and which allocation needs
-> to be charged for the job. After this job information, the script loads the libraries necessary for supporting jobs
-> execution. In particular, the compiler and MPI libraries need to be loaded. Finally the commands to launch the jobs
-> are called. These may also include any pre- or post-processing jobs that need to be run on the compute nodes.
->
-> (**CW CHANGE**) This example submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where
-> indicated, modify the script to the correct settings for usernames and filepaths for your HPC system. It must be 
-> noted here that all HPC systems have subtle differences in the necessary commands to 
-> submit a job, please consult your local documentation for definitive advice on this for your HPC system.
->
-> Submit this job and read on while it is completing (typical runtime of ~5mins).
+> This will take about 5 minutes.
 >
 {: .challenge}
 
@@ -78,26 +91,28 @@ While this job is running, lets examine the input file to understand the HemeLB 
 {% include {{ site.snippets }}/01/10c-bif_input.xml %}
 ~~~
 
+The HemeLB input file can be broken into three main regions: 
 
-The HemeLB input file can be broken into three main regions: Simulation set-up; Boundary conditions; and Property
-output. In the simulation set-up section (**section callout nearby**) specifies global simulation information such as
-the discretisation parameters, total simulation steps and initialisation requirements. The boundary conditions specify
-the local parameters needed for the execution of the inlets and outlets of the simulation domain. Finally, the property
-output section dictates the type and frequency of dumping simulation data to file for post-processing.
+1. **Simulation set-up**: specify global simulation information like discretisation parameters, total 
+   simulation steps and initialisation requirements
+2. **Boundary conditions**: specify the local parameters needed for the execution of the inlets and outlets of the
+   simulation domain
+3. **Property output**: dictates the type and frequency of dumping simulation data to file for post-processing
 
-The actual geometry being run by HemeLB is specified by the `bifurcation.gmy` file and represents the splitting of 
-a single cylinder into two. This can be seen as simplified representation of many vascular junctions presented
-throughout the network of arteries and veins.
+The actual geometry being run by HemeLB is specified by a geometry file, `bifurcation.gmy` which represents the 
+splitting of a single cylinder into two. This can be seen as simplified representation of many vascular junctions
+presented throughout the network of arteries and veins.
 
 <p align="center"><img src="../fig/01/BifurcationImage.png" width="60%"/></p>
 
 ## Understanding your output files
 
 Your job will typically generate a number of output files. Firstly, there will be job output and error files with names
-indicated in the job script. Often these involve the submitted job name and the job number assigned by the scheduler. 
-These will generally be found in the same folder that the job script was submitted from. In a successful job, the error
-file should be empty (or only contain system specific, non-critical warnings) whilst the output file will contain the
-screen based HemeLB output.
+which have been specified in the job script. These are often denoted with the submitted job name and the job number 
+assigned by the scheduler and are usually found in the same folder that the job script was submitted from. 
+
+In a successful job, the error file should be empty (or only contain system specific, non-critical warnings) whilst the
+output file will contain the screen based HemeLB output.
 
 Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the
 job script with the `-out` option. Here both summary execution information and property output is contained in the
@@ -124,19 +139,18 @@ is provided below:
 > 
 > Often we need to run simulations on a larger quantity of resources than that provided by a single node. For HemeLB, 
 > this change does not require any modification to the source code to achieve. Here we can easily request more nodes 
-> for our study by changing the resources requested in the job submission scripts **indicate the line to change SLURM/PBS**
-> When changing the resources requested, ensure that you also modify the execution line to use the desired resources. 
+> for our study by changing the resources requested in the job submission scripts. It is important that
+> when changing the resources requested, ensure that you also modify the execution line to use the desired resources. 
 > In {{ site.sched.name }}, this can be automated with the `{{ site.sched.ntasks }}` shortcut.
 >
-> Modify this your submission script and investigate the effect of changing requested resources.
+> Modify the appropriate section in your submission script and investigate the effect of changing requested resources.
 >
 {: .challenge}
-
 
 ## Benchmarking in HemeLB: A case study
 
 In the next section we will look at how we can use all this information to perform a scalability study, but first
-let us overview the concepts of benchmarking.
+let us ensure the concepts of benchmarking are clear.
 
 > ## The ideal benchmarking study
 >
@@ -168,6 +182,8 @@ let us overview the concepts of benchmarking.
 > >    system, full machine jobs may not be possible to run or may require a long time before it launches. 
 > {: .solution}
 {: .challenge}
+
+**CW to edit: Benchmarking HemeLB**
 
 ## Scaling 
 
@@ -333,7 +349,8 @@ to repeat key benchmark tests to ensure a reliable measure of performance is obt
 
 For **weak scaling**, we want usually want to increase our workload without increasing
 our *walltime*,
-and we do that by using additional resources. To consider this in more detail, let's head
+and we do that by using additional resources. (**EDIT ME NEEDS CHANGING BASED ON WHETHER THIS WILL BE KEPT**)
+To consider this in more detail, let's head
 back to our chefs again from the previous episode, where we had more people to serve
 but the same amount of time to do it in.
 
