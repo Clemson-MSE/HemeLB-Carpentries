@@ -4,18 +4,26 @@ root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # only page that doesn't follow the pattern /:path/index.html
 ---
 
-This workshop is specifically aimed at running the [HemeLB](http://hemelb.org.s3-website.eu-west-2.amazonaws.com/)
-software on an HPC system. You may be running HemeLB on either a desktop, laptop or
-already on an HPC system, however ineffective use of HemeLB can lead to running jobs for
-(far) longer than necessary. Being able configure HemeLB on an HPC system effectively can speed up 
-simulations significantly and vastly improve it's performance. This workshop will look to address these issues.
+HemeLB is a 3D blood flow simulation code based on the lattice Boltzmann method. It is an open-source code built
+using C++ and MPI and has demonstrated excellent scaling performance on some of the largest and fastest supercomputers
+on the planet. One particular challenge for simulating the typically sparse domains characteristic of blood vessels is
+dealing with the sparse domain space - for a bounding box of a given domain maybe 1% (and often much less) actually 
+consists of fluid that you are interested in studying. During its development, HemeLB has been specifically optimised 
+to efficiently study such domains. The full feature version of HemeLB can be found [here](https://github.com/hemelb-codes/).
+However for this lesson, we recommend using the HemePure example - a version of HemeLB that has
+further optimisations for scalable simulation on CPU based machines.
+
+This workshop is specifically aimed at running HemeLB on an HPC system. You may be running HemeLB on either a desktop,
+laptop or already on an HPC system, however ineffective use of HemeLB can lead to running jobs for
+longer than necessary. Being able configure HemeLB on an HPC system effectively can speed up simulations significantly
+an improve it's performance. This workshop will look to address these issues.
 
 Some questions that you may ask yourself are;
 
 * What is meant by the term ***performance*** in relation to piece of software?
 * How do I measure performance?
 * How can I know the expected performance of a piece of software?
-* How do I compare LAMMPS running on my HPC to its expected performance?
+* How do I compare HemeLB running on my HPC to its expected performance?
 * **If software performance is not optimal in my system, is there something that can I
   do to accelerate it?**
 

@@ -81,6 +81,8 @@ title: Running HemeLB on HPC Systems -  Lesson Outline
     - 01-benchmarking-and-scaling - exercises + content
     - 02-hemelb-bottlenecks - exercises
 
+- May 24-31 add material
+
 - May 31st
   - Start Sprint 1
 
