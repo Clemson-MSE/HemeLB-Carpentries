@@ -97,10 +97,12 @@ and **CPU hours**.
 > typically used to measure the (theoretical) performance of a computer's processor.
 >
 > The theoretical peak flops is given by
+>
 > ~~~
 > Number of cores * Average frequency * Operations per cycle`
 > ~~~
 > {: .language-bash}
+>
 > What a software program can *achieve* in terms of flops is usually a surprisingly
 > small percentage of this value (e.g., 10% efficiency is not a bad number!).
 >
@@ -141,10 +143,12 @@ and **CPU hours**.
 > > We need to ask the scheduler for 5 hours (and 2 nodes worth of resources for that
 > > time). To ask for this from the scheduler we need to include the appropriate
 > > option in our job script:
+> >
 > > ~~~
 > > {{ site.sched.comment }} {{ site.sched.flag.time }} 5:00:00
 > > ~~~
 > > {: .language-bash} 
+> >
 > {: .solution}
 {: .challenge}
 
