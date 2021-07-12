@@ -1,7 +1,7 @@
-# JSC, Julich Supercomputing Centre: Jureca + SBATCH
+# LRZ, Leibniz Supercomputing Centre: Jureca + SBATCH
 host_name: "SuperMUC-NG"
 host_login: "" # EDIT ME
-host_location: "LRZ, Supercomputing Centre"
+host_location: "Leibniz Supercomputing Centre"
 host_homedir: ""  # EDIT ME
 host_prompt: "[user@laptop ~]$"
 sched_name: "SBATCH" # Check
