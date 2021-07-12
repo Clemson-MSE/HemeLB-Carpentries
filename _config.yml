@@ -22,11 +22,11 @@ local:
   prompt: "[user@laptop ~]$"
 
 remote:
-  name: "JURECA"
+  name: "SuperMUC-NG"
   login: "jureca01.fz-juelich.de"
   host: "jrl12"
   node: "jrc0940"
-  location: "Juelich Supercomputing Centre"
+  location: "Leibniz Supercomputing Centre"
   homedir: "/p/home/jusers/yourUsername/jureca"
   prompt: "[yourUsername@jrl12 ~]$"
 
@@ -54,6 +54,8 @@ sched:
   hist: "sacct -u yourUsername"
   queue:
     default: "batch"
+
+hemelb:
 
 mpi_runtime:
   implementation: "ParaStation"
