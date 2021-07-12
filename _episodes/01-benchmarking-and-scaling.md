@@ -337,6 +337,13 @@ presenting scaling performance. The use of logarithmic scales can allow scaling 
 viewed but it can also make changes in values harder to assess. Linear scales make axes easier to 
 interpret but can also make it harder to distinguish between individual points. **fig/plots**
 
+<p align="center"><img src="../fig/01/Bifurcation_SNDMLUPS_loglog.png" width="40%"/></p>
+
+<p align="center"><img src="../fig/01/Bif_SNG_Perf_combined.png" width="100%"/></p>
+
+<p align="center"><img src="../fig/01/Bifurcation_SNG_Speedup_loglog.png" width="40%"/></p>
+
+
 These figures also highlight two other characteristics of assessing performance. In our SuperMUC-NG
 results, the four data points at the lowest core counts appear to have better performance than that
 at higher core counts. Here this is due to the the transition from one to multiple nodes on this machine 
