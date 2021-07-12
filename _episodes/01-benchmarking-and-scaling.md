@@ -90,6 +90,7 @@ While this job is running, lets examine the input file to understand the HemeLB 
 ~~~
 {% include {{ site.snippets }}/01/10c-bif_input.xml %}
 ~~~
+{: .source}
 
 The HemeLB input file can be broken into three main regions: 
 
