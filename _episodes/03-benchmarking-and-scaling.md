@@ -117,7 +117,7 @@ output file will contain the screen based HemeLB output.
 
 Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the
 job script with the `-out` option. Here both summary execution information and property output is contained in the
-folder `results/Extracted`. For further guide on using the [`hemeXtract`tool](https://github.com/UCL-CCS/hemeXtract)
+folder `results/Extracted`. For further guide on using the [`hemeXtract`](https://github.com/UCL-CCS/hemeXtract) tool
 please see the tutorial on the HemeLB website.
 
 Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file
