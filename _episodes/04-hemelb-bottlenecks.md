@@ -209,7 +209,10 @@ practice, this means that the maximum velocity of the simulation must be signifi
 simulation. As a rough rule of thumb, the following is often acceptable in simulations (though if smaller Ma can be achieved, 
 this is better):
 
+~~~
 $ Ma = \frac{3u_{max} \Delta t }{\Delta x} << 0.1$
+~~~
+{: .language-latex}
 
 Often the competing restrictions placed on a simulation by these two expressions can demand a small time step to be used.
 
