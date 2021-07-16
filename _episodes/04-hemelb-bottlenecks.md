@@ -172,7 +172,7 @@ your simulation domain, the greater the effect of data writing will be.
 
 
 > ## Effect of model size
-> In **refer to folder** you can find a higher resolution model (<p>h&#8778</p> 4 times larger **TODO confirm**) of the bifurcation 
+> In **refer to folder** you can find a higher resolution model (h<h&#8778> 4 times larger **TODO confirm**) of the bifurcation 
 > model we have been studying. Repeat some of the exercises on load balancing and data writing to see how a larger model 
 > impacts the performance of your system.
 >
