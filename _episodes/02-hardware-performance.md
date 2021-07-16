@@ -45,6 +45,7 @@ is known as a shared memory platform. However, when you partition the available 
 each partition as a private memory space to CPU cores, then we call this a distributed memory
 platform. A simple graphic for this is shown below:
 
+<p align="center"><img src="../fig/02/memory-pattern.png" width="50%"/></p>
 
 Depending upon what kind of memory a computer has, the parallelization approach of a code could
 vary. For example, in a distributed memory platform, when a CPU core needs data from its private
@@ -53,7 +54,7 @@ memory of another CPU core then it requires a ‘communication’ protocol and d
 becomes slower.
 
 Similar situation arises for GPU coding too. In this case, the CPU is generally called the *host*
-and the GPUs are called the *device*s. When we submit a GPU job, it is launched in the CPU (host)
+and the GPUs are called the *device*. When we submit a GPU job, it is launched in the CPU (host)
 which in turn directs it to be executed by the GPUs (devices). While doing these calculations, data
 is copied from CPU memory to the GPU’s and then processed. After the GPU finishes a calculation,
 the result is copied back from the GPU to CPU. This communication is expensive
@@ -93,6 +94,8 @@ Task parallelism is when we can decompose the larger task
 into multiple independent sub-tasks, each of which we then assign to different cores. A
 simple graphical representation is given below:
 
+<p align="center"><img src="../fig/02/task-data-parallelism.png" width="50%"/></p>
+
 
 As application **users**, we need to know if our application actually offers control over
 which parallelization methods (and tools) we can use. If so,
@@ -101,16 +104,16 @@ hardware we have available to us.
 
 ### Popular parallelization strategies
 
-Data parallelism is conceptually easy to map to distributed memory, and it is the most
-commonly found choice on HPC systems. The main parallelization technique one finds is the domain
-decomposition method. In this approach, the global domain is divided into many sub-domains
-and then each sub-domain is assigned to a processor.
+The main parallelisation technique that is used by any modern software is the domain decomposition
+method. In this process, the global domain is divided into many sub-domains and then each
+sub-domain is assigned to a processor. If your computer has `N` physical processors, you can initiate
+`N` MPI processes on your computer. This means each sub-domain is handled by a MPI process and when
+atoms move from one domain to another, the atom identities assigned to each MPI task will also be
+updated accordingly. In this method, for a (nearly) homogeneously distributed atomic system, we can
+expect almost uniform distribution of work across various MPI tasks.
 
+<p align="center"><img src="../fig/02/DD_cartoon.png" width="50%"/></p>
 
-If your computer has `N` physical
-processors, you could initiate
-`N` MPI processes on your computer. This means each sub-domain is handled by an MPI process
-and usually the domains communicate with their "closest" neighbours to exchange information.
 
 > ## What is MPI?
 >
@@ -122,8 +125,7 @@ and usually the domains communicate with their "closest" neighbours to exchange 
 > memory of several interconnected *compute node*s as one. They created a standardized software
 > that synchronizes the various states of memory through the network interfaces between the client
 > nodes during the execution of an application. With this performing large calculations
-> that required more memory
-> than each individual node can offer was possible.
+> that required more memory than each individual node can offer was possible.
 >
 > Moreover, this technique of passing
 > messages (hence Message Passing Interface or MPI) on memory updates in a controlled fashion
@@ -150,6 +152,9 @@ and, in some cases,the MPI parallelization strategy is so strongly
 integrated that it almost always offers better performance than the OpenMP based thread-level
 parallelism.
 
+<p align="center"><img src="../fig/02/fork_join.png" width="50%"/></p>
+
+
 Another commonly found parallelization strategy is to use *GPU*s (with the more general
 term being an *accelerator*). GPUs work together with the CPUs. A CPU is specialized to perform
 complex tasks (like making decisions), while a GPU is very efficient in doing
@@ -160,6 +165,7 @@ contrary, a GPU
 has thousands of cores that are highly efficient at doing simple repetitive jobs in parallel. See
 below on how a CPU and GPU works together.
 
+<p align="center"><img src="../fig/02/CPUplusGPU.png" width="50%"/></p> 
 
 > ## Using all available resources
 >

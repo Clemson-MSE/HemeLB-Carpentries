@@ -60,8 +60,7 @@ This lesson is about taking a well-informed, systematic approach towards how to 
 > box for 8 hours, how long will it take to run if we only use one CPU
 > core?
 >
->
-> {: language-bash}
+> <p align="center"><img src="../fig/01/10x10x10_cube.png" width="40%"/></p>
 >
 >> ## Solution
 >>
@@ -99,7 +98,7 @@ and **CPU hours**.
 > The theoretical peak flops is given by
 >
 > ~~~
-> Number of cores * Average frequency * Operations per cycle`
+> Number of cores * Average frequency * Operations per cycle
 > ~~~
 > {: .language-bash}
 >
