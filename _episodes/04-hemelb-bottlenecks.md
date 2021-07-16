@@ -188,7 +188,7 @@ that link the discretization parameters, physical variables and simulation accur
 In these studies, HemeLB is using a single relaxation time (or BGK) collision kernel to solve the fluid flow. In this model 
 viscosity, lattice spacing, and simulation timestep are related to the relaxation parameter &tau; by,
 
-&nu; = &frac13;(&tau; - &frac12;) <sup>&Delta;x<sup>2</sup></sup>/<sub>&Delta;t</sub>
+&nu; = <sup>1</sup>/<sub>3</sub>(&tau; - &frac12;) <sup>&Delta;x<sup>2</sup></sup>/<sub>&Delta;t</sub>
  
 Here:
 
