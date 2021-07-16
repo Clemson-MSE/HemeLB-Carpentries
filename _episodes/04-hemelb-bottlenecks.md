@@ -192,7 +192,7 @@ $\nu = \frac{1}{3} \left( \tau - \frac{1}{2} \right) \frac{\Delta x ^2}{\Delta t
  
 Here:
 
-* &nu; - Fluid viscosity [m<sup>2</sup>/s] - in HemeLB this is set to 4x10$^{-6} m^2/s$ the value for human blood
+* &nu; - Fluid viscosity [m<sup>2</sup>/s] - in HemeLB this is set to 4x10<sup>-6</sup> m<sup>2</sup>/s the value for human blood
 * &Delta;x - Lattice spacing [m]
 * &Delta;t - Time step [s]
 
