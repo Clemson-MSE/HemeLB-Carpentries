@@ -172,7 +172,7 @@ your simulation domain, the greater the effect of data writing will be.
 
 
 > ## Effect of model size
-> In **refer to folder** you can find a higher resolution model ( &approx; 4 times larger **TODO confirm**) of the bifurcation 
+> In **refer to folder** you can find a higher resolution model ( ≈ 4 times larger **TODO confirm**) of the bifurcation 
 > model we have been studying. Repeat some of the exercises on load balancing and data writing to see how a larger model 
 > impacts the performance of your system.
 >
@@ -188,7 +188,7 @@ that link the discretization parameters, physical variables and simulation accur
 In these studies, HemeLB is using a single relaxation time (or BGK) collision kernel to solve the fluid flow. In this model 
 viscosity, lattice spacing, and simulation timestep are related to the relaxation parameter &tau; by,
 
-$\nu = \frac{1}{3} \left( \tau - \frac{1}{2} \right) \frac{\Delta x ^2}{\Delta t}. $
+&nu; = &frac13;(&tau; - &frac12;) <sup>&Delta;x<sup>2</sup></sup>/<sub>&Delta;t</sub>
  
 Here:
 
@@ -197,18 +197,16 @@ Here:
 * &Delta;t - Time step [s]
 
 This relationship puts physical and practical limits on the values that can be selected for these parameters. In particular,
- &tau; > \frac{1}{2}$ must be imposed for a physical viscosity to exist, values of &tau; very close to $\frac{1}{2}$ can be
- unstable. Generally, a value of &tau; &approx; 1 gives the most accurate results.
+&tau; > \frac{1}{2}$ must be imposed for a physical viscosity to exist, values of &tau; very close to $\frac{1}{2}$ can be
+unstable. Generally, a value of &tau; ≈ 1 gives the most accurate results.
 
 The lattice Boltzmann method can only replicate the Navier-Stokes equations for fluid flow in a low Mach number regime. In
 practice, this means that the maximum velocity of the simulation must be significantly less than the speed of sound of the
 simulation. As a rough rule of thumb, the following is often acceptable in simulations (though if smaller Ma can be achieved, 
 this is better):
 
-~~~
-$ Ma = \frac{3u_{max} \Delta t }{\Delta x} << 0.1$
-~~~
-{: .language-latex}
+
+Ma = <sup>(3u<sub>max</sub>*&Delta;t)</sup>&frasl;<sub>&Delta;x</sub>
 
 Often the competing restrictions placed on a simulation by these two expressions can demand a small time step to be used.
 
@@ -222,9 +220,10 @@ Often the competing restrictions placed on a simulation by these two expressions
 >
 > > ## Solution
 > > Starting points would be the following, these would likely need further adjustment in reality:
-> > For &Delta;x = 100 &mu;s, &Delta;t = 5 &mu;s gives Ma &approx; 0.087 and &tau; = 0.506; 400,000 simulation steps required 
-> > For &Delta;x = 50 &mu;s, &Delta;t = 2.5 &mu;s gives Ma &approx; 0.087 and &tau; = 0.512; 800,000 simulation steps required 
-> > For &Delta;x = 20 &mu;s, &Delta;t = 1 &mu;s gives Ma &approx; 0.087 and &tau; = 0.530; 2,000,000 simulation steps required 
+> >
+> > - For &Delta;x = 100 &mu;s, &Delta;t = 5 &mu;s gives Ma ≈ 0.087 and &tau; = 0.506; 400,000 simulation steps required 
+> > - For &Delta;x = 50 &mu;s, &Delta;t = 2.5 &mu;s gives Ma ≈ 0.087 and &tau; = 0.512; 800,000 simulation steps required 
+> > - For &Delta;x = 20 &mu;s, &Delta;t = 1 &mu;s gives Ma ≈ 0.087 and &tau; = 0.530; 2,000,000 simulation steps required 
 > > 
 > > Higher resolution geometries have many more data points stored within them - halving the grid resolution requires approximately
 > > 8x more points and will take roughly 16x longer to simulate for the same Ma and physical simulation time. Higher resolution 
