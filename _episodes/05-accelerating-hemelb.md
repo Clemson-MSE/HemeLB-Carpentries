@@ -12,6 +12,7 @@ objectives:
 keypoints:
 - accelerator packages offered, how to 
 ---
+
 ## How can I accelerate HemeLB performance?
 
 There are two basic approaches to accelerate HemeLB simulations that we will discuss 
@@ -25,8 +26,8 @@ in a subsequent episode.
 
 The two options we will discuss in this episode are: 1) Vectorisation and 2) Monitoring
 
-
 ## Vectorisation overview
+
 At the heart of many simulation codes will be a relatively small number of kernels that 
 are responsible for the key problem solving steps. In the lattice Boltzmann method of 
 HemeLB it is the update of the fundamental population distributions and the conversion of
@@ -44,10 +45,10 @@ instructions that explicitly tell the compiler how a certain portion of code sho
 In HemeLB, the key computational kernels have been encoded with SSE3 intrinsics that allows
 two 'double' units to be operated on simultaneously. This level of optimisation should be 
 compatible with most modern CPUs, even those available on desktops and laptops. To enact this 
-in HemeLB set the -DHEMELB_USE_SSE3 flag in the compilation script to ON and recompile. The 
+in HemeLB set the `-DHEMELB_USE_SSE3` flag in the compilation script to ON and recompile. The 
 encoding of the key kernels using the intrinsics can be seen in the file src/lb/lattices/Lattice.h.
 
-> ##Case Study: Simulation acceleration with SSE3 intrinsics 
+> ## Case Study: Simulation acceleration with SSE3 intrinsics 
 >
 > Repeat your scaling benchmark tests with SSE3 intrinsics active and compare performance against
 > that achieved with the 'naive' code implementation and default compiler options. In particular,
@@ -59,26 +60,29 @@ encoding of the key kernels using the intrinsics can be seen in the file src/lb/
 ## Monitoring in HemeLB
 In the input file provided for the benchmarking case, you will notice the following section:
 
-  <monitoring>
-  <incompressibility/>
-  </monitoring>
+```xml
+<monitoring>
+<incompressibility/>
+</monitoring>
+```
 
 This makes the HemeLB simulation monitor for numerical characteristics that will cause the simulation
 to become irretrievably unstable and aborts the simulation at this point. This process checks the 
 data at every site in the domain at every time step. As simulation domains grow, this can become a 
 significant portion of the computational time. If you are studying a simulation domain with boundary
 that are known two generate stable and sensible results, deactivating this feature can reduce the 
-time needed for a simulation to complete. It is STRONGLY recommended to keep this feature active for
+time needed for a simulation to complete. It is **STRONGLY** recommended to keep this feature active for
 new domains and boundary conditions to be aware of when simulations are unstable or are possibly on 
 the verge of becoming so. Stability monitoring can be removed by deleting this section or commenting 
 it out via:
 
-  <!-- <monitoring>
-  <incompressibility/>
-  </monitoring> -->
+```xml
+<!-- <monitoring>
+<incompressibility/>
+</monitoring> -->
+```
 
-
-> ##Case Study: Reduced runtimes without stability monitoring 
+> ## Case Study: Reduced runtimes without stability monitoring 
 >
 > Repeat the benchmarking tests case for both geometry sizes the with the stability monitoring deactivated.
 > Compare how significant the effect of stability monitoring is for the larger domain. 
@@ -93,25 +97,28 @@ it is not always possible to know in advance how many iterations are required fo
 be reached. This monitoring check will automatically terminate a simulation once a stipulated 
 tolerance value on velocity is reached. This is invoked in the input file by:
 
-  <monitoring>
-  <incompressibility/>
-     <steady_flow_convergence tolerance="1e-3" terminate="true" criterion="velocity">
-            <criterion type="velocity" units="m/s" value="1e-5"/>
-    </steady_flow_convergence> 
-  </monitoring>
+```xml
+<monitoring>
+<incompressibility/>
+    <steady_flow_convergence tolerance="1e-3" terminate="true" criterion="velocity">
+          <criterion type="velocity" units="m/s" value="1e-5"/>
+  </steady_flow_convergence> 
+</monitoring>
+```
 
 The value for the velocity stated here is the reference value against which the local error is compared.
 
-> ##Case Study: Reduced runtimes for convergence 
+> ## Case Study: Reduced runtimes for convergence 
 >
 > Repeat the benchmarking test case with the convergence monitoring in place. By how much is the simulation truncated? 
 > Try different values for tolerance and input boundary conditions. 
-> NOTE: Steady-state convergence will not work accurately or reliably for intentionally transient flow conditions.
+> **NB**: Steady-state convergence will not work accurately or reliably for intentionally transient flow conditions.
 > 
 {: .challenge}
 
 
 **Include this once checked for ourselves**
+
 ## If you are feeling brave... Tuning Communications
 Depending on your systems, another option that may yield performance gains is in the modification of 
 how the underlying MPI communications are managed. The default setting provided in the compilation 
@@ -119,13 +126,10 @@ settings for HemeLB have been found to work well in most settings. Investigate h
 by trying the different settings for MPI communication. These can be set as options in the compilation 
 script:
 
-**This would be nicer in a table..**
-Option; Description; Default; Options
--DHEMELB_POINTPOINT_IMPLEMENTATION; point to point comms implementation; 'Coalesce'; 'Coalesce','Separated','Immediate'
-
--DHEMELB_GATHERS_IMPLEMENTATION; gather comms implementation;  Separated; 'Separated','ViaPointPoint'
-
--DHEMELB_ALLTOALL_IMPLEMENTATION; alltoall comms implementation; Separated; 'Separated','ViaPointPoint'
-
--DHEMELB_SEPARATE_CONCERNS; communicate for each concern separately; OFF; ON/OFF)
+| Option                               | Description                             | Default      | Options                                   |
+|--------------------------------------|-----------------------------------------|--------------|-------------------------------------------|
+| `-DHEMELB_POINTPOINT_IMPLEMENTATION` | Point to point comms implementation     | `'Coalesce'` | `'Coalesce'`, `'Separated'`, `'Immediate'`|
+| `-DHEMELB_GATHERS_IMPLEMENTATION`    | Gather comms implementation             | `Separated`  | `'Separated'`, `'ViaPointPoint'`          |
+| `-DHEMELB_ALLTOALL_IMPLEMENTATION`   | All to all comms implementation         | `Separated`  | `'Separated'`, `'ViaPointPoint'`          |
+| `-DHEMELB_SEPARATE_CONCERNS`         | Communicate for each concern separately | `OFF`        | `ON`, `OFF`                               |
 

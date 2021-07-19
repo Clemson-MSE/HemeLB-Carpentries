@@ -214,8 +214,10 @@ Often the competing restrictions placed on a simulation by these two expressions
 > ## Determining your physical parameters 
 > Suppose you wish to simulate blood flow through a section of the aorta with a maximum velocity of 1 m/s for a period of 
 > two heartbeats (2 seconds). Using the expressions above, determine suitable choices for the time step if your geometry
-> has a grid resolution of &Delta;x = 100 &mu;m. How many iterations do you need to run for this choice? How do your answers
-> change if you have higher resolutions models with &Delta;x = 50 &mu;m and &Delta;x = 20 &mu;m$? What would be the 
+> has a grid resolution of &Delta;x = 100 &mu;m. 
+>
+> How many iterations do you need to run for this choice? How do your answers
+> change if you have higher resolutions models with (i) &Delta;x = 50 &mu;m and (ii) &Delta;x = 20 &mu;m$? What would be the 
 > pros and cons of using these higher resolution models?
 >
 > > ## Solution
