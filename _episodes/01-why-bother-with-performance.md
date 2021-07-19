@@ -23,13 +23,12 @@ keypoints:
 
 ## What is software performance?
 
-Before getting into the software side of things, lets take a few steps back. The concept
-of performance is generic and can apply to many factors in our lives, such as our own
+The concept of performance is generic and can apply to many factors in our lives, such as our own
 physical and mental performance. With *software performance* the emphasis is not on
 using the most powerful machine, but on how best to utilise the power that you have.
 
-Say you are the chef in a restaurant and every dish that you do is perfect. You would be
-able to produce a set 7 course meal for a table of 3-6 without too much difficulty. If
+Imagine you are the chef in a restaurant and you are able to prepare the perfect dish, every time
+You are also able to produce a set 7 course meal for a table of 3-6 without too much difficulty. If
 you are catering a conference dinner though, it becomes more difficult, as people would be
 waiting many hours for their food. However, if you could delegate tasks to a team of 6
 additional chefs who could assist you (while also communicating with each other), you
@@ -153,7 +152,8 @@ and **CPU hours**.
 
 The `{{ site.sched.flag.time }}` option to the scheduler used in the exercise indicates the
 *maximum* amount of walltime requested, which will differ from the *actual*
-walltime the code spends to run.
+walltime the code spends to run. It is important to overestimate this number so that it doesn't 
+kill your job before it has finished running.
 
 ## How can we enhance performance?
 
@@ -180,7 +180,7 @@ application.
 > > ## Solution
 > >
 > > 1. Yes, potentially, the more cores and nodes you have, the more work can be
-> >    distributed across those cores...but you need to ensure they are being used!
+> >    distributed across those cores... but you need to ensure they are being used!
 > > 2. No, increasing simulation walltime only increases the possible duration the code
 >      will run for. It does not improve the code performance.
 > > 3. Yes, IO is a very common *bottleneck* in software, it can be very expensive (in
