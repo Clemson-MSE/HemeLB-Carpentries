@@ -61,7 +61,7 @@ error prone, and most supercomputing centres will have a basic one which you can
 and modify for the rest of the course.
 
 ~~~
-{% include {{ site.snippets}}/01/JobScript_slurm.sh %}
+{% include {{ site.snippets}}/03/JobScript_slurm.sh %}
 ~~~
 {: .source}
 
@@ -88,7 +88,7 @@ your local documentation for definitive advice on this for your HPC system.
 While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
 
 ```xml
-{% include {{ site.snippets }}/01/10c-bif_input.xml %}
+{% include {{ site.snippets }}/03/10c-bif_input.xml %}
 ```
 
 
@@ -104,7 +104,7 @@ The actual geometry being run by HemeLB is specified by a geometry file, `bifurc
 splitting of a single cylinder into two. This can be seen as simplified representation of many vascular junctions
 presented throughout the network of arteries and veins.
 
-<p align="center"><img src="../fig/01/BifurcationImage.png" width="60%"/></p>
+<p align="center"><img src="../fig/03/BifurcationImage.png" width="60%"/></p>
 
 ## Understanding your output files
 
@@ -124,7 +124,7 @@ Open the file `results/report.txt` to view a breakdown of statistics of the Heme
 is provided below:
 
 ~~~
-{% include {{ site.snippets }}/01/ExampleReport.txt %}
+{% include {{ site.snippets }}/03/ExampleReport.txt %}
 ~~~
 {: .source}
 
@@ -158,7 +158,7 @@ let us ensure the concepts of benchmarking are clear.
 > Benchmarking is a process that judges how well a piece of software runs on a system. Based on what you have learned
 > thus far from running your own benchmarks, which of the following would represent a good benchmarking analysis?
 >
-> <p align="center"><img src="../fig/01/ep1_ideal_benchmark.png" width="100%"/></p>
+> <p align="center"><img src="../fig/03/ep1_ideal_benchmark.png" width="100%"/></p>
 >
 > 1. 7 benchmarks, core count increases by factor of 2
 > 2. 12 benchmarks, core count increases by factor of 2
@@ -249,7 +249,7 @@ This allows problems to be solved more quickly.
 > 
 > Consider the following scalability plot for a random application
 > 
-> <p align="center"><img src="../fig/01/scalability_study.png" width="50%"/></p>
+> <p align="center"><img src="../fig/03/scalability_study.png" width="50%"/></p>
 > 
 > At what point would you consider to be peak performance in this example.
 >
@@ -274,8 +274,6 @@ This allows problems to be solved more quickly.
 > {: .solution}
 {: .challenge}
 
-**EDITME** (This section needs more expandid) JM-Ok now?
-
 Scaling behaviour in computation is centred around the effective use of resources as you
 scale up the amount of computing resources you use. An example of "perfect" scaling would
 be that when we use twice as many CPUs, we get an answer in half the time. "Poor" scaling
@@ -291,10 +289,13 @@ is observed when this balance tips and communication time outweighs compute time
 at which this occurs varies between machines and again emphasise the need for benchmarking.
 
 HemeLB is a code that has demonstrated very good strong scaling characteristics on several 
-large supercomputers up to full machine scale. **FIGURES here - files/SNG* plots** The plots below provide examples of such 
+large supercomputers up to full machine scale. The plots below provide examples of such 
 performance on the German machine SuperMUC-NG. These demonstrate how the performance varies 
 between 864 and 309,120 CPU cores in terms of both walltime used in the simulation phase 
 and the speed-up observed compared to the smallest number of cores used. 
+
+<p align="center"><img src="../fig/03/SUPERMUC-HemeLB.png" width="100%"/></p>
+
 
 > ## Plotting strong scalability
 >
@@ -338,11 +339,11 @@ presenting scaling performance. The use of logarithmic scales can allow scaling 
 viewed but it can also make changes in values harder to assess. Linear scales make axes easier to 
 interpret but can also make it harder to distinguish between individual points. **fig/plots**
 
-<p align="center"><img src="../fig/01/Bifurcation_SNG_MLUPS_loglog.png" width="40%"/></p>
+<p align="center"><img src="../fig/03/Bifurcation_SNG_MLUPS_loglog.png" width="40%"/></p>
 
-<p align="center"><img src="../fig/01/Bif_SNG_Perf_combined.png" width="100%"/></p>
+<p align="center"><img src="../fig/03/Bif_SNG_Perf_combined.png" width="100%"/></p>
 
-<p align="center"><img src="../fig/01/Bifurcation_SNG_Speedup_loglog.png" width="40%"/></p>
+<p align="center"><img src="../fig/03/Bifurcation_SNG_Speedup_loglog.png" width="40%"/></p>
 
 
 These figures also highlight two other characteristics of assessing performance. In our SuperMUC-NG
@@ -356,9 +357,7 @@ to repeat key benchmark tests to ensure a reliable measure of performance is obt
 ### Weak scaling
 
 For **weak scaling**, we want usually want to increase our workload without increasing
-our *walltime*,
-and we do that by using additional resources. (**EDIT ME NEEDS CHANGING BASED ON WHETHER THIS WILL BE KEPT**)
-To consider this in more detail, let's head
+our *walltime*, and we do that by using additional resources. To consider this in more detail, let's head
 back to our chefs again from the previous episode, where we had more people to serve
 but the same amount of time to do it in.
 
