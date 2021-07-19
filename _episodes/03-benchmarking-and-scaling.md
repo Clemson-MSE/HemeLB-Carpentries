@@ -274,8 +274,6 @@ This allows problems to be solved more quickly.
 > {: .solution}
 {: .challenge}
 
-**EDITME** (This section needs more expandid) JM-Ok now?
-
 Scaling behaviour in computation is centred around the effective use of resources as you
 scale up the amount of computing resources you use. An example of "perfect" scaling would
 be that when we use twice as many CPUs, we get an answer in half the time. "Poor" scaling
@@ -295,6 +293,9 @@ large supercomputers up to full machine scale. **FIGURES here - files/SNG* plots
 performance on the German machine SuperMUC-NG. These demonstrate how the performance varies 
 between 864 and 309,120 CPU cores in terms of both walltime used in the simulation phase 
 and the speed-up observed compared to the smallest number of cores used. 
+
+<p align="center"><img src="../fig/03/SUPERMUC-HemeLB.png" width="80%"/></p>
+
 
 > ## Plotting strong scalability
 >
