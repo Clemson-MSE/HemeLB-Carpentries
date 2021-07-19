@@ -169,7 +169,8 @@ your simulation domain, the greater the effect of data writing will be.
 > impact on performance is clear to observe. 
 >
 {: .challenge}
-
+**Chris, could you please add the figures fig/Bif_SNG_Walltime_semilog_dtSaving_MPI_10.png and/or fig/Bif_SNG_Walltime_semilog_dtSaving_MPI_40.png
+(outputting inlet/outlet and whole data at the same frequency)**
 
 > ## Effect of model size
 > In **refer to folder** you can find a higher resolution model ( ≈ 4 times larger **TODO confirm**) of the bifurcation 
