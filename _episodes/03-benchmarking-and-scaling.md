@@ -289,12 +289,12 @@ is observed when this balance tips and communication time outweighs compute time
 at which this occurs varies between machines and again emphasise the need for benchmarking.
 
 HemeLB is a code that has demonstrated very good strong scaling characteristics on several 
-large supercomputers up to full machine scale. **FIGURES here - files/SNG* plots** The plots below provide examples of such 
+large supercomputers up to full machine scale. The plots below provide examples of such 
 performance on the German machine SuperMUC-NG. These demonstrate how the performance varies 
 between 864 and 309,120 CPU cores in terms of both walltime used in the simulation phase 
 and the speed-up observed compared to the smallest number of cores used. 
 
-<p align="center"><img src="../fig/03/SUPERMUC-HemeLB.png" width="80%"/></p>
+<p align="center"><img src="../fig/03/SUPERMUC-HemeLB.png" width="100%"/></p>
 
 
 > ## Plotting strong scalability
@@ -357,9 +357,7 @@ to repeat key benchmark tests to ensure a reliable measure of performance is obt
 ### Weak scaling
 
 For **weak scaling**, we want usually want to increase our workload without increasing
-our *walltime*,
-and we do that by using additional resources. (**EDIT ME NEEDS CHANGING BASED ON WHETHER THIS WILL BE KEPT**)
-To consider this in more detail, let's head
+our *walltime*, and we do that by using additional resources. To consider this in more detail, let's head
 back to our chefs again from the previous episode, where we had more people to serve
 but the same amount of time to do it in.
 
