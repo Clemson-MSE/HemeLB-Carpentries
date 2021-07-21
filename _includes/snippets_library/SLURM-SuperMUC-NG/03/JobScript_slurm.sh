@@ -22,11 +22,9 @@
 #SBATCH --ntasks-per-node=10
 
 #Add 'Module load' statements here - check your local system for specific modules/names
-module load <Something for local system>
-module load <Compiler library used>
-module load <MPI library used>
+{{ site.hemelb.env }}
 
 #Run HemeLB (other systems may use srun or mpirun in place of mpiexec):
 rm -rf results #delete old results file
-mpiexec -n $SLURM_NTASKS Path/to/executable/hemepure -in input.xml -out results
+{{ site.sched.interactive}} -n {{ site.sched.ntasks }} {{ site.hemelb.exec }} -in input.xml -out results
 
