@@ -6,16 +6,16 @@
 {{ site.sched.comment }} {{ site.sched.flag.output }} ./%x.%j.out
 {{ site.sched.comment }} {{ site.sched.flag.error }} ./%x.%j.err
 #Initial working directory:
-{{ site.sched.comment }} -D ./
+{{ site.sched.comment }} {{ site.sched.flag.directory }} ./
 
 # Wall clock limit:
-{{ site.sched.comment }} --time=00:15:00
+{{ site.sched.comment }} {{ site.sched.flag.time }}=00:15:00
 
 #Setup of execution environment <Check/Set as appropriate for your local system>
 {{ site.sched.comment }} {{ site.sched.flag.export }}
 {{ site.sched.comment }} {{ site.sched.flag.env }}
-{{ site.sched.comment }} {{ site.sched.flag.name }}=
-{{ site.sched.comment }} {{ site.sched.flag.partition }}=
+{{ site.sched.comment }} {{ site.sched.flag.account }}="projectID"
+{{ site.sched.comment }} {{ site.sched.flag.queue }}="Check Local System"
 
 #Number of nodes and MPI tasks per node:
 {{ site.sched.comment }} {{ site.sched.flag.node }}=1
