@@ -77,7 +77,7 @@ In the HemeLB results file, the number of sites assigned to each core is reporte
 be used to check for signs of significant imbalance between cores. For example we plot below how HemeLB has distributed the workload of
 the bifurcation geometry on 48 and 192 cores. Note in both cases that rank 0 has no sites assigned to it. As the speed of a simulation
 is governed by the core with the most work to do, we do not want to see a rank that has significantly more sites than the others. Cores
-with signficantly less workload should not hold up a simulation's progression but will be waiting for other cores to complete and thus 
+with significantly less workload should not hold up a simulation's progression but will be waiting for other cores to complete and thus 
 wasting its computational performance potential. The success of a distribution will depend on the number of cores requested and the complexity
 of the domain. 
 
