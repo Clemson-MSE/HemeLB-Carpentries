@@ -188,7 +188,7 @@ Extraction writing 0 0 0 0
 
 ```
 
-This section tracks how much time is spent in various process of the simulation's initialisation and execution. Here Local reports the time spent in the process in rank 0 and the min, mean and max columns give statistics across all CPUs used in the simulation. For this episode, the Simulation total information is of greatest interest - this indicates how long the simulation itself took to complete and represents total wall time less the initialisation time. This parameter is how we judge the scaling performance of the code. The other parameters are described in: 'src/reporting/Timers.h' and can help to identify which section of the initialisation or computation is requireing the most time to complete:
+This section tracks how much time is spent in various process of the simulation's initialisation and execution. Here Local reports the time spent in the process in rank 0 and the min, mean and max columns give statistics across all CPUs used in the simulation. For this episode, the Simulation total information is of greatest interest - this indicates how long the simulation itself took to complete and represents total wall time less the initialisation time. This parameter is how we judge the scaling performance of the code. The other parameters are described in: 'src/reporting/Timers.h' and can help to identify which section of the initialisation or computation is requiring the most time to complete:
 
 ```
 total = 0, //!< Total time
