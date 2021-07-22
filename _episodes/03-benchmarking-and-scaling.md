@@ -91,7 +91,6 @@ While this job is running, lets examine the input file to understand the HemeLB 
 {% include {{ site.snippets }}/03/10c-bif_input.xml %}
 ```
 
-
 The HemeLB input file can be broken into three main regions: 
 
 1. **Simulation set-up**: specify global simulation information like discretisation parameters, total 
@@ -128,11 +127,9 @@ is provided below:
 ~~~
 {: .source}
 
-
 **Breakdown of key parts of report - sites/node, simulation vs total job time, other areas of interest.**
 
 **EDITME** How to understand your output files, and gain understanding of where most time is spent. Use examples.
-
 
 > ## Editing the submission script
 >

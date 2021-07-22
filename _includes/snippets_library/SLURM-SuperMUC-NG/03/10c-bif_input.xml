@@ -53,7 +53,7 @@
     </outlet>
   </outlets>
   <properties>
-	  <!--    <propertyoutput file="whole.dat" period="100">
+	<propertyoutput file="whole.dat" period="100">
       <geometry type="whole" />
       <field type="velocity" />
       <field type="pressure" />
@@ -62,6 +62,6 @@
       <geometry type="inlet" />
       <field type="velocity" />
       <field type="pressure" />
-    </propertyoutput> -->
+  </propertyoutput>
 </properties>
 </hemelbsettings>

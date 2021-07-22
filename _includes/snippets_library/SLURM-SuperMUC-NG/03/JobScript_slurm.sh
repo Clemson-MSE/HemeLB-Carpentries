@@ -1,32 +1,30 @@
 #!/bin/bash
 # Job Name and Files
-#SBATCH -J jobname
+{{ site.sched.comment }} {{ site.sched.flag.name }} jobname
 
 #Output and error:
-#SBATCH -o ./%x.%j.out
-#SBATCH -e ./%x.%j.err
+{{ site.sched.comment }} {{ site.sched.flag.output }} ./%x.%j.out
+{{ site.sched.comment }} {{ site.sched.flag.error }} ./%x.%j.err
 #Initial working directory:
-#SBATCH -D ./
+{{ site.sched.comment }} {{ site.sched.flag.directory }} ./
 
 # Wall clock limit:
-#SBATCH --time=00:15:00
+{{ site.sched.comment }} {{ site.sched.flag.time }}=00:15:00
 
 #Setup of execution environment <Check/Set as appropriate for your local system>
-#SBATCH --export=NONE
-#SBATCH --get-user-env
-#SBATCH --account=insert your_projectID_here
-#SBATCH --partition=<CheckLocalSystem>
+{{ site.sched.comment }} {{ site.sched.flag.export }}
+{{ site.sched.comment }} {{ site.sched.flag.env }}
+{{ site.sched.comment }} {{ site.sched.flag.account }}="projectID"
+{{ site.sched.comment }} {{ site.sched.flag.queue }}="Check Local System"
 
 #Number of nodes and MPI tasks per node:
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=10
+{{ site.sched.comment }} {{ site.sched.flag.node }}=1
+{{ site.sched.comment }} {{ site.sched.flag.tasks_node }}=10
 
 #Add 'Module load' statements here - check your local system for specific modules/names
-module load <Something for local system>
-module load <Compiler library used>
-module load <MPI library used>
+{{ site.hemelb.env }}
 
-#Run HemeLB (other systems may use srun or mpirun in place of mpiexec):
+#Run HemeLB 
 rm -rf results #delete old results file
-mpiexec -n $SLURM_NTASKS Path/to/executable/hemepure -in input.xml -out results
+{{ site.sched.interactive}} -n {{ site.sched.ntasks }} {{ site.hemelb.exec }} -in input.xml -out results
 
