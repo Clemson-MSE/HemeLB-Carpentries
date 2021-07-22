@@ -24,7 +24,7 @@
 #Add 'Module load' statements here - check your local system for specific modules/names
 {{ site.hemelb.env }}
 
-#Run HemeLB (other systems may use srun or mpirun in place of mpiexec):
+#Run HemeLB 
 rm -rf results #delete old results file
 {{ site.sched.interactive}} -n {{ site.sched.ntasks }} {{ site.hemelb.exec }} -in input.xml -out results
 
