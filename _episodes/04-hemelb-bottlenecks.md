@@ -47,13 +47,12 @@ timesteps.
 Benchmark plots - particularly for speed-up and MLUPS/core - can help identify when a potential
 bottleneck becomes a problem for efficient simulation. If an apparent bottleneck is particularly
 significant, timing data from a job can also be useful in identifying where the source of it 
-may be. HemeLB has a reporting mechanism that we introduced in Episode 1 that provides such 
-information. This file gets written to results/report.txt.  **ExampleReport.txt**
+may be. HemeLB has a reporting mechanism that we introduced in Episode 3 that provides such 
+information. This file gets written to results/report.txt.  
 
 This file provides a wealth of information about the simulation you have conducted, including
-the size of simulation conducted and the time spent in various sections of the simulation.  
-
-**Illustration + callouts here, if not done in Episode 1**
+the size of simulation conducted and the time spent in various sections of the simulation. The
+breakdown of information provided here is described in Episode 3.
 
 We will discuss three common bottlenecks that may be encountered with HemeLB:
 - Load balance
@@ -75,7 +74,18 @@ The progression of the simulation is held up by the core with the most work to d
 large number of processors for a fixed number of sites to study.
 
 In the HemeLB results file, the number of sites assigned to each core is reported near the top of the file and can 
-be used to check for signs of significant imbalance between cores. ** add plot of site distribution from ExampleReport.txt**
+be used to check for signs of significant imbalance between cores. For example we plot below how HemeLB has distributed the workload of
+the bifurcation geometry on 48 and 192 cores. Note in both cases that rank 0 has no sites assigned to it. As the speed of a simulation
+is governed by the core with the most work to do, we do not want to see a rank that has significantly more sites than the others. Cores
+with significantly less workload should not hold up a simulation's progression but will be waiting for other cores to complete and thus 
+wasting its computational performance potential. The success of a distribution will depend on the number of cores requested and the complexity
+of the domain. 
+
+
+<p align="center"><img src="../fig/03/LoadBalance_48c.png" width="100%"/></p>
+
+
+<p align="center"><img src="../fig/03/LoadBalance_192c.png" width="100%"/></p>
 
 In general, the default load distribution algorithm in HemeLB has demonstrated good performance except in extreme
 circumstances. This default algorithm however does assume that each node type: Bulk fluid, Inlet, Outlet, Wall; all require
@@ -86,21 +96,29 @@ format from *.gmy to *.gmy+.
 
 
 > ## Compiling and using gmy2gmy+
-> Download the code for the gmy2gmy+ converter from **Provide Link here** and compile it on your machine.
-> This script is run with the following instruction:
->    **Launch converter**
+> Download the code for the gmy2gmy+ converter from **Provide Link here, have uploaded to files** and compile it on your machine.
+> This script is run with the following instruction (where DOMAIN is your test domain name):
+>    ./gmy2gmy+ DOMAIN.gmy DOMAIN.gmy+ 1 2 4 4 4 4 
 > 
 > This assigns a simple weighting factor of 1 to fluid nodes, 2 to wall nodes and 4 to variants of in/outlets.
 >
-> You will also need to recompile HemeLB so that it knows to read gmy+ files. Here edit the build script
-> so that it looks like the following (N.B. we do not need to recompile dependencies) and build the code.
+> You will also need to recompile HemeLB so that it knows to read gmy+ files. Here edit the build script 
+> to include the following option and recompile the source code. To keep your old executable, rename the 
+> build folder to buildGMYPLUS.
 > 
-> **Modified build script**
+> -DHEMELB_USE_GMYPLUS=ON
 >
 {: .callout}
 
+An example of the improved load balance using the gmy+ format are shown below:
 
-> ## Testing the performance of gmy+
+<p align="center"><img src="../fig/03/GMYP_48c.png" width="100%"/></p>
+
+
+<p align="center"><img src="../fig/03/GMYP_192c.png" width="100%"/></p>
+
+
+> ## Testing the performance of gmy+ and ParMETIS
 > Repeat the benchmarking tests conducted in Episode 1 using the gmy+ (edit the input.xml file accordingly)
 > and compare your results. Also examine how load distribution has changed as a result in the report.txt file.
 >
@@ -110,13 +128,19 @@ format from *.gmy to *.gmy+.
 
 Another option for improving the load balance of HemeLB is to make use of the ParMETIS library that was built
 as a dependency in the initial compilation of the code. To do this you will need to recompile the source code 
-with the following option enabled. ** highlight compilation option **
+with the following option enabled: -DHEMELB_USE_PARMETIS=ON. This tool takes the load decomposition generated 
+by the default HemeLB algorithm and then seeks to generate an improved decomposition.
 
-This tool takes the load decomposition generated byt the default HemeLB algorithm and then seeks to generate 
-an improved decomposition. **Caveat - I've not used this option based on the following argument. TODO check 
-if this works as anticipated**
+<p align="center"><img src="../fig/03/Parmetis_48c.png" width="100%"/></p>
 
-With any of the suggested options for improving load balance, it is important to assess how much performance
+
+<p align="center"><img src="../fig/03/Parmetis_192c.png" width="100%"/></p>
+
+As can be seen, using ParMETIS can generate a near perfect load distribution. Whilst this may seem like an 
+ideal solution it does come with potential drawbacks. The first is memory usage, from experience it has been 
+noted that ParMETIS can demand a large amount of memory during its operation and this can become a limiting
+factor on its use as domains become larger. The second is overall performance improvement.With any of the 
+suggested options for improving load balance, it is important to assess how much performance
 gain has been achieved through this change. This should be assessed in two metrics: Simulation Time and Total
 Walltime. The first measure only looks at the time taken for the requested iterations to complete and is the 
 value we used for assessing scaling in Episode 1. The Total Walltime includes both the Simulation Time and the 
@@ -126,6 +150,32 @@ Simulation Time. As many HPC systems charge for the Total Walltime of a job, it 
 that causes this measure to increase. For small geometries, the initialisation time of HemeLB can be very quick
 (a few seconds) but for larger domains with multiple boundaries, this can extend to tens of minutes.
 
+
+> ## Testing the performance of gmy+ and ParMETIS
+> Repeat the benchmarking tests conducted in Episode 1 using the gmy+ and ParMETIS (edit the input.xml file so that it is 
+> looking for the gmy+ file when testing this, save as a separate file; when testing ParMETIS the original input.xml file
+> can be used).
+> and compare your results. Also examine how load distribution has changed as a result in the report.txt file.
+>
+> Try different choices of the gmy+ weights to see how this impacts your results.
+> See how your results vary when a larger geometry is used (see **FOLDERPATHHERE** for gmy and input files).
+> 
+> > ## Example Results
+> > 
+> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. The relative benefit of using load balancing schemes will vary depending on the size and complexity of the domain, the length of your simulation and the available hardware.
+> > 
+> > | Scheme   | Cores | Initialisation Time (s) | Simulation Time (s) | Total Time (s) |
+> > |-----------------------------------------------------------------------------------|
+> > | Default  | 48    | 0.7                     |     56.0            | 56.7           |
+> > | Default  | 192   | 1.0                     |     15.3            | 16.3           |
+> > | GMY+     | 48    | 0.7                     |     56.1            | 56.8           |
+> > | GMY+     | 192   | 1.0                     |     13.2            | 14.2           |
+> > | ParMETIS | 48    | 2.6                     |     56.7            | 59.3           |
+> > | ParMETIS | 192   | 2.4                     |     12.5            | 14.9           |
+> > |-----------------------------------------------------------------------------------|
+> > 
+> {: .solution} 
+{: .challenge}
 
 
 ## Data writing
@@ -152,11 +202,11 @@ performance. In HemeLB, output is governed by the 'properties' section of the in
     </propertyoutput>
   </properties>
 </hemelbsettings>
-``` 
+```
 
 In this example, we output pressure and velocity information at the inlet and outlet surfaces of our domain every 100 
 steps and for the whole simulation domain every 1000 steps. This data is written to compressed *.dat files in results/Extracted.
-It is recommended that the ```whole``` option is used with caution as it can generate VERY large *.dat files. The larger
+It is recommended that the `whole` option is used with caution as it can generate VERY large *.dat files. The larger
 your simulation domain, the greater the effect of data writing will be.
 
 

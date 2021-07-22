@@ -127,9 +127,111 @@ is provided below:
 ~~~
 {: .source}
 
-**Breakdown of key parts of report - sites/node, simulation vs total job time, other areas of interest.**
+This file provides various pieces of information about the completed simulation. In particular, it includes a Problem description, Timing data and Build information. 
 
-**EDITME** How to understand your output files, and gain understanding of where most time is spent. Use examples.
+Problem description:
+
+~~~ 
+Configured by file input.xml with a 2010048 site geometry.
+There were 18450 blocks, each with 512 sites (fluid and solid).
+Recorded 0 images.
+Ran with 3 threads.
+Ran for 1000 steps of an intended 1000.
+With 0.000010 seconds per time step.
+Sub-domains info:
+rank: 0, fluid sites: 0
+rank: 1, fluid sites: 1012837
+rank: 2, fluid sites: 997211
+~~~
+{: .source}
+
+This section tells you how big the geometry you studied was (here 2010048 sites); how many threads (i.e. CPUs) it was run on; the number of steps and time step size used and how the simulation domain has been distributed between the CPUs. Note that HemeLB is run in a master+slave configuration where one CPU is dedicated to simulation coordination and while the rest solve the problem. This is why rank 0 is assigned 0 fluid sites.
+
+Timing data:
+
+~~~
+Timing data:
+Name Local Min Mean Max
+Total 172 172 172 173
+Seed Decomposition 9.69e-08 9.69e-08 0.00512 0.00794
+Domain Decomposition 1.71e-05 1.71e-05 0.0952 0.144
+File Read 0.0301 0.0301 0.946 1.41
+Re Read 0 0 0 0
+Unzip 0 0 0.0931 0.141
+Moves 0 0 0.0213 0.0341
+Parmetis 0 0 0 0
+Lattice Data initialisation 2.98 2.98 4.04 4.56
+Lattice Boltzmann 0.000513 0.000513 105 158
+LB calc only 0.00021 0.00021 105 158
+Monitoring 0.00017 0.00017 6.5 9.83
+MPI Send 0.00093 0.00093 0.00322 0.00465
+MPI Wait 166 0.0747 55.5 166
+Simulation total 168 168 168 168
+Reading communications 0 0 0.412 0.627
+Parsing 0 0 0.487 0.738
+Read IO 0 0 0.00404 0.00616
+Read Blocks prelim 0 0 0.00384 0.00576
+Read blocks all 0 0 0.906 1.36
+Move Forcing Counts 0 0 0 0
+Move Forcing Data 0 0 0 0
+Block Requirements 0 0 0 0
+Move Counts Sending 0 0 0 0
+Move Data Sending 0 0 0 0
+Populating moves list for decomposition optimisation 0 0 0 0
+Initial geometry reading 0 0 0 0
+Colloid initialisation 0 0 0 0
+Colloid position communication 0 0 0 0
+Colloid velocity communication 0 0 0 0
+Colloid force calculations 0 0 0 0
+Colloid calculations for updating 0 0 0 0
+Colloid outputting 0 0 0 0
+Extraction writing 0 0 0 0
+~~~
+{: .source}
+
+This section tracks how much time is spent in various process of the simulation's initialisation and execution. Here Local reports the time spent in the process in rank 0 and the min, mean and max columns give statistics across all CPUs used in the simulation. For this episode, the Simulation total information is of greatest interest - this indicates how long the simulation itself took to complete and represents total wall time less the initialisation time. This parameter is how we judge the scaling performance of the code. The other parameters are described in: 'src/reporting/Timers.h' and can help to identify which section of the initialisation or computation is requiring the most time to complete:
+
+~~~
+total = 0, //!< Total time
+initialDecomposition, //!< Initial seed decomposition
+domainDecomposition, //!< Time spent in parmetis domain decomposition
+fileRead, //!< Time spent in reading the geometry description file
+reRead, //!< Time spend in re-reading the geometry after second decomposition
+unzip, //!< Time spend in un-zipping
+moves, //!< Time spent moving things around post-parmetis
+parmetis, //!< Time spent in Parmetis
+latDatInitialise, //!< Time spent initialising the lattice data
+lb, //!< Time spent doing the core lattice boltzman simulation
+lb_calc, //!< Time spent doing calculations in the core lattice boltzmann simulation
+monitoring, //!< Time spent monitoring for stability, compressibility, etc.
+mpiSend, //!< Time spent sending MPI data
+mpiWait, //!< Time spent waiting for MPI
+simulation, //!< Total time for running the simulation
+~~~
+{: .source}
+
+Build information:
+
+~~~
+Build type: 
+Optimisation level: -O3
+Use SSE3: OFF
+Built at: 
+Reading group size: 2
+Lattice: D3Q19
+Kernel: LBGK
+Wall boundary condition: BFL
+Iolet boundary condition: 
+Wall/iolet boundary condition: 
+Communications options:
+Point to point implementation: Coalesce
+All to all implementation: Separated
+Gathers implementation: Separated
+Separated concerns: OFF
+~~~
+{: .source}
+
+Finally, this section provides some information on the compilation options used in the executable being used for the simulation.
 
 > ## Editing the submission script
 >
@@ -298,7 +400,8 @@ and the speed-up observed compared to the smallest number of cores used.
 >
 > Using the original job script run HemeLB jobs at least 6 different job sizes, preferably over 
 > multiple nodes. For the size of job provided here, we suggest aiming for a maximum of around
-> 200 cores. After each job, record the `Simulation Time` from the Report.txt file.
+> 200 cores. If your available hardware permits larger jobs, try this too up to a reasonable limit.
+> After each job, record the `Simulation Time` from the Report.txt file.
 >
 > Now that you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
 > the number of CPU cores on the X-axis and the simulation times on the Y-axis (use your
