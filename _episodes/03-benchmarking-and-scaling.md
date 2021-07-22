@@ -130,8 +130,8 @@ is provided below:
 This file provides various pieces of information about the completed simulation. In particular, it includes a Problem description, Timing data and Build information. 
 
 Problem description:
-``` 
 
+~~~ 
 Configured by file input.xml with a 2010048 site geometry.
 There were 18450 blocks, each with 512 sites (fluid and solid).
 Recorded 0 images.
@@ -142,11 +142,14 @@ Sub-domains info:
 rank: 0, fluid sites: 0
 rank: 1, fluid sites: 1012837
 rank: 2, fluid sites: 997211
-```
+~~~
+{: .source}
+
 This section tells you how big the geometry you studied was (here 2010048 sites); how many threads (i.e. CPUs) it was run on; the number of steps and time step size used and how the simulation domain has been distributed between the CPUs. Note that HemeLB is run in a master+slave configuration where one CPU is dedicated to simulation coordination and while the rest solve the problem. This is why rank 0 is assigned 0 fluid sites.
 
 Timing data:
-```
+
+~~~
 Timing data:
 Name Local Min Mean Max
 Total 172 172 172 173
@@ -183,12 +186,12 @@ Colloid force calculations 0 0 0 0
 Colloid calculations for updating 0 0 0 0
 Colloid outputting 0 0 0 0
 Extraction writing 0 0 0 0
-
-```
+~~~
+{: .source}
 
 This section tracks how much time is spent in various process of the simulation's initialisation and execution. Here Local reports the time spent in the process in rank 0 and the min, mean and max columns give statistics across all CPUs used in the simulation. For this episode, the Simulation total information is of greatest interest - this indicates how long the simulation itself took to complete and represents total wall time less the initialisation time. This parameter is how we judge the scaling performance of the code. The other parameters are described in: 'src/reporting/Timers.h' and can help to identify which section of the initialisation or computation is requiring the most time to complete:
 
-```
+~~~
 total = 0, //!< Total time
 initialDecomposition, //!< Initial seed decomposition
 domainDecomposition, //!< Time spent in parmetis domain decomposition
@@ -204,11 +207,12 @@ monitoring, //!< Time spent monitoring for stability, compressibility, etc.
 mpiSend, //!< Time spent sending MPI data
 mpiWait, //!< Time spent waiting for MPI
 simulation, //!< Total time for running the simulation
-``` 
+~~~
+{: .source}
 
 Build information:
-```
 
+~~~
 Build type: 
 Optimisation level: -O3
 Use SSE3: OFF
@@ -224,7 +228,9 @@ Point to point implementation: Coalesce
 All to all implementation: Separated
 Gathers implementation: Separated
 Separated concerns: OFF
-```
+~~~
+{: .source}
+
 Finally, this section provides some information on the compilation options used in the executable being used for the simulation.
 
 > ## Editing the submission script
