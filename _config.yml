@@ -42,10 +42,17 @@ sched:
     user: "-u yourUsername"
     interactive: "--pty /bin/bash -i"
     histdetail: "-l -j"
+    account: "--account"
+    export: "--export=NONE"
+    env: "--get-user-env"
     name: "-J"
-    time: "-t"
+    output: "-o"
+    error: "-e"
+    directory: "-D"
+    time: "--time"
     queue: "--partition"
-    node: "-N"
+    node: "--nodes"
+    tasks_node: "--ntasks-per-node"
   del: "scancel"
   interactive: "mpiexec"
   info: "sinfo"
@@ -58,8 +65,8 @@ sched:
 hemelb:
   env: 
     - "module purge \n"
-    - "module load slurm_setup"
-    - "module load intel/19.0.5"
+    - "module load slurm_setup \n"
+    - "module load intel/19.0.5 \n"
     - "module load intel-mpi/2019-intel"
   exec: "/dss/dsshome1/00/di39tav2/codes/HemePure/src/build_PP/hemepure" # CORRECT???
 
