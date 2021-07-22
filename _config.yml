@@ -57,8 +57,7 @@ sched:
 
 hemelb:
   env: 
-    - "module purge"
-    - "\n"
+    - "module purge \n"
     - "module load slurm_setup"
     - "module load intel/19.0.5"
     - "module load intel-mpi/2019-intel"
