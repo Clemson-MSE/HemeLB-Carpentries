@@ -247,7 +247,7 @@ Here:
 * &Delta;t - Time step [s]
 
 This relationship puts physical and practical limits on the values that can be selected for these parameters. In particular,
-&tau; > \frac{1}{2}$ must be imposed for a physical viscosity to exist, values of &tau; very close to $\frac{1}{2}$ can be
+&tau; > &frac12; must be imposed for a physical viscosity to exist, values of &tau; very close to &frac12; can be
 unstable. Generally, a value of &tau; ≈ 1 gives the most accurate results.
 
 The lattice Boltzmann method can only replicate the Navier-Stokes equations for fluid flow in a low Mach number regime. In

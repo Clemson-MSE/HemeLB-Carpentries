@@ -23,12 +23,12 @@ local:
 
 remote:
   name: "SuperMUC-NG"
-  login: "jureca01.fz-juelich.de"
-  host: "jrl12"
-  node: "jrc0940"
+  login: "" # EDIT ME 
+  host: "" # EDIT ME
+  node: "" # EDIT ME
   location: "Leibniz Supercomputing Centre"
-  homedir: "/p/home/jusers/yourUsername/jureca"
-  prompt: "[yourUsername@jrl12 ~]$"
+  homedir: "" # EDIT ME
+  prompt: "" # EDITME
 
 sched:
   name: "SLURM"
@@ -42,12 +42,19 @@ sched:
     user: "-u yourUsername"
     interactive: "--pty /bin/bash -i"
     histdetail: "-l -j"
+    account: "--account"
+    export: "--export=NONE"
+    env: "--get-user-env"
     name: "-J"
-    time: "-t"
+    output: "-o"
+    error: "-e"
+    directory: "-D"
+    time: "--time"
     queue: "--partition"
-    node: "-N"
+    node: "--nodes"
+    tasks_node: "--ntasks-per-node"
   del: "scancel"
-  interactive: "srun"
+  interactive: "mpiexec"
   info: "sinfo"
   comment: "#SBATCH"
   ntasks: "$SLURM_NTASKS"
@@ -56,10 +63,17 @@ sched:
     default: "batch"
 
 hemelb:
+  env: 
+    - "module purge \n"
+    - "module load slurm_setup \n"
+    - "module load intel/19.0.5 \n"
+    - "module load intel-mpi/2019-intel"
+  exec: "/dss/dsshome1/00/di39tav2/codes/HemePure/src/build_PP/hemepure" # CORRECT???
+
 
 mpi_runtime:
   implementation: "ParaStation"
-  launcher: "srun"
+  launcher: "mpiexec"
 
 # Interactive queue names, one or more as a list
 workshop_interactive_queues:
@@ -81,7 +95,7 @@ carpentry: "swc"
 title: "Running HemeLB on HPC systems"
 
 # Email address, no mailto:
-email: "a.ocais@fz-juelich.de"
+email: "j.mccullough@ucl.ac.uk"
 
 # Life cycle stage of the lesson
 # possible values: "pre-alpha", "alpha", "beta", "stable"

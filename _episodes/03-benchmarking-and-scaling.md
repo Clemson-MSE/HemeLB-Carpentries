@@ -91,7 +91,6 @@ While this job is running, lets examine the input file to understand the HemeLB 
 {% include {{ site.snippets }}/03/10c-bif_input.xml %}
 ```
 
-
 The HemeLB input file can be broken into three main regions: 
 
 1. **Simulation set-up**: specify global simulation information like discretisation parameters, total 
@@ -127,7 +126,6 @@ is provided below:
 {% include {{ site.snippets }}/03/ExampleReport.txt %}
 ~~~
 {: .source}
-
 
 This file provides various pieces of information about the completed simulation. In particular, it includes a Problem description, Timing data and Build information. 
 
@@ -228,7 +226,6 @@ Gathers implementation: Separated
 Separated concerns: OFF
 ```
 Finally, this section provides some information on the compilation options used in the executable being used for the simulation.
-
 
 > ## Editing the submission script
 >
