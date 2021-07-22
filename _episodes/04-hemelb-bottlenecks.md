@@ -82,10 +82,10 @@ wasting its computational performance potential. The success of a distribution w
 of the domain. 
 
 
-<p align="center"><img src="../fig/03/LoadBalance_48c.png" width="100%"/></p>
+<p align="center"><img src="../fig/04/LoadBalance_48c.PNG" width="100%"/></p>
 
 
-<p align="center"><img src="../fig/03/LoadBalance_192c.png" width="100%"/></p>
+<p align="center"><img src="../fig/04/LoadBalance_192c.PNG" width="100%"/></p>
 
 In general, the default load distribution algorithm in HemeLB has demonstrated good performance except in extreme
 circumstances. This default algorithm however does assume that each node type: Bulk fluid, Inlet, Outlet, Wall; all require
@@ -112,10 +112,10 @@ format from *.gmy to *.gmy+.
 
 An example of the improved load balance using the gmy+ format are shown below:
 
-<p align="center"><img src="../fig/03/GMYP_48c.png" width="100%"/></p>
+<p align="center"><img src="../fig/04/GMYP_48c.PNG" width="100%"/></p>
 
 
-<p align="center"><img src="../fig/03/GMYP_192c.png" width="100%"/></p>
+<p align="center"><img src="../fig/04/GMYP_192c.PNG" width="100%"/></p>
 
 
 > ## Testing the performance of gmy+ and ParMETIS
@@ -131,10 +131,10 @@ as a dependency in the initial compilation of the code. To do this you will need
 with the following option enabled: -DHEMELB_USE_PARMETIS=ON. This tool takes the load decomposition generated 
 by the default HemeLB algorithm and then seeks to generate an improved decomposition.
 
-<p align="center"><img src="../fig/03/Parmetis_48c.png" width="100%"/></p>
+<p align="center"><img src="../fig/04/Parmetis_48c.PNG" width="100%"/></p>
 
 
-<p align="center"><img src="../fig/03/Parmetis_192c.png" width="100%"/></p>
+<p align="center"><img src="../fig/04/Parmetis_192c.PNG" width="100%"/></p>
 
 As can be seen, using ParMETIS can generate a near perfect load distribution. Whilst this may seem like an 
 ideal solution it does come with potential drawbacks. The first is memory usage, from experience it has been 
