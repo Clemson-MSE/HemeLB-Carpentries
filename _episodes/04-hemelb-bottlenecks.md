@@ -16,7 +16,7 @@ keypoints:
 usemathjax: true
 ---
 
-- How is HemeLB parallelised?
+# How is HemeLB parallelised?
 
 Before using any accelerator package to speedup your runs, it is always wise to identify
 performance *bottlenecks*. The term "bottleneck" refers to specific parts of an
@@ -65,6 +65,7 @@ accurate results are obtained.
 
 
 ## Load balancing
+
 One important issue with MPI-based parallelization is that it can under-perform for systems with inhomogeneous
 distribution of work between cores. It is pretty common that the evolution of simulated systems 
 over time begin to reflect such a case. This results in *load imbalance*. While some of the processors are assigned with
@@ -82,10 +83,10 @@ wasting its computational performance potential. The success of a distribution w
 of the domain. 
 
 
-<p align="center"><img src="../fig/04/LoadBalance_48c.PNG" width="100%"/></p>
-
+<!--<p align="center"><img src="../fig/04/LoadBalance_48c.PNG" width="100%"/></p>
 
 <p align="center"><img src="../fig/04/LoadBalance_192c.PNG" width="100%"/></p>
+--->
 
 In general, the default load distribution algorithm in HemeLB has demonstrated good performance except in extreme
 circumstances. This default algorithm however does assume that each node type: Bulk fluid, Inlet, Outlet, Wall; all require
@@ -96,6 +97,7 @@ format from *.gmy to *.gmy+.
 
 
 > ## Compiling and using gmy2gmy+
+> 
 > Download the code for the gmy2gmy+ converter from **Provide Link here, have uploaded to files** and compile it on your machine.
 > This script is run with the following instruction (where DOMAIN is your test domain name):
 >    ./gmy2gmy+ DOMAIN.gmy DOMAIN.gmy+ 1 2 4 4 4 4 
@@ -112,13 +114,15 @@ format from *.gmy to *.gmy+.
 
 An example of the improved load balance using the gmy+ format are shown below:
 
+<!--
 <p align="center"><img src="../fig/04/GMYP_48c.PNG" width="100%"/></p>
 
 
 <p align="center"><img src="../fig/04/GMYP_192c.PNG" width="100%"/></p>
-
+-->
 
 > ## Testing the performance of gmy+ and ParMETIS
+> 
 > Repeat the benchmarking tests conducted in Episode 1 using the gmy+ (edit the input.xml file accordingly)
 > and compare your results. Also examine how load distribution has changed as a result in the report.txt file.
 >
@@ -131,10 +135,12 @@ as a dependency in the initial compilation of the code. To do this you will need
 with the following option enabled: -DHEMELB_USE_PARMETIS=ON. This tool takes the load decomposition generated 
 by the default HemeLB algorithm and then seeks to generate an improved decomposition.
 
+<!--
 <p align="center"><img src="../fig/04/Parmetis_48c.PNG" width="100%"/></p>
 
 
 <p align="center"><img src="../fig/04/Parmetis_192c.PNG" width="100%"/></p>
+-->
 
 As can be seen, using ParMETIS can generate a near perfect load distribution. Whilst this may seem like an 
 ideal solution it does come with potential drawbacks. The first is memory usage, from experience it has been 
@@ -152,6 +158,7 @@ that causes this measure to increase. For small geometries, the initialisation t
 
 
 > ## Testing the performance of gmy+ and ParMETIS
+> 
 > Repeat the benchmarking tests conducted in Episode 1 using the gmy+ and ParMETIS (edit the input.xml file so that it is 
 > looking for the gmy+ file when testing this, save as a separate file; when testing ParMETIS the original input.xml file
 > can be used).
@@ -162,7 +169,9 @@ that causes this measure to increase. For small geometries, the initialisation t
 > 
 > > ## Example Results
 > > 
-> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. The relative benefit of using load balancing schemes will vary depending on the size and complexity of the domain, the length of your simulation and the available hardware.
+> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. 
+> > The relative benefit of using load balancing schemes will vary depending on the size and complexity of the domain,
+> > the length of your simulation and the available hardware.
 > > 
 > > | Scheme   | Cores | Initialisation Time (s) | Simulation Time (s) | Total Time (s) |
 > > |-----------------------------------------------------------------------------------|
@@ -179,6 +188,7 @@ that causes this measure to increase. For small geometries, the initialisation t
 
 
 ## Data writing
+
 With all simulations, it is important to get output data to assess how the simulation has performed and to investigate
 your problem of interest. Unfortunately, writing data to disk is a cost that can negatively impact on simulation 
 performance. In HemeLB, output is governed by the 'properties' section of the input file. 
@@ -211,6 +221,7 @@ your simulation domain, the greater the effect of data writing will be.
 
 
 > ## Testing the effect of data writing
+>
 > Repeat the benchmarking tests conducted in Episode 1 now outputting inlet/outlet and whole data at a number of different
 > time intervals. Compare your results to those obtained in Episode 1. Given output is critical to the simulation process
 > what would be a suitable strategy for writing output data?
@@ -222,6 +233,7 @@ your simulation domain, the greater the effect of data writing will be.
 
 
 > ## Effect of model size
+> 
 > In **refer to folder** you can find a higher resolution model ( ≈ 4 times larger **TODO confirm**) of the bifurcation 
 > model we have been studying. Repeat some of the exercises on load balancing and data writing to see how a larger model 
 > impacts the performance of your system.
@@ -229,6 +241,7 @@ your simulation domain, the greater the effect of data writing will be.
 {: .challenge}
 
 ## Choice of simulation parameters
+
 With most simulation methods, results that accurately represent the physical system being studied can only be achieved if suitable
 parameters are provided. When this is not the case, the simulation may be unstable, it may not represent reality or both. Whilst 
 the choice of simulation parameters may not change the algorithmic speed of your code, they can impact how long a simulation needs 
@@ -262,6 +275,7 @@ Often the competing restrictions placed on a simulation by these two expressions
 
  
 > ## Determining your physical parameters 
+>
 > Suppose you wish to simulate blood flow through a section of the aorta with a maximum velocity of 1 m/s for a period of 
 > two heartbeats (2 seconds). Using the expressions above, determine suitable choices for the time step if your geometry
 > has a grid resolution of &Delta;x = 100 &mu;m. 
@@ -271,6 +285,7 @@ Often the competing restrictions placed on a simulation by these two expressions
 > pros and cons of using these higher resolution models?
 >
 > > ## Solution
+> >
 > > Starting points would be the following, these would likely need further adjustment in reality:
 > >
 > > - For &Delta;x = 100 &mu;s, &Delta;t = 5 &mu;s gives Ma ≈ 0.087 and &tau; = 0.506; 400,000 simulation steps required 
