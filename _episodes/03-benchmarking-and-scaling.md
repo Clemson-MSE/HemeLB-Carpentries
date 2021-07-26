@@ -127,7 +127,8 @@ is provided below:
 ~~~
 {: .source}
 
-This file provides various pieces of information about the completed simulation. In particular, it includes a Problem description, Timing data and Build information. 
+This file provides various pieces of information about the completed simulation. In particular, it includes a Problem
+description, Timing data and Build information. 
 
 Problem description:
 
@@ -145,7 +146,10 @@ rank: 2, fluid sites: 997211
 ~~~
 {: .source}
 
-This section tells you how big the geometry you studied was (here 2010048 sites); how many threads (i.e. CPUs) it was run on; the number of steps and time step size used and how the simulation domain has been distributed between the CPUs. Note that HemeLB is run in a master+slave configuration where one CPU is dedicated to simulation coordination and while the rest solve the problem. This is why rank 0 is assigned 0 fluid sites.
+This section tells you how big the geometry you studied was (here 2010048 sites); how many threads (i.e. CPUs) it was
+run on; the number of steps and time step size used and how the simulation domain has been distributed between the
+CPUs. Note that HemeLB is run in a master+slave configuration where one CPU is dedicated to simulation coordination and
+while the rest solve the problem. This is why rank 0 is assigned 0 fluid sites.
 
 Timing data:
 
@@ -189,7 +193,13 @@ Extraction writing 0 0 0 0
 ~~~
 {: .source}
 
-This section tracks how much time is spent in various process of the simulation's initialisation and execution. Here Local reports the time spent in the process in rank 0 and the min, mean and max columns give statistics across all CPUs used in the simulation. For this episode, the Simulation total information is of greatest interest - this indicates how long the simulation itself took to complete and represents total wall time less the initialisation time. This parameter is how we judge the scaling performance of the code. The other parameters are described in: 'src/reporting/Timers.h' and can help to identify which section of the initialisation or computation is requiring the most time to complete:
+This section tracks how much time is spent in various process of the simulation's initialisation and execution.
+Here Local reports the time spent in the process in rank 0 and the min, mean and max columns give statistics across
+all CPUs used in the simulation. For this episode, the Simulation total information is of greatest interest - this
+indicates how long the simulation itself took to complete and represents total wall time less the initialisation time.
+This parameter is how we judge the scaling performance of the code. The other parameters are described in: 
+'src/reporting/Timers.h' and can help to identify which section of the initialisation or computation is requiring the 
+most time to complete:
 
 ~~~
 total = 0, //!< Total time
