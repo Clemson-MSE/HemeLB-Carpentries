@@ -21,6 +21,9 @@ snippets: "/snippets_library/SLURM-SuperMUC-NG"
 local:
   prompt: "[user@laptop ~]$"
 
+files:
+  jobscript: "/files/JobScript-slurm.sh"
+
 remote:
   name: "SuperMUC-NG"
   login: "" # EDIT ME 

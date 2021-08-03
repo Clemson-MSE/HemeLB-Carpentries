@@ -1,0 +1,18 @@
+ <properties>
+    <propertyoutput file="whole.dat" period="1000">
+      <geometry type="whole" />
+      <field type="velocity" />
+      <field type="pressure" />
+    </propertyoutput>
+    <propertyoutput file="inlet.dat" period="100">
+      <geometry type="inlet" />
+      <field type="velocity" />
+      <field type="pressure" />
+    </propertyoutput>
+    <propertyoutput file="outlet.dat" period="100">
+      <geometry type="inlet" />
+      <field type="velocity" />
+      <field type="pressure" />
+    </propertyoutput>
+  </properties>
+</hemelbsettings>
