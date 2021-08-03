@@ -406,7 +406,7 @@ to repeat key benchmark tests to ensure a reliable measure of performance is obt
 
 For **weak scaling**, we want usually want to increase our workload without increasing
 our *walltime*, and we do that by using additional resources. To consider this in more detail, let's head
-back to our chefs again from the [first episode]({{page.root}}{% link _episodes/01-why-bother-with-performance.md}),
+back to our chefs again from the [first episode]({{page.root}}{% link _episodes/01-why-bother-with-performance.md %}),
 where we had more people to serve but the same amount of time to do it in.
 
 We hired extra chefs who have specialisations but let us assume that they are all bound

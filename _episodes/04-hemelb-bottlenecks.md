@@ -47,13 +47,13 @@ Benchmark plots - particularly for *speed-up* and *MLUPS/core* - can help identi
 bottleneck becomes a problem for efficient simulation. If an apparent bottleneck is particularly
 significant, timing data from a job can also be useful in identifying where the source of it 
 may be. HemeLB has a reporting mechanism that we introduced in the 
-[previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md}) that provides such 
+[previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) that provides such 
 information. This file gets written to `results/report.txt`.  
 
 This file provides a wealth of information about the simulation you have conducted, including
 the size of simulation conducted and the time spent in various sections of the simulation. The
 breakdown of information provided here is described in the
-[previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md}).
+[previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}).
 
 We will discuss three common bottlenecks that may be encountered with HemeLB:
 - Load balance
@@ -98,7 +98,7 @@ geometry data format from `*.gmy` to `*.gmy+`.
 
 > ## Compiling and using gmy2gmy+
 > 
-> 1. Download the code for the gmy2gmy+ converter from [`files/gmy2gmy+`]({{page.root}}{% link files/gmu2gmy+}) and
+> 1. Download the code for the gmy2gmy+ converter from [`files/gmy2gmy+`]({{page.root}}{% link files/gmu2gmy+ %}) and
 >    compile it on your machine. This script is run with the following instruction (where `DOMAIN` is your test domain 
 >    name):
 > 
@@ -133,7 +133,7 @@ An example of the improved load balance using the gmy+ format are shown below:
 > ## Testing the performance of gmy+
 > 
 > Repeat the benchmarking tests conducted in the 
-> [previous episode]({{ page.root }}{% link _episodes/03-benchmarking-and-scaling.md}) using the `gmy+` format. You
+> [previous episode]({{ page.root }}{% link _episodes/03-benchmarking-and-scaling.md %}) using the `gmy+` format. You
 > will need to edit the `input.xml` file accordingly) and compare your results. Also examine how load distribution has
 > changed as a result in the `report.txt` file.
 >
