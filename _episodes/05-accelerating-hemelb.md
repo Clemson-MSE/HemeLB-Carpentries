@@ -45,16 +45,34 @@ instructions that explicitly tell the compiler how a certain portion of code sho
 In HemeLB, the key computational kernels have been encoded with SSE3 intrinsics that allows
 two 'double' units to be operated on simultaneously. This level of optimisation should be 
 compatible with most modern CPUs, even those available on desktops and laptops. To enact this 
-in HemeLB set the `-DHEMELB_USE_SSE3` flag in the compilation script to ON and recompile. The 
+in HemeLB set the `-DHEMELB_USE_SSE3` flag in the compilation script to `ON` and recompile. HemeLB 
+can also use AVX2 intrinsics where the instructions can operate on four 'double' units to be acted
+on with a single instruction. This can be enabled by setting `-DHEMELB_USE_AVX2` to `ON` and the 
+SSE3 flag to `OFF`. Before trying this, be certain that your CPU is able to use AVX2 intrinsics. The 
 encoding of the key kernels using the intrinsics can be seen in the file src/lb/lattices/Lattice.h.
 
-> ## Case Study: Simulation acceleration with SSE3 intrinsics 
+> ## Case Study: Simulation acceleration with intrinsics 
 >
 > Repeat your scaling benchmark tests with SSE3 intrinsics active and compare performance against
 > that achieved with the 'naive' code implementation and default compiler options. In particular,
 > note how walltime and parallel efficiency (speed_up_compared_to_smallest/core_scale_up) changes
 > with their use.
 > 
+> > ## Example Results
+> > 
+> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. The benefit of using intrinsics can become more apparent at higher core counts, longer runtimes and larger domains.
+> > 
+> > | Scheme | Cores | Initialisation Time (s) | Simulation Time (s) | Total Time (s) |
+> > |-----------------------------------------------------------------------------------|
+> > | Basic  | 48    | 0.7                     |     67.5            | 68.2           |
+> > | Basic  | 192   | 1.0                     |     19.6            | 20.6           |
+> > | SSE3   | 48    | 0.7                     |     56.1            | 56.8           |
+> > | SSE3   | 192   | 1.0                     |     15.2            | 16.2           |
+> > | AVX2   | 48    | 0.7                     |     55.9            | 56.6           |
+> > | AVX2   | 192   | 1.1                     |     14.9            | 16.0           |
+> > |-----------------------------------------------------------------------------------|
+> > 
+> {: .solution} 
 {: .challenge}
 
 ## Monitoring in HemeLB
