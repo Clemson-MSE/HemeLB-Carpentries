@@ -100,7 +100,7 @@ geometry data format from `*.gmy` to `*.gmy+`.
 > 
 > Download the code for the gmy2gmy+ converter from 
 > [`files/gmy2gmy+`]({{page.root}}{% link files/gmy2gmy+/gmy2gmy+.cc %}) along with its corresponding
-> [MakeFile]({{page.root}}{% link files/gmy2gmy+/MakeFile %}) and compile it on your machine. This script is run
+> [Makefile]({{page.root}}{% link files/gmy2gmy+/Makefile %}) and compile it on your machine. This script is run
 > with the following instruction (where `DOMAIN` is your test domain name):
 > 
 > ~~~
