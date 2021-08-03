@@ -160,15 +160,12 @@ ideal solution it does come with potential drawbacks.
                      and this can become a limiting factor on its use as domains become larger. 
 2. **Performance Improvement:** With any of the suggested options for improving load balance, it is important to assess
                                 how much performance gain has been achieved through this change. This should be 
-                                assessed in two metrics: 
-
-                                - Simulation Time: This looks at the time taken for the requested iterations to 
-                                                   complete and is the value used for assessing scaling previously. 
-                                - Total Walltime: Includes both the Simulation Time and the time needed to initialise 
-                                                  the simulation. The use of extra load balancing tools requires the
-                                                  extra initialisation time and it needs to be judged whether this
-                                                  extra cost is merited in terms of the achieved improvement in 
-                                                  Simulation Time. 
+                                assessed in two metrics: **1) Simulation Time:** This looks at the time taken for the 
+                                requested iterations to complete and is the value used for assessing scaling 
+                                previously. **2) Total Walltime:** Includes both the Simulation Time and the time 
+                                needed to initialise the simulation. The use of extra load balancing tools requires the
+                                extra initialisation time and it needs to be judged whether this extra cost is merited
+                                in terms of the achieved improvement in Simulation Time. 
 
 As many HPC systems charge for the Total Walltime of a job, it is inefficient to use a tool 
 that causes this measure to increase. For small geometries, the initialisation time of HemeLB can be very quick
