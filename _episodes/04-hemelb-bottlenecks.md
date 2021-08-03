@@ -98,7 +98,7 @@ geometry data format from `*.gmy` to `*.gmy+`.
 
 > ## Compiling and using gmy2gmy+
 > 
-> 1. Download the code for the gmy2gmy+ converter from [`files/gmy2gmy+`]({{page.root}}{% link files/gmu2gmy+ %}) and
+> 1. Download the code for the gmy2gmy+ converter from [`files/gmy2gmy+`]({{page.root}}{% link files/gmy2gmy+ %}) and
 >    compile it on your machine. This script is run with the following instruction (where `DOMAIN` is your test domain 
 >    name):
 > 
