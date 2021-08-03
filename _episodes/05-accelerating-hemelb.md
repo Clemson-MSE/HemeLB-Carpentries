@@ -22,9 +22,12 @@ investigation.
 
 Versions of HemeLB that are accelerated by GPUs are also available and these can yield
 significant speed-up compared to the CPU code. We will discuss the use of these further
-in a subsequent episode. 
+in the [next episode]({{page.root}}{% link _episodes/06-gpus-with-hemelb.md %}). 
 
-The two options we will discuss in this episode are: 1) Vectorisation and 2) Monitoring
+The two options we will discuss in this episode are: 
+
+- 1) Vectorisation
+- 2) Monitoring
 
 ## Vectorisation overview
 
@@ -32,8 +35,8 @@ At the heart of many simulation codes will be a relatively small number of kerne
 are responsible for the key problem solving steps. In the lattice Boltzmann method of 
 HemeLB it is the update of the fundamental population distributions and the conversion of
 these to macroscopic properties of interest. When these kernels are written in code, they 
-are often written in variables of the type 'double' that may be naively acted on in a 
-sequential manner. However modern processors can operate on multiple 'double' sized units
+are often written in variables of the type '*double*' that may be naively acted on in a 
+sequential manner. However modern processors can operate on multiple '*double*' sized units
 of memory at the same time - the latest Intel cores can operate on eight at once. Therefore
 significant speed-ups can be obtained by invoking parallelism at this fundamental level by 
 adjusting the instructions of this fundamental kernel to allow vector operations. Modern 
@@ -42,14 +45,14 @@ fashion. However, sometimes code complexity can mean that this is not fully achi
 compiler and vectorised code needs to be written. This is done through the use of intrinsic
 instructions that explicitly tell the compiler how a certain portion of code should be compiled.
 
-In HemeLB, the key computational kernels have been encoded with SSE3 intrinsics that allows
-two 'double' units to be operated on simultaneously. This level of optimisation should be 
+In HemeLB, the key computational kernels have been encoded with **SSE3** intrinsics that allows
+two '*double*' units to be operated on simultaneously. This level of optimisation should be 
 compatible with most modern CPUs, even those available on desktops and laptops. To enact this 
 in HemeLB set the `-DHEMELB_USE_SSE3` flag in the compilation script to `ON` and recompile. HemeLB 
-can also use AVX2 intrinsics where the instructions can operate on four 'double' units to be acted
+can also use **AVX2** intrinsics where the instructions can operate on four '*double*' units to be acted
 on with a single instruction. This can be enabled by setting `-DHEMELB_USE_AVX2` to `ON` and the 
-SSE3 flag to `OFF`. Before trying this, be certain that your CPU is able to use AVX2 intrinsics. The 
-encoding of the key kernels using the intrinsics can be seen in the file src/lb/lattices/Lattice.h.
+SSE3 flag to `OFF`. Before trying this, be certain that your CPU is able to use **AVX2** intrinsics. The 
+encoding of the key kernels using the intrinsics can be seen in the file `src/lb/lattices/Lattice.h`.
 
 > ## Case Study: Simulation acceleration with intrinsics 
 >
@@ -60,7 +63,8 @@ encoding of the key kernels using the intrinsics can be seen in the file src/lb/
 > 
 > > ## Example Results
 > > 
-> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. The benefit of using intrinsics can become more apparent at higher core counts, longer runtimes and larger domains.
+> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. 
+> > The benefit of using intrinsics can become more apparent at higher core counts, longer runtimes and larger domains.
 > > 
 > > | Scheme | Cores | Initialisation Time (s) | Simulation Time (s) | Total Time (s) |
 > > |-----------------------------------------------------------------------------------|
@@ -108,7 +112,7 @@ it out via:
 {: .challenge}
 
 Another monitoring option that can be introduced to your simulation is a check to observe when 
-steady-state is reached. HemeLB is a explicit solver meaning that it is not ideally suited to steady-state
+**steady-state** is reached. HemeLB is a explicit solver meaning that it is not ideally suited to steady-state
 simulations as implicit methods can be. Once a suitable timestep is determined the simulation will 
 continuously step through time until the desired number of iterations is completed. Unfortunately,
 it is not always possible to know in advance how many iterations are required for steady-state to 
