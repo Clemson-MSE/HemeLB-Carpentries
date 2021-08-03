@@ -1,0 +1,10 @@
+Configured by file input.xml with a 2010048 site geometry.
+There were 18450 blocks, each with 512 sites (fluid and solid).
+Recorded 0 images.
+Ran with 3 threads.
+Ran for 1000 steps of an intended 1000.
+With 0.000010 seconds per time step.
+Sub-domains info:
+rank: 0, fluid sites: 0
+rank: 1, fluid sites: 1012837
+rank: 2, fluid sites: 997211
