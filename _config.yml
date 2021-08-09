@@ -30,8 +30,8 @@ remote:
   host: "" # EDIT ME
   node: "" # EDIT ME
   location: "Leibniz Supercomputing Centre"
-  homedir: "" # EDIT ME
-  prompt: "" # EDITME
+  homedir: "/dss/dsshome1/00/yourUsername" 
+  prompt: "yourUsername@login02:~>" #This is at HOME, ~ changes to current directory when moving between folders 
 
 sched:
   name: "SLURM"
@@ -75,7 +75,7 @@ hemelb:
 
 
 mpi_runtime:
-  implementation: "ParaStation"
+  implementation: "IntelMPI"
   launcher: "mpiexec"
 
 # Interactive queue names, one or more as a list
