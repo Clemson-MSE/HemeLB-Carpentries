@@ -7,9 +7,9 @@
 #SBATCH -o ./%x.%j.out
 #SBATCH -e ./%x.%j.err
 
-# Send an email on completion of job
-#SBATCH --mail-user=j.mccullough@ucl.ac.uk
-#SBATCH --mail-type=BEGIN,END,FAIL
+# Remove first # to send an email on completion of job
+##SBATCH --mail-user=emailaddress@institute.ac.uk
+##SBATCH --mail-type=BEGIN,END,FAIL
 
 # walltime, maximum walltime allowed (HH:MM:SS)
 #SBATCH --time=0:20:00

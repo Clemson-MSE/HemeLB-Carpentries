@@ -4,13 +4,14 @@ teaching: 30
 exercises: 90
 questions:
 - "What are the various options to accelerate HemeLB?"
-- "What accelerator packages are compatible with which hardware?"
-- "How do I invoke a package in a HemeLB run?"
+- "What accelerator tools are compatible with which hardware?"
 objectives:
-- "Understand the different accelerator packages available in HemeLB"
+- "Understand the different methods of accelerating a HemeLB simulation"
 - "Learn how to invoke the different accelerator packages across different hardwares"
+- "Understand the risks of trying to naively use HemeLB acceleration methods on a new domain or machine"
 keypoints:
-- accelerator packages offered, how to 
+- "The use of efficiently vectorised instructions can effectively speed-up simulations compared to default options, however they may not be available on all CPUs"
+- "Simulation monitoring in HemeLB can require a significant amount of time to complete. If a set of simulation parameters is known to be stable and acceptably accurate, removal of this feature will accelerate simulation time. It is recommended to be kept in place to catch unstable simulations when new geometries or simulation parameters are being investigated."
 ---
 
 ## How can I accelerate HemeLB performance?
@@ -53,6 +54,10 @@ can also use **AVX2** intrinsics where the instructions can operate on four '*do
 on with a single instruction. This can be enabled by setting `-DHEMELB_USE_AVX2` to `ON` and the 
 SSE3 flag to `OFF`. Before trying this, be certain that your CPU is able to use **AVX2** intrinsics. The 
 encoding of the key kernels using the intrinsics can be seen in the file `src/lb/lattices/Lattice.h`.
+In `src/CMakeLists.txt` you can identify the compiler flags that are imposed when **SSE3** or **AVX2**
+instrinsics are implemented. These options can also allow the compiler to implicitly vectorise some
+other sections of the code, however the performance of this alone has not been seen to match that 
+obtained when the explicit intrinsics are used for the key computational kernels.
 
 > ## Case Study: Simulation acceleration with intrinsics 
 >

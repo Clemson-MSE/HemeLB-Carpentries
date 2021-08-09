@@ -10,8 +10,10 @@ questions:
 objectives:
 - "Be able to perform a benchmark analysis of an application"
 - "Be able to perform a scaling analysis of an application"
+- "Understand what good scaling performance looks like"
 keypoints:
 - "Benchmarking is a way of assessing the performance of a program or set of programs"
+- "Strong scaling indicates how the quickly a problem of fixed size can be solved with differing number of cores on a given machine"
 
 ---
 
