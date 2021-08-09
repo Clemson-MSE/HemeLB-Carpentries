@@ -13,9 +13,11 @@ objectives:
 keypoints:
 - "The best way to identify bottlenecks is to run different benchmarks on a smaller system and
   compare it to a representative system"
-- "Effective load balancing is being able to distribute an equal amount of work across
-- "Evaluate both simulation time and overall wall time to determine if improved load balance leads to more efficient performance"
-- "For all applications, writing data to file can be a time consuming activity. Carefully consider what data you need for post-processing to minimise the time spent in this regime"
+- "Effective load balancing is being able to distribute an equal amount of work across processes."
+- "Evaluate both simulation time and overall wall time to determine if improved load balance leads to more efficient
+   performance."
+- "For all applications, writing data to file can be a time consuming activity. Carefully consider what data you need
+   for post-processing to minimise the time spent in this regime."
 usemathjax: true
 ---
 
