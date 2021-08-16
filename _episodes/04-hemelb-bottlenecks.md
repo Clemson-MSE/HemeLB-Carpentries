@@ -10,12 +10,15 @@ objectives:
 - "Learn how to analyse timing data in HemeLB and determine bottlenecks"
 - "Learn how to use HemeLB compilation options to overcome bottlenecks"
 - "Learn how to modify HemeLB file writing options to minimise I/O bottlenecks"
+- "Learn how the choice of simulation parameters can impact the simulation time needed to reach a solution with HemeLB"
 keypoints:
 - "The best way to identify bottlenecks is to run different benchmarks on a smaller system and
   compare it to a representative system"
 - "Effective load balancing is being able to distribute an equal amount of work across processes."
 - "Evaluate both simulation time and overall wall time to determine if improved load balance leads to more efficient
    performance."
+- "The choice of simulation parameters impacts both the accuracy and stability of a simulation as well as the time needed
+   to complete a simulation. This is especially true for solvers using explicit techniques such as HemeLB."
 - "For all applications, writing data to file can be a time consuming activity. Carefully consider what data you need
    for post-processing to minimise the time spent in this regime."
 usemathjax: true
@@ -249,7 +252,10 @@ the choice of simulation parameters may not change the algorithmic speed of your
 to run to represent a given amount of physical time. The lattice Boltzmann method, on which HemeLB is based, has specific restrictions 
 that link the discretization parameters, physical variables and simulation accuracy and stability.
 
-In these studies, HemeLB is using a single relaxation time (or BGK) collision kernel to solve the fluid flow. In this model 
+In these studies, HemeLB is using a single relaxation time (or BGK) collision kernel to solve the fluid flow. HemeLB (and the lattice 
+Boltzmann method more widely) also has other collision kernels that can permit simulation of more sophisticated flow scenarios such 
+as non-Newtonian fluid rheology or possess improved stability or accuracy characteristics. The BGK kernel is typically the first choice
+for the collision model to used and is also simplest (and generally fastest) to implement and perform computationally. In this model 
 viscosity, lattice spacing, and simulation timestep are related to the relaxation parameter &tau; by,
 
 &nu; = <sup>1</sup>/<sub>3</sub>(&tau; - &frac12;) <sup>&Delta;x<sup>2</sup></sup>/<sub>&Delta;t</sub>
