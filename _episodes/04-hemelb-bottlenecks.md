@@ -26,12 +26,14 @@ usemathjax: true
 
 ## How is HemeLB parallelised?
 
-Before using any accelerator package to speedup your runs, it is always wise to identify performance **bottlenecks**.
-The term "bottleneck" refers to specific parts of an application that are unable to keep pace with the rest of the
-calculation, thus slowing overall performance.
+Before using accelerator packages or other optimisation strategies to speedup your runs, it is always wise 
+to identify what are known as performance **bottlenecks**. The term "bottleneck" refers to specific parts of an 
+application that are unable to keep pace with the rest of the calculation, thus slowing overall performance. Finding
+these can prove dfficult at times and it may turn out that only minor tweaks are needed to speed up your code
+significantly.
 
 Therefore, you need to ask yourself these questions:
-* Are my runs slower than expected?
+* Are my simulation runs slower than expected?
 * What is it that is hindering us getting the expected scaling behaviour?
 
 HemeLB distributes communicates between the multiple CPU cores taking part in a simulation 
@@ -49,19 +51,17 @@ In this episode, we will discuss some bottlenecks that may be observed within th
 Identifying (and addressing) performance bottlenecks is important as this could save you
 a lot of computation time and resources. The best way to do this is to start with a reasonably
 representative system having a modest system size and run for a few hundred/thousand
-timesteps.
+timesteps, small enough so that it doesn't run for too long, but large enough and representative
+enough that you can project a full workflow.
 
 Benchmark plots - particularly for *speed-up* and *MLUPS/core* - can help identify when a potential
 bottleneck becomes a problem for efficient simulation. If an apparent bottleneck is particularly
 significant, timing data from a job can also be useful in identifying where the source of it 
 may be. HemeLB has a reporting mechanism that we introduced in the 
 [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) that provides such 
-information. This file gets written to `results/report.txt`.  
-
-This file provides a wealth of information about the simulation you have conducted, including
-the size of simulation conducted and the time spent in various sections of the simulation. The
-breakdown of information provided here is described in the
-[previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}).
+information. This file gets written to `results/report.txt`. This file provides a wealth of information about
+the simulation you have conducted, including the size of simulation conducted and the time spent in various sections
+of the simulation. 
 
 We will discuss three common bottlenecks that may be encountered with HemeLB:
 - Load balance
@@ -82,6 +82,30 @@ update. The progression of the simulation is held up by the core with the most w
 overall loss in parallel efficiency if a large imbalance is present. This situation is more likely to expose itself as
 you scale up to a large large number of processors for a fixed number of sites to study.
 
+> ## Quantifying load imbalance
+> 
+> A store has 4 people working in it and each has been tasked with loading a number of boxes. Assume that each person
+> fills a box every minute.
+>
+> | Person          | James | Holly | Sarah | Mark  | Total number of boxes |
+> |-----------------|-------|-------|-------|-------|-----------------------|
+> | Number of boxes |   6   |   1   |   3   |   2   |           12          |
+> |-----------------|-------|-------|-------|-------|-----------------------|
+>
+> 1. How long would it take to finish packing the boxes?
+> 2. If the work is evenly distributed among the 4 people how long would it take to fill up the boxes?
+>
+> > ## Solution
+> >
+> > 1. It would take 6 minutes as James has the most number of boxes to fill. This means that Holly will have been 
+> >    watching for 5 minutes, Sarah for 3 and Mark for 2.
+> > 2. If the work was distributed evenly, (# boxes/# people), then it would take 3 minutes to complete. Load balancing
+> >    works in such a way that if a core is underutilised, it takes some work away from other ones to complete the 
+> >    task more quickly. This is particularly useful in chemistry/biological systems where a large area is left with 
+> >    little to do.
+> {: .solution}
+{: .challenge}
+
 In the HemeLB results file, the number of sites assigned to each core is reported near the top of the file and can 
 be used to check for signs of significant imbalance between cores. For example we plot below how HemeLB has distributed
 the workload of the bifurcation geometry on 48 and 192 cores. Note in both cases that rank 0 has no sites assigned to
@@ -90,11 +114,7 @@ has significantly more sites than the others. Cores with significantly less work
 progression but will be waiting for other cores to complete and thus wasting its computational performance potential.
 The success of a distribution will depend on the number of cores requested and the complexity of the domain. 
 
-
-<p align="center"><img src="../fig/04/LoadBalance_48c.png" width="100%"/></p>
-
-<p align="center"><img src="../fig/04/LoadBalance_192c.png" width="100%"/></p>
-
+<p align="center"><img src="../fig/04/Default_Load_Balancing.png" width="100%"/></p>
 
 In general, the default load distribution algorithm in HemeLB has demonstrated good performance except in extreme
 circumstances. This default algorithm however does assume that each node type: `Bulk fluid`, `Inlet`, `Outlet`, `Wall`;
@@ -102,7 +122,6 @@ all require the same amount of computational work to conduct and this can genera
 are a large number of non-bulk sites present in a geometry. HemeLB has a tool available to help correct this imbalance
 by assigning weights to the different site types in order to generate a more even distribution, this converts the
 geometry data format from `*.gmy` to `*.gmy+`.
-
 
 > ## Compiling and using gmy2gmy+
 > 
@@ -132,11 +151,7 @@ geometry data format from `*.gmy` to `*.gmy+`.
 
 An example of the improved load balance using the gmy+ format are shown below:
 
-<p align="center"><img src="../fig/04/GMYP_48c.png" width="100%"/></p>
-
-
-<p align="center"><img src="../fig/04/GMYP_192c.png" width="100%"/></p>
-
+<p align="center"><img src="../fig/04/GMYplus_Load_Balancing.png" width="100%"/></p>
 
 > ## Testing the performance of gmy+
 > 
@@ -156,10 +171,7 @@ as a dependency in the initial compilation of the code. To do this you will need
 with the following option enabled: `-DHEMELB_USE_PARMETIS=ON`. This tool takes the load decomposition generated 
 by the default HemeLB algorithm and then seeks to generate an improved decomposition.
 
-<p align="center"><img src="../fig/04/Parmetis_48c.png" width="100%"/></p>
-
-
-<p align="center"><img src="../fig/04/Parmetis_192c.png" width="100%"/></p>
+<p align="center"><img src="../fig/04/Parmetis_Load_Balancing.png" width="100%"/></p>
 
 As can be seen, using ParMETIS can generate a near perfect load distribution. Whilst this may seem like an 
 ideal solution it does come with potential drawbacks. 
@@ -181,17 +193,19 @@ that causes this measure to increase. For small geometries, the initialisation t
 
 > ## Testing the performance of gmy+ and ParMETIS
 > 
-> Repeat the benchmarking tests conducted in Episode 1 using the gmy+ and ParMETIS (edit the input.xml file so that it is 
-> looking for the gmy+ file when testing this, save as a separate file; when testing ParMETIS the original `input.xml` file
-> can be used).
-> and compare your results. Also examine how load distribution has changed as a result in the report.txt file.
+> Repeat the benchmarking tests conducted in the 
+> [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) using the gmy+ and ParMETIS
+> (edit the input.xml file so that it is looking for the gmy+ file when testing this, save as a separate file; when
+> testing ParMETIS the original `input.xml` file can be used) and compare your results. 
+> 
+> Also examine how load distribution has changed as a result in the `report.txt` file.
 >
 > Try different choices of the gmy+ weights to see how this impacts your results.
-> See how your results vary when a larger geometry is used (see **FOLDERPATHHERE** for `gmy` and input files).
+> See how your results vary when a larger geometry is used (see `files/biggerBif` for `gmy` and input files).
 > 
 > > ## Example Results
 > > 
-> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. 
+> > Note that exact timings can vary between jobs, even on the same machine - you may see different performances. 
 > > The relative benefit of using load balancing schemes will vary depending on the size and complexity of the domain,
 > > the length of your simulation and the available hardware.
 > > 
@@ -226,9 +240,10 @@ steps and for the whole simulation domain every 1000 steps. This data is written
 
 > ## Testing the effect of data writing
 >
-> Repeat the benchmarking tests conducted in Episode 1 now outputting inlet/outlet and whole data at a number of different
-> time intervals. Compare your results to those obtained in Episode 1. Given output is critical to the simulation process
-> what would be a suitable strategy for writing output data?
+> Repeat the benchmarking tests conducted in the 
+> [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) now outputting inlet/outlet and
+> whole data at a number of different time intervals. Compare your results to those you have previously obtained. Given 
+> output is critical to the simulation process what would be a suitable strategy for writing output data?
 >
 > Below we provide some example results obtained on SuperMUC-NG by writing the whole data set at different time intervals. The 
 > impact on performance is clear to observe. 
@@ -238,7 +253,7 @@ steps and for the whole simulation domain every 1000 steps. This data is written
 
 > ## Effect of model size
 > 
-> In **refer to folder** you can find a higher resolution model (≈ 3.5 times larger) of the bifurcation 
+> In `files/biggerBif` you can find a higher resolution model ( ≈ 4 times larger) of the bifurcation 
 > model we have been studying. Repeat some of the exercises on load balancing and data writing to see how a larger model 
 > impacts the performance of your system.
 >
@@ -288,7 +303,7 @@ Often the competing restrictions placed on a simulation by these two expressions
 > has a grid resolution of &Delta;x = 100 &mu;m. 
 >
 > How many iterations do you need to run for this choice? How do your answers
-> change if you have higher resolutions models with (i) &Delta;x = 50 &mu;m and (ii) &Delta;x = 20 &mu;m$? What would be the 
+> change if you have higher resolutions models with (i) &Delta;x = 50 &mu;m and (ii) &Delta;x = 20 &mu;m? What would be the 
 > pros and cons of using these higher resolution models?
 >
 > > ## Solution
