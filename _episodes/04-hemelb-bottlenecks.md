@@ -18,9 +18,11 @@ usemathjax: true
 
 ## How is HemeLB parallelised?
 
-Before using any accelerator package to speedup your runs, it is always wise to identify performance **bottlenecks**.
-The term "bottleneck" refers to specific parts of an application that are unable to keep pace with the rest of the
-calculation, thus slowing overall performance.
+Before using accelerator packages or other optimisation strategies to speedup your runs, it is always wise 
+to identify what are known as performance **bottlenecks**. The term "bottleneck" refers to specific parts of an 
+application that are unable to keep pace with the rest of the calculation, thus slowing overall performance. Finding
+these can prove dfficult at times and it may turn out that only minor tweaks are needed to speed up your code
+significantly.
 
 Therefore, you need to ask yourself these questions:
 * Are my runs slower than expected?
@@ -41,19 +43,17 @@ In this episode, we will discuss some bottlenecks that may be observed within th
 Identifying (and addressing) performance bottlenecks is important as this could save you
 a lot of computation time and resources. The best way to do this is to start with a reasonably
 representative system having a modest system size and run for a few hundred/thousand
-timesteps.
+timesteps, small enough so that it doesn't run for too long, but large enough and representative
+enough that you can project a full workflow.
 
 Benchmark plots - particularly for *speed-up* and *MLUPS/core* - can help identify when a potential
 bottleneck becomes a problem for efficient simulation. If an apparent bottleneck is particularly
 significant, timing data from a job can also be useful in identifying where the source of it 
 may be. HemeLB has a reporting mechanism that we introduced in the 
 [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) that provides such 
-information. This file gets written to `results/report.txt`.  
-
-This file provides a wealth of information about the simulation you have conducted, including
-the size of simulation conducted and the time spent in various sections of the simulation. The
-breakdown of information provided here is described in the
-[previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}).
+information. This file gets written to `results/report.txt`. This file provides a wealth of information about
+the simulation you have conducted, including the size of simulation conducted and the time spent in various sections
+of the simulation. 
 
 We will discuss three common bottlenecks that may be encountered with HemeLB:
 - Load balance
@@ -164,7 +164,7 @@ that causes this measure to increase. For small geometries, the initialisation t
 > Repeat the benchmarking tests conducted in Episode 1 using the gmy+ and ParMETIS (edit the input.xml file so that it is 
 > looking for the gmy+ file when testing this, save as a separate file; when testing ParMETIS the original `input.xml` file
 > can be used).
-> and compare your results. Also examine how load distribution has changed as a result in the report.txt file.
+> and compare your results. Also examine how load distribution has changed as a result in the `report.txt` file.
 >
 > Try different choices of the gmy+ weights to see how this impacts your results.
 > See how your results vary when a larger geometry is used (see **FOLDERPATHHERE** for `gmy` and input files).
