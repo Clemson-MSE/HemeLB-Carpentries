@@ -238,7 +238,7 @@ steps and for the whole simulation domain every 1000 steps. This data is written
 
 > ## Effect of model size
 > 
-> In **refer to folder** you can find a higher resolution model ( ≈ 4 times larger **TODO confirm**) of the bifurcation 
+> In **refer to folder** you can find a higher resolution model (≈ 3.5 times larger) of the bifurcation 
 > model we have been studying. Repeat some of the exercises on load balancing and data writing to see how a larger model 
 > impacts the performance of your system.
 >
