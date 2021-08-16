@@ -4,15 +4,20 @@ teaching: 40
 exercises: 45
 questions:
 - "How can I identify the main bottlenecks in HemeLB?"
-- "How do I come up with a strategy for finding the best optimisation?"
+- "How do I come up with a strategy for minimising the impact of bottlenecks on my simulation?"
 - "What is load balancing?"
 objectives:
 - "Learn how to analyse timing data in HemeLB and determine bottlenecks"
+- "Learn how to use HemeLB compilation options to overcome bottlenecks"
+- "Learn how to modify HemeLB file writing options to minimise I/O bottlenecks"
 keypoints:
 - "The best way to identify bottlenecks is to run different benchmarks on a smaller system and
   compare it to a representative system"
-- "Effective load balancing is being able to distribute an equal amount of work across
-  processes"
+- "Effective load balancing is being able to distribute an equal amount of work across processes."
+- "Evaluate both simulation time and overall wall time to determine if improved load balance leads to more efficient
+   performance."
+- "For all applications, writing data to file can be a time consuming activity. Carefully consider what data you need
+   for post-processing to minimise the time spent in this regime."
 usemathjax: true
 ---
 
