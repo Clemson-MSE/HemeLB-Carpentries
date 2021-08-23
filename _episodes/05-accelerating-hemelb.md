@@ -144,14 +144,11 @@ The value for the velocity stated here is the reference value against which the 
 {: .challenge}
 
 
-**Include this once checked for ourselves**
-
-## If you are feeling brave... Tuning Communications
-Depending on your systems, another option that may yield performance gains is in the modification of 
-how the underlying MPI communications are managed. The default setting provided in the compilation 
-settings for HemeLB have been found to work well in most settings. Investigate how the performance changes
-by trying the different settings for MPI communication. These can be set as options in the compilation 
-script:
+## Tuning MPI Communications
+Depending on your systems, another option that **may** yield performance gains is in the modification of 
+how the underlying MPI communications are managed. For general operation however, the default settings
+provided in the compilation options for HemeLB have been found to work very well in most applications.
+For the curious reader, the available compilation options are:
 
 | Option                               | Description                             | Default      | Options                                   |
 |--------------------------------------|-----------------------------------------|--------------|-------------------------------------------|
@@ -159,4 +156,31 @@ script:
 | `-DHEMELB_GATHERS_IMPLEMENTATION`    | Gather comms implementation             | `Separated`  | `'Separated'`, `'ViaPointPoint'`          |
 | `-DHEMELB_ALLTOALL_IMPLEMENTATION`   | All to all comms implementation         | `Separated`  | `'Separated'`, `'ViaPointPoint'`          |
 | `-DHEMELB_SEPARATE_CONCERNS`         | Communicate for each concern separately | `OFF`        | `ON`, `OFF`                               |
+
+> ## Case Study: Demonstration of MPI Setting Choices 
+>
+> To demonstrate the impact of changing MPI options, each were individually examined in turn with all other flags 
+> remaining in their default setting. Further discussion on MPI implementation techniques can be found on resources
+> such as https://mpitutorial.com/tutorials/ among many others.
+> 
+> > ## Example Results
+> > 
+> > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. 
+> > Here it can be seen that the use of some options in isolation can prevent HemeLB from successfully operating,
+> > whilst those with successfult execution only saw variation of performance within the expected variability of 
+> > machine operation. As an exercise see whether such behaviour is repeated, and occurs consistently, on your 
+> > local machine.
+> > 
+> > | Scheme                               | Option            | Initialisation Time (s) | Simulation Time (s) | Total Time (s) |
+> > |---------------------------------------------------------------------------------------------------------------------------|
+> > | All default options                  | Defaults          | 0.7                     |     67.0            | 67.7           |
+> > | `-DHEMELB_POINTPOINT_IMPLEMENTATION` | `'Separated'`     | 0.7                     |     67.3            | 68.0           |
+> > | `-DHEMELB_POINTPOINT_IMPLEMENTATION` | `'Immediate'`     | Job Failed              |     -               | -              |
+> > | `-DHEMELB_GATHERS_IMPLEMENTATION`    | `'ViaPointPoint'` | Job Failed              |     -               | -              |
+> > | `-DHEMELB_ALLTOALL_IMPLEMENTATION`   | `'ViaPointPoint'` | Job Failed              |     -               | -              |
+> > | `-DHEMELB_SEPARATE_CONCERNS`         | `ON`              | 0.7                     |     66.2            | 66.9           |
+> > |---------------------------------------------------------------------------------------------------------------------------|
+> > 
+> {: .solution} 
+{: .challenge}
 
