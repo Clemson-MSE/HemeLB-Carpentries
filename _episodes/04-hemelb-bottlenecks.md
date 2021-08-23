@@ -135,7 +135,8 @@ geometry data format from `*.gmy` to `*.gmy+`.
 > ~~~
 > {: .source}
 >
-> This assigns a simple weighting factor of 1 to *fluid nodes*, 2 to *wall nodes* and 4 to variants of *in/outlets*.
+> This assigns a simple weighting factor of 1 to *fluid nodes*, 2 to *wall nodes* and 4 to variants of *in/outlets* 
+> (in order: `Inlet`, `Outlet`, `Inlet+Wall`, `Outlet+Wall`).
 >
 > Recompile HemeLB so that it knows to read `gmy+` files. To keep your old executable, rename the 
 > `build` folder to `buildGMYPLUS`. Edit the build script in `buildGMYPLUS`to include the option;
