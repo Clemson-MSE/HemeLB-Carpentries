@@ -167,8 +167,8 @@ For the curious reader, the available compilation options are:
 > > 
 > > Note that exact timings can vary between jobs, even on the same machine - you may see different performance. 
 > > Here it can be seen that the use of some options in isolation can prevent HemeLB from successfully operating,
-> > whilst those with successfult execution only saw variation of performance withing the expected variability of 
-> > machine operation. As an excercise see whether such behaviour is repeated, and occurs consistently, on your 
+> > whilst those with successfult execution only saw variation of performance within the expected variability of 
+> > machine operation. As an exercise see whether such behaviour is repeated, and occurs consistently, on your 
 > > local machine.
 > > 
 > > | Scheme                               | Option            | Initialisation Time (s) | Simulation Time (s) | Total Time (s) |
