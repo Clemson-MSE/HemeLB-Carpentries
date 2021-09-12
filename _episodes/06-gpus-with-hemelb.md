@@ -49,7 +49,7 @@ With the above in mind, a typical sequence of operations for a CUDA C++ program 
 2. Initialize host data.
 3. Transfer data from the host to the device.
 4. Execute one or more CUDA kernels (computations performed on the GPU).
-5. Transfer results from the device to the host. A synchronisation point should be placed before getting the results from the device to the host, to ensure that the CUDA kernels have completed their execution.   
+5. Transfer results from the device to the host. 
 
 
 **GPU CUDA kernel - CUDA function** 
