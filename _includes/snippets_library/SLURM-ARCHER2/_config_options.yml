@@ -17,21 +17,21 @@
 # copy an existing folder, rename it, and customize for your
 # installation. Remember to keep the leading slash on the
 # `snippets` variable below!
-snippets: "/snippets_library/SLURM-SuperMUC-NG"
+snippets: "/snippets_library/ARCHER2"
 local:
   prompt: "[user@laptop ~]$"
 
 files:
-  jobscript: "/files/JobScript-slurm.sh"
+  jobscript: "/files/Submission_Script_ARCHER2.sh"
 
 remote:
-  name: "SuperMUC-NG"
+  name: "ARCHER2"
   login: "" # EDIT ME 
   host: "" # EDIT ME
-  node: "" # EDIT ME
-  location: "Leibniz Supercomputing Centre"
-  homedir: "/dss/dsshome1/00/yourUsername" 
-  prompt: "yourUsername@login02:~>" #This is at HOME, ~ changes to current directory when moving between folders 
+  node: "" # EDIT M
+  location: "EPCC"
+  homedir: "/home/projectCode/projectCode/yourUsername" #NB ARCHER2 compute nodes don't connect to home drive, therefore all code etc needs to be in WORK 
+  prompt: "yourUsername@uan01:~>" #This is at HOME, ~ changes to current directory when moving between folders 
 
 sched:
   name: "SLURM"
@@ -46,8 +46,6 @@ sched:
     interactive: "--pty /bin/bash -i"
     histdetail: "-l -j"
     account: "--account"
-    export: "--export=NONE"
-    env: "--get-user-env"
     name: "-J"
     output: "-o"
     error: "-e"
@@ -55,12 +53,14 @@ sched:
     time: "--time"
     queue: "--partition"
     node: "--nodes"
-    tasks_node: "--ntasks-per-node"
+    tasks_node: "--tasks-per-node"
+    cpus_tasks: "--cpus-per-task"
+    qos: "--qos"
   del: "scancel"
-  interactive: "mpiexec"
+  interactive: "srun"
   info: "sinfo"
   comment: "#SBATCH"
-  ntasks: "$SLURM_NTASKS"
+  ntasks: "--cpu-bind=cores"
   hist: "sacct -u yourUsername"
   queue:
     default: "batch"
@@ -68,15 +68,14 @@ sched:
 hemelb:
   env: 
     - "module purge \n"
-    - "module load slurm_setup \n"
-    - "module load intel/19.0.5 \n"
-    - "module load intel-mpi/2019-intel"
-  exec: "/dss/dsshome1/00/di39tav2/codes/HemePure/src/build_PP/hemepure" # CORRECT???
+    - "module load epcc-job-env \n"
+    - "module restore PrgEnv-gnu \n"
+  exec: "/work/projectCode/projectCode/yourUserName/HemePure/src/build/hemepure" # CORRECT???
 
 
 mpi_runtime:
-  implementation: "IntelMPI"
-  launcher: "mpiexec"
+  implementation: "cray-mpich"
+  launcher: "srun --unbuffered"
 
 # Interactive queue names, one or more as a list
 workshop_interactive_queues:

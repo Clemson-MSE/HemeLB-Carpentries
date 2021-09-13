@@ -10,8 +10,10 @@ questions:
 objectives:
 - "Be able to perform a benchmark analysis of an application"
 - "Be able to perform a scaling analysis of an application"
+- "Understand what good scaling performance looks like"
 keypoints:
 - "Benchmarking is a way of assessing the performance of a program or set of programs"
+- "Strong scaling indicates how the quickly a problem of fixed size can be solved with differing number of cores on a given machine"
 
 ---
 
@@ -50,208 +52,6 @@ of things: software, hardware or the computer itself and it’s architecture.
 > allow the best option for that machine to be identified.
 {: .callout}
 
-
-## Creating a job file
-
-HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests
-from multiple users. Common examples of schedulers include SLURM and PBS. 
-
-We will now work on creating a job file which we can run on {{ site.remote.name }}. Writing a job file from scratch is
-error prone, and most supercomputing centres will have a basic one which you can modify. Below is a job file we can use
-and modify for the rest of the course.
-
-~~~
-{% include {{ site.snippets}}/03/JobScript_slurm.sh %}
-~~~
-{: .source}
-
-Particular information includes who submitted the jobs, how long it needs to run for, what resources are required
-and which allocation needs to be charged for the job. After this job information, the script loads the libraries
-necessary for supporting jobs execution. In particular, the compiler and MPI libraries need to be loaded. Finally the
-commands to launch the jobs are called. These may also include any pre- or post-processing jobs that need to be run on
-the compute nodes.
-
-The example above submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where
-indicated, modify the script to the correct settings for usernames and filepaths for your HPC system. It must be 
-noted here that all HPC systems have subtle differences in the necessary commands to submit a job, you should consult 
-your local documentation for definitive advice on this for your HPC system.
-
-> ## Running a HemeLB job on your HPC
-> 
-> Examine the provided jobscript and run the job using `{{ site.sched.submit }} myjob.sh`. You can track the progress
-> of the job using `{{ site.sched.status}} {{ site.sched.user }}
->
-> This will take about 5 minutes.
->
-{: .challenge}
-
-While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
-
-```xml
-{% include {{ site.snippets }}/03/10c-bif_input.xml %}
-```
-
-The HemeLB input file can be broken into three main regions: 
-
-1. **Simulation set-up**: specify global simulation information like discretisation parameters, total 
-   simulation steps and initialisation requirements
-2. **Boundary conditions**: specify the local parameters needed for the execution of the inlets and outlets of the
-   simulation domain
-3. **Property output**: dictates the type and frequency of dumping simulation data to file for post-processing
-
-The actual geometry being run by HemeLB is specified by a geometry file, `bifurcation.gmy` which represents the 
-splitting of a single cylinder into two. This can be seen as simplified representation of many vascular junctions
-presented throughout the network of arteries and veins.
-
-<p align="center"><img src="../fig/03/BifurcationImage.png" width="60%"/></p>
-
-## Understanding your output files
-
-Your job will typically generate a number of output files. Firstly, there will be job output and error files with names
-which have been specified in the job script. These are often denoted with the submitted job name and the job number 
-assigned by the scheduler and are usually found in the same folder that the job script was submitted from. 
-
-In a successful job, the error file should be empty (or only contain system specific, non-critical warnings) whilst the
-output file will contain the screen based HemeLB output.
-
-Secondly, HemeLB will generate its file based output in the `results` folder - the specific name is listed in the
-job script with the `-out` option. Here both summary execution information and property output is contained in the
-folder `results/Extracted`. For further guide on using the [`hemeXtract`](https://github.com/UCL-CCS/hemeXtract) tool
-please see the tutorial on the HemeLB website.
-
-Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. An example file
-is provided below:
-
-~~~
-{% include {{ site.snippets }}/03/ExampleReport.txt %}
-~~~
-{: .source}
-
-This file provides various pieces of information about the completed simulation. In particular, it includes a Problem description, Timing data and Build information. 
-
-Problem description:
-
-~~~ 
-Configured by file input.xml with a 2010048 site geometry.
-There were 18450 blocks, each with 512 sites (fluid and solid).
-Recorded 0 images.
-Ran with 3 threads.
-Ran for 1000 steps of an intended 1000.
-With 0.000010 seconds per time step.
-Sub-domains info:
-rank: 0, fluid sites: 0
-rank: 1, fluid sites: 1012837
-rank: 2, fluid sites: 997211
-~~~
-{: .source}
-
-This section tells you how big the geometry you studied was (here 2010048 sites); how many threads (i.e. CPUs) it was run on; the number of steps and time step size used and how the simulation domain has been distributed between the CPUs. Note that HemeLB is run in a master+slave configuration where one CPU is dedicated to simulation coordination and while the rest solve the problem. This is why rank 0 is assigned 0 fluid sites.
-
-Timing data:
-
-~~~
-Timing data:
-Name Local Min Mean Max
-Total 172 172 172 173
-Seed Decomposition 9.69e-08 9.69e-08 0.00512 0.00794
-Domain Decomposition 1.71e-05 1.71e-05 0.0952 0.144
-File Read 0.0301 0.0301 0.946 1.41
-Re Read 0 0 0 0
-Unzip 0 0 0.0931 0.141
-Moves 0 0 0.0213 0.0341
-Parmetis 0 0 0 0
-Lattice Data initialisation 2.98 2.98 4.04 4.56
-Lattice Boltzmann 0.000513 0.000513 105 158
-LB calc only 0.00021 0.00021 105 158
-Monitoring 0.00017 0.00017 6.5 9.83
-MPI Send 0.00093 0.00093 0.00322 0.00465
-MPI Wait 166 0.0747 55.5 166
-Simulation total 168 168 168 168
-Reading communications 0 0 0.412 0.627
-Parsing 0 0 0.487 0.738
-Read IO 0 0 0.00404 0.00616
-Read Blocks prelim 0 0 0.00384 0.00576
-Read blocks all 0 0 0.906 1.36
-Move Forcing Counts 0 0 0 0
-Move Forcing Data 0 0 0 0
-Block Requirements 0 0 0 0
-Move Counts Sending 0 0 0 0
-Move Data Sending 0 0 0 0
-Populating moves list for decomposition optimisation 0 0 0 0
-Initial geometry reading 0 0 0 0
-Colloid initialisation 0 0 0 0
-Colloid position communication 0 0 0 0
-Colloid velocity communication 0 0 0 0
-Colloid force calculations 0 0 0 0
-Colloid calculations for updating 0 0 0 0
-Colloid outputting 0 0 0 0
-Extraction writing 0 0 0 0
-~~~
-{: .source}
-
-This section tracks how much time is spent in various process of the simulation's initialisation and execution. Here Local reports the time spent in the process in rank 0 and the min, mean and max columns give statistics across all CPUs used in the simulation. For this episode, the Simulation total information is of greatest interest - this indicates how long the simulation itself took to complete and represents total wall time less the initialisation time. This parameter is how we judge the scaling performance of the code. The other parameters are described in: 'src/reporting/Timers.h' and can help to identify which section of the initialisation or computation is requiring the most time to complete:
-
-~~~
-total = 0, //!< Total time
-initialDecomposition, //!< Initial seed decomposition
-domainDecomposition, //!< Time spent in parmetis domain decomposition
-fileRead, //!< Time spent in reading the geometry description file
-reRead, //!< Time spend in re-reading the geometry after second decomposition
-unzip, //!< Time spend in un-zipping
-moves, //!< Time spent moving things around post-parmetis
-parmetis, //!< Time spent in Parmetis
-latDatInitialise, //!< Time spent initialising the lattice data
-lb, //!< Time spent doing the core lattice boltzman simulation
-lb_calc, //!< Time spent doing calculations in the core lattice boltzmann simulation
-monitoring, //!< Time spent monitoring for stability, compressibility, etc.
-mpiSend, //!< Time spent sending MPI data
-mpiWait, //!< Time spent waiting for MPI
-simulation, //!< Total time for running the simulation
-~~~
-{: .source}
-
-Build information:
-
-~~~
-Build type: 
-Optimisation level: -O3
-Use SSE3: OFF
-Built at: 
-Reading group size: 2
-Lattice: D3Q19
-Kernel: LBGK
-Wall boundary condition: BFL
-Iolet boundary condition: 
-Wall/iolet boundary condition: 
-Communications options:
-Point to point implementation: Coalesce
-All to all implementation: Separated
-Gathers implementation: Separated
-Separated concerns: OFF
-~~~
-{: .source}
-
-Finally, this section provides some information on the compilation options used in the executable being used for the simulation.
-
-> ## Editing the submission script
->
-> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
-> 
-> Often we need to run simulations on a larger quantity of resources than that provided by a single node. For HemeLB, 
-> this change does not require any modification to the source code to achieve. Here we can easily request more nodes 
-> for our study by changing the resources requested in the job submission scripts. It is important that
-> when changing the resources requested, ensure that you also modify the execution line to use the desired resources. 
-> In {{ site.sched.name }}, this can be automated with the `{{ site.sched.ntasks }}` shortcut.
->
-> Modify the appropriate section in your submission script and investigate the effect of changing requested resources.
->
-{: .challenge}
-
-## Benchmarking in HemeLB: A case study
-
-In the next section we will look at how we can use all this information to perform a scalability study, but first
-let us ensure the concepts of benchmarking are clear.
-
 > ## The ideal benchmarking study
 >
 > Benchmarking is a process that judges how well a piece of software runs on a system. Based on what you have learned
@@ -283,12 +83,162 @@ let us ensure the concepts of benchmarking are clear.
 > {: .solution}
 {: .challenge}
 
-**CW to edit: Benchmarking HemeLB**
+## Creating a job file
+
+HPC systems typically use a job scheduler to manage the deployment of jobs and their many different resource requests
+from multiple users. Common examples of schedulers include SLURM and PBS. 
+
+We will now work on creating a job file which we can run on {{ site.remote.name }}. Writing a job file from scratch is
+error prone, and most supercomputing centres will have a basic one which you can modify. Below is a job file we can use
+and modify for the rest of the course.
+
+~~~
+{% include {{ site.snippets}}/03/JobScript_slurm.sh %}
+~~~
+{: .source}
+
+Particular information includes who submitted the jobs, how long it needs to run for, what resources are required
+and which allocation needs to be charged for the job. After this job information, the script loads the libraries
+necessary for supporting jobs execution. In particular, the compiler and MPI libraries need to be loaded. Finally the
+commands to launch the jobs are called. These may also include any pre- or post-processing jobs that need to be run on
+the compute nodes.
+
+The example above submits a HemeLB job on 1 node that utilises 10 cores and runs for a maximum of 10 minutes. Where
+indicated, modify the script to the correct settings for usernames and filepaths for your HPC system. It must be 
+noted here that all HPC systems have subtle differences in the necessary commands to submit a job, you should consult 
+your local documentation for definitive advice on this for your HPC system.
+
+> ## Running a HemeLB job on your HPC
+> 
+> Examine the provided jobscript, which is located in `{{ site.files.jobscript }}` and run the job using
+> `{{ site.sched.submit.name }} myjob.sh`. You can track the progress of the job using 
+> `{{ site.sched.status}} {{ site.sched.user }}`. This job uses 10 cores and will take about 5 minutes.
+>
+{: .challenge}
+
+While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
+
+```xml
+{% include {{ site.snippets }}/03/10c-bif_input.xml %}
+```
+
+The HemeLB input file can be broken into three main regions: 
+
+1. **Simulation set-up**: specify global simulation information like discretisation parameters, total 
+   simulation steps and initialisation requirements
+2. **Boundary conditions**: specify the local parameters needed for the execution of the inlets and outlets of the
+   simulation domain
+3. **Property output**: dictates the type and frequency of dumping simulation data to file for post-processing
+
+The actual geometry being run by HemeLB is specified by a geometry file, `bifurcation.gmy` which represents the 
+splitting of a single cylinder into two. This can be seen as simplified representation of many vascular junctions
+presented throughout the network of arteries and veins.
+
+<p align="center"><img src="../fig/03/BifurcationImage.png" width="60%"/></p>
+
+## Understanding your output files
+
+Your job will typically generate a number of output files. Firstly, there will be job **output** and **error** files
+with names which have been specified in the job script. These are often denoted with the submitted job name and the 
+job number assigned by the scheduler and are usually found in the same folder that the job script was submitted from. 
+
+In a successful job, the error file should be empty (or only contain system specific, non-critical warnings) whilst the
+output file will contain the screen based HemeLB output.
+
+Secondly, HemeLB will generate its file based output in the `results` folder. The specific name is listed in the
+job script with the `{{ site.sched.flag.output }}` option. Here, both summary execution information and property output
+is contained in the folder `results/Extracted`. For further guide on using the 
+[`hemeXtract`](https://github.com/UCL-CCS/hemeXtract) tool please see the 
+[`tutorial`](http://hemelb.org.s3-website.eu-west-2.amazonaws.com/tutorials/simulation/sim_section3/) on the HemeLB
+website.
+
+Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run. 
+
+ file provides various pieces of information about the completed simulation. In particular, it includes a Problem
+description, Timing data and Build information. 
+
+**Problem description:**
+
+~~~ 
+{% include {{ site.snippets }}/03/ExampleReport-01.txt %}
+~~~
+{: .source}
+
+The problem description section gives a number of parameters including;
+
+- how big the geometry was (here 2010048 sites)
+- how many threads (i.e. CPUs) it was run on
+- the number of steps and time step size used 
+- how the simulation domain has been distributed between the CPUs. 
+
+Note that HemeLB is run in a master+slave configuration where one CPU is dedicated to simulation coordination and
+while the rest solve the problem. This is why rank 0 is assigned 0 fluid sites.
+
+**Timing data:**
+
+~~~
+{% include {{ site.snippets }}/03/ExampleReport-02.txt %}
+~~~
+{: .source}
+
+The timing section tracks how much time is spent in various process of the simulation's initialisation and execution.
+Here, `Local` reports the time spent in the process in rank 0 and the `min`, `mean` and `max` columns give statistics 
+across all CPUs used in the simulation. 
+
+Here, the `Simulation total` is of greatest interest as it indicates how long the simulation itself took to complete
+and represents total wall time less the initialisation time. This parameter is how we judge the scaling performance of 
+the code. The other parameters are described in `src/reporting/Timers.h` shown below and can help to identify which
+section of the initialisation or computation is requiring the most time to complete:
+
+~~~
+{% include {{ site.snippets }}/03/Timers.h %}
+~~~
+{: .source}
+
+**Build information:**
+
+~~~
+{% include {{ site.snippets }}/03/ExampleReport-03.txt %}
+~~~
+{: .source}
+
+Finally, this section provides some information on the compilation options used in the executable being used for the
+simulation. These settings are recommended by the code developers and maintainers.
+
+> ## Analysing your output file
+>
+> Open the file `results/report.txt` to view a breakdown of statistics of the HemeLB job you've just run.
+> 
+> What is your walltime, what section of the initialisation or computation is taking longest to run?
+>
+{: .challenge}
+
+## Benchmarking in HemeLB: Utilising multiple nodes
+
+In the next section we will look at how we can use all this information to perform a scalability study, but first
+let us run a second benchmark, this time using more than one node
+
+Often we need to run simulations on a larger quantity of resources than that provided by a single node. For HemeLB, 
+this change does not require any modification to the source code to achieve. Here we can easily request more nodes 
+for our study by changing the resources requested in the job submission scripts. 
+
+> ## Editing the submission script
+> 
+> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
+> 
+> It is important that when changing the resources requested, ensure that you also modify the execution line to use the 
+> desired resources. In {{ site.sched.name }}, this can be automated with the `{{ site.sched.ntasks }}` shortcut.
+>
+> Modify the appropriate section in your submission script so that we now utilise 2 nodes and investigate the effect of
+> changing the requested resources in your output files. How does the walltime differ, what are the changes?
+>
+{: .challenge}
+
 
 ## Scaling 
 
-Going back to our athelete example from earlier, we may have determined the conditions and done a few benchmarks on
-their performance over different distances, we might have learned a few things.
+Going back to our athelete example from earlier in the episode, we may have determined the conditions and done a few 
+benchmarks on their performance over different distances, we might have learned a few things.
 
 - how fast the athelete can run over short, medium and long distances
 - the point at which the athelete can no longer perform at peak performance
@@ -423,8 +373,8 @@ be useful to construct a line of 'Good' scaling - 75% efficient for example - to
 assist in performance evaluation. 
 
 Some measure of algorithmic speed can also be useful for evaluating machine performance. For
-lattice Boltzmann method based codes such as HemeLB, a common metric is MLUPS - Millions of 
-Lattice site Updates Per Second - which is often expressed as a core based value and can be
+lattice Boltzmann method based codes such as HemeLB, a common metric is **MLUPS** - *Millions of* 
+*Lattice site Updates Per Second*, which is often expressed as a core based value and can be
 computed by:
 
 `MLUPS = (NumSites * NumSimulationSteps)/(1e6 * SimulationTime * Cores)`
@@ -437,7 +387,7 @@ given machine. As an illustration we have generated examples of these plots for 
 case on SuperMUC-NG. We have also illustrated the effect of different axes scaling can have on
 presenting scaling performance. The use of logarithmic scales can allow scaling to be easily 
 viewed but it can also make changes in values harder to assess. Linear scales make axes easier to 
-interpret but can also make it harder to distinguish between individual points. **fig/plots**
+interpret but can also make it harder to distinguish between individual points. 
 
 <p align="center"><img src="../fig/03/Bifurcation_SNG_MLUPS_loglog.png" width="40%"/></p>
 
@@ -446,8 +396,8 @@ interpret but can also make it harder to distinguish between individual points. 
 <p align="center"><img src="../fig/03/Bifurcation_SNG_Speedup_loglog.png" width="40%"/></p>
 
 
-These figures also highlight two other characteristics of assessing performance. In our SuperMUC-NG
-results, the four data points at the lowest core counts appear to have better performance than that
+These figures also highlight two other characteristics of assessing performance. In results obtained using 
+SuperMUC-NG, the four data points at the lowest core counts appear to have better performance than that
 at higher core counts. Here this is due to the the transition from one to multiple nodes on this machine 
 and this has a consequence on communication performance. Similarly is the presence of some seemingly
 unusual data results. The performance of computer hardware can be occasionally variable and a 
@@ -458,8 +408,8 @@ to repeat key benchmark tests to ensure a reliable measure of performance is obt
 
 For **weak scaling**, we want usually want to increase our workload without increasing
 our *walltime*, and we do that by using additional resources. To consider this in more detail, let's head
-back to our chefs again from the previous episode, where we had more people to serve
-but the same amount of time to do it in.
+back to our chefs again from the [first episode]({{page.root}}{% link _episodes/01-why-bother-with-performance.md %}),
+where we had more people to serve but the same amount of time to do it in.
 
 We hired extra chefs who have specialisations but let us assume that they are all bound
 by secrecy, and are not allowed to reveal to you

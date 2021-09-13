@@ -11,7 +11,7 @@
 # Wall clock limit:
 {{ site.sched.comment }} {{ site.sched.flag.time }}=00:15:00
 
-#Setup of execution environment <Check/Set as appropriate for your local system>
+#Setup of execution environment
 {{ site.sched.comment }} {{ site.sched.flag.export }}
 {{ site.sched.comment }} {{ site.sched.flag.env }}
 {{ site.sched.comment }} {{ site.sched.flag.account }}="projectID"
