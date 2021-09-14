@@ -250,7 +250,8 @@ steps and for the whole simulation domain every 1000 steps. This data is written
 > impact on performance is clear to observe. 
 >
 {: .challenge}
-
+**Chris, could you please add the figures fig/Bif_SNG_Walltime_semilog_dtSaving_MPI_10.png and/or fig/Bif_SNG_Walltime_semilog_dtSaving_MPI_40.png
+(outputting inlet/outlet and whole data at the same frequency)**
 
 > ## Effect of model size
 > 
