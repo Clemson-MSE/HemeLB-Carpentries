@@ -156,11 +156,11 @@ These memory copies can be Synchronous or Asynchronous.
 
 NVIDIA Nsight Systems **EXPAND**
 
->> ## A note on GPU Profiling
->> 
->> It should be noted that some HPC systems do not readily accommodate GPU profiling tools such as NVIDIA Nsight Systems, owing to that fact that root
->> directory access may be required. You should check with your system administrator of the different options available to you on your system for 
->> profiling GPU code.
+> ## A note on GPU Profiling
+> 
+> It should be noted that some HPC systems do not readily accommodate GPU profiling tools such as NVIDIA Nsight Systems, owing to that fact that root
+> directory access may be required. You should check with your system administrator of the different options available to you on your system for 
+> profiling GPU code.
 {: .callout}
 
 CUDA files (extension .cu)
