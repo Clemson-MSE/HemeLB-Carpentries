@@ -196,7 +196,7 @@ that causes this measure to increase. For small geometries, the initialisation t
 > 
 > Repeat the benchmarking tests conducted in the 
 > [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) using the gmy+ and ParMETIS
-> (edit the input.xml file so that it is looking for the gmy+ file when testing this, save as a separate file; when
+> (edit the `input.xml` file so that it is looking for the gmy+ file when testing this, save as a separate file; when
 > testing ParMETIS the original `input.xml` file can be used) and compare your results. 
 > 
 > Also examine how load distribution has changed as a result in the `report.txt` file.
