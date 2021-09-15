@@ -11,75 +11,169 @@ keypoints:
   runtime is required before starting a GPU run"
 ---
 
-# GPUs - Why do we need GPUs?
+## GPUs - Why do we need GPUs?
 
-A Graphics Processing Unit (GPU) is a type of specialised processor originally designed to accelerate graphics rendering. However, it was gradually 
-realised that a GPU can also be used to accelerate other types of calculations as well, involving massive amounts of data, due to the way that it 
-is designed to operate. A GPU has nowadays hundreds to thousands processing cores. For example the NVIDIA A100 GPU has 6912 CUDA cores and 432 Tensor
-cores. We will not discuss the difference between the 2 now, but what does this mean is that a GPU has much more processing power to complete a given task.  
+A Graphics Processing Unit (GPU) is a type of specialised processor originally designed to accelerate
+graphics rendering, this includes video games. GPUs can have thousands of cores, which can perform tasks
+simultaneously, which at the time was very helpful for creating pixels on a screen for gaming purposes.
 
-If you need to perform a task on massive amounts of data, then the same analysis (calculations - set of code) will be executed on/for each one of the 
+Imagine you were playing a game using a CPU, which only has a handful of cores, compared to a GPU, which has
+thousands, you can get an idea why a GPU is more fit for purpose in that way. However, it was gradually realised
+that a GPU can also be used to accelerate other types of calculations as well, involving massive amounts of data,
+due to the way that it is designed to operate. 
+
+Top level GPUs nowadays, such as the NVIDIA A100 GPU has 6912 CUDA cores and 432 Tensor cores. A CUDA core is the
+NVIDIA version of a CPU core, and which can run CUDA code. A Tensor core is a more advanced core which is
+fundamental to AI and deep learning workflows, using such libraries as (TensorFlow)[https://www.tensorflow.org/]. 
+We will not discuss any further differences between these two now, but what you need to remember and understand is
+that a GPU has much more processing power than a CPU to complete a given task. 
+
+A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an NVIDIA conference: 
+
+If you need to perform a task on massive amounts of data, then the same analysis (calculations - set of code)
+will be executed on/for each one of the 
 elements/data that we have. A CPU would have to go through each one of the elements in a serial manner, i.e. perform the analysis on the first element,
 once finished move to the next one and so on and so forth, until it manages to process everything. 
 A GPU on the other hand, will do this in a parallel way (large scale parallelism), depending on how may cores it has. The same mathematical function
 will run over and over again but at a large scale, offering significant speed-up to the calculations.   
 
-A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an NVIDIA conference: 
+A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an
+NVIDIA conference in 2008. Although it is a big oversimplication of the internal processes and communications between
+a CPU and a GPU, it gives an ideal as to why GPUs are regarded so highly.
 
-Hence, in scientific computing, with GPUs we can achieve massive acceleration of our calculations. That is why GPUs are becoming commonplace
-on high-end HPC machines, with a number of GPUs installed on each node.  
+Hence, in scientific computing, with GPUs we can achieve massive acceleration of our calculations. That is why GPUs
+are becoming commonplace on high-end HPC machines, with a number of GPUs installed on each node.  
 
 ![image](https://user-images.githubusercontent.com/52040752/133001824-ac80d147-8444-4650-9a13-5c0b3ae53f68.png)
 
-The schematic Figure from NVIDIA (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] shows an example distribution
-of chip resources for a CPU versus a GPU.  
+The schematic Figure from NVIDIA (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] 
+shows an example distribution of chip resources for a CPU versus a GPU. 
 
+It is worth noting however that even though GPUs have more cores than a CPU, and can technically do things much
+quicker, their main disadvantage is their low memory, and this limits them to doing small, albeit vast amounts of
+smaller calculations at once. So you would not want to have a GPU running a long and complex calculation on a single
+core, as it will likely run out of memory and waste using a GPU in the first place, therefore a CPU is more practical.
+
+> ## CPUs vs GPUs
+> 
+> Look at the table below on the main differences between CPUs and GPUs. Some of these values are true and some
+> are false. Spend a few minutes sorting through them to match the answer to the correct column.
+> 
+> | CPU                                            | GPU                                    |
+> |-----------------------------------------------------------------------------------------|
+> | Central Processing Unit                        | Graphics Processing Unit               |
+> | Many cores                                     | Several cores                          |
+> | Low latency                                    | High throughput                        | 
+> | Good for parallel processing                   | Good for serial processing             | 
+> | Handful of operations at once                  | Thousands of operations at once        | 
+> | Consumes/needs more memory                     | Requires less memory                   |
+> | Lower speed                                    | Higher speed                           |
+> | Weak cores                                     | Powerful cores                         |
+> | Complements main brain to perform calculations | Considered as main 'brain' of computer |
+> | Explicit management of threads                 | Threads managed by hardware            |
+> | Data Parallelism                               | Task Parallelism                       |
+> | Few highly optimised instructions              | Diverse instruction sets               |
+> |-----------------------------------------------------------------------------------------|
+> 
+> > ## Solution
+> > 
+> > | CPU                                    | GPU                                            |
+> > |-----------------------------------------------------------------------------------------|
+> > | Central Processing Unit                | Graphics Processing Unit                       |
+> > | Several cores                          | Many cores                                     |
+> > | Low latency                            | High throughput                                | 
+> > | Good for serial processing             | Good for parallel processing                   | 
+> > | Handful of operations at once          | Thousands of operations at once                | 
+> > | Consumes/needs more memory             | Requires less memory                           |
+> > | Lower speed                            | Higher speed                                   |
+> > | Powerful cores                         | Weak cores                                     |
+> > | Considered as main 'brain' of computer | Complements main brain to perform calculations |
+> > | Explicit management of threads         | Threads managed by hardware                    |
+> > | Task Parallelism                       | Data Parallelism                               |
+> > | Diverse instruction sets               | Few highly optimised instructions              |
+> > |-----------------------------------------------------------------------------------------|
+> > 
+> {: .solution}
+{: .challenge}
 
 ## HemeLB and GPUs
 
-A GPU accelerated version of HemeLB has been developed using NVIDIA's CUDA platform. CUDA stands for Compute Unified Device Architecture; it is a
-parallel computing platform and application programming interface model created by Nvidia. Hence our GPU HemeLB code is GPU-aware; it can only 
-run on NVIDIA's GPUs. 
+A GPU accelerated version of HemeLB has been developed using NVIDIA's CUDA platform. CUDA stands for Compute Unified
+Device Architecture and is a parallel computing platform and application programming interface model created by NVIDIA. 
+Hence our GPU HemeLB code is GPU-aware; it can only run on NVIDIA's GPUs. 
 
-CUDA does not require developers to have specialised graphics programming knowledge. Developers can use popular programming languages, such as 
-C/C++ and Fortran to exploit the GPU resources. The GPU accelerated version of HemeLB was developed using CUDA C++. 
-
-# Introduction to CUDA
+CUDA does not require developers to have specialised graphics programming knowledge. Developers can use popular 
+programming languages, such as C/C++ and Fortran to exploit the GPU resources. The GPU accelerated version of HemeLB
+was developed using CUDA C++. 
 
 ## CUDA Programming Basics
 
-The main thing that someone needs to have in mind when it comes to CUDA and GPU programming, is that the compute intensive parts of a code can be 
-ported onto the GPU (device) for the calculations to take place for a fraction of the time it would take to complete on a CPU and then get the 
-results back to the CPU (host). Hence, the developer needs to implement the GPU CUDA kernels, which are the functions for doing the calculations 
-on the GPU, but also arrange: a) the data transfers to and from the GPU, as well as b) the synchronisation points, i.e. when to stop the code moving
-past a given point until a certain task on the GPU has been completed.
+The most important concept to have in mind when it comes to CUDA and GPU programming, is that the compute 
+intensive parts of a code can be ported onto the GPU (device) for the calculations to take place for a fraction of the
+time it would take to complete on a CPU. Following that, the results are then returned back to the CPU (host). Hence, the 
+developer needs to implement what are known as GPU CUDA kernels, which are the functions for doing the calculations 
+on the GPU, but also arrange: 
+- the data transfers to and from the GPU, as well as 
+- the synchronisation points, i.e. when to stop the code moving past a given point until a certain task on the GPU 
+  has been completed.
 
-With the above in mind, a typical sequence of operations for a CUDA C++ program is:
+With the above in mind, a typical workflow for a CUDA C++ program is:
 1. Declare and allocate host (CPU) and device (GPU) memory.
-2. Initialize host data.
-3. Transfer data from the host to the device.
-4. Execute one or more CUDA kernels (computations performed on the GPU).
-5. Transfer results from the device to the host. 
+2. Initialize host (CPU) data.
+3. Transfer data from the host (CPU) to the device (GPU).
+4. Execute one or more CUDA kernels (the computations to be performed on the GPU).
+5. Transfer results from the device (GPU) back to the host (CPU). 
 
 
-**GPU CUDA kernel - CUDA function** 
+### GPU CUDA kernel - CUDA function
 
-The specifier `global` is added in front of the function, which tells the CUDA C++ compiler that this is a function that runs on the GPU and can
-be called from CPU code.
+CUDA programming can take a bit to get used to and as yet there are no Carpentries style resources for CUDA programming
+available, however here we will provide a brief lookover at the main functionalities and differences.
 
-A full example of defining a GPU CUDA kernel would be as follows;
+The specifier `global` is added in front of the function, which tells the CUDA C++ compiler that this is a function 
+that runs on the GPU and can be called from CPU code. The remainder of the code will be relatively similar, however
+when you are defining your function, the keyword will be required to run the function on a GPU. A full example of
+defining a GPU CUDA kernel would be as follows;
 
 ~~~
 global void GPU_Cuda_Kernel_Name(kernel's_arguments)
 ~~~
 {: .source}
 
-**Launch the GPU kernel**
+### GPU Memory Hierarchy - Memory Allocation in CUDA
 
-The GPU CUDA kernel is launched by using a specific syntax, the **triple angle bracket** `<<< >>>`. This will inform the compiler that the kernel
-that follows is a GPU kernel and will therefore be executed on the GPU. The information between the triple angle brackets is the execution
-configuration, which determines how many threads on the device (GPU) will execute the kernel in parallel. These threads are arranged in thread blocks,
-hence the developer should specify how many threads there are per block.   
+Before we carry onto how to launch a kernel, we need to discuss the memory hierarchy of a GPU, as an understanding of
+it is crucial to getting a CUDA code to actually run and work. In CUDA, the kernel is executed with the aid of CUDA
+threads, which represent the execution of the kernel. Every thread has an index which is used for calculating the
+memory address locations. Each thread has a private local memory, and may also access data from multiple memory spaces
+during their execution. NVIDIA's (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] 
+page gives a good overview.
+
+One thread is never enough though when dealing with GPUs, as threads come in thread blocks, 
+which can be executed in serial or parallel. Depending on the GPU you are utilising, a thread block can contain either
+512 or 1024 of these threads.
+
+Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All
+threads have access to the same global memory. An overview of the memory Hierarchy is outlined below.
+
+*There are also two additional read-only memory spaces accessible by all threads: the **constant** and **texture***
+*memory spaces. The global, constant, and texture memory spaces are optimized for different memory usages. Texture*
+*memory also offers different addressing modes, as well as data filtering, for some specific data formats (see Texture*
+*and Surface Memory). The global, constant, and texture memory spaces are persistent across kernel launches by the*
+*same application.*
+
+**THE ABOVE IS LIKELY TOO ADVANCED, IS IT REQUIRED FOR UNDERSTANDING?**
+
+![image](https://user-images.githubusercontent.com/52040752/133094845-0b902979-f6a9-48c0-8b93-5be7546f8e48.png)
+
+
+### Launching the GPU kernel
+
+The GPU CUDA kernel is launched by using a specific syntax, the **triple angle bracket** `<<< >>>`. This will inform
+the compiler that the kernel that follows is a GPU kernel and will therefore be executed on the GPU. The information
+between the triple angle brackets is the execution configuration, which determines how many threads on the device (GPU) 
+will execute the kernel in parallel. These threads are arranged in what are thread blocks, hence the developer should
+specify how many threads there are per block.   
 
 An example of a launching a GPU CUDA kernel (GPU_Cuda_Kernel_Name) is as follows: 
 
@@ -92,16 +186,16 @@ dim3 nThreads(nThreadsPerBlock);
 int nBlocks = (number_of_Elements)/nThreadsPerBlock	+ ((number_of_Elements % nThreadsPerBlock > 0) ? 1 : 0);
 
 // Launch the GPU CUDA kernel
-GPU_Cuda_Kernel_Name <<< nBlocks, nThreads>>> (Provide_Arguments_here); 
+GPU_Cuda_Kernel_Name <<< nBlocks, nThreads >>> (Provide_Arguments_here); 
 ~~~
 {: .source}
 
-The first argument in the execution configuration `GPU_Cuda_Kernel_Name **<<< nBlocks, nThreads>>>` specifies the number of thread
-blocks (`nBlocks`), while (`nThreads`) specifies the number of threads in a thread block.
+The first argument in the execution configuration; `GPU_Cuda_Kernel_Name <<< nBlocks, nThreads>>>` specifies the 
+number of thread blocks (`nBlocks`), while (`nThreads`) specifies the number of threads in a thread block.
 
-Remember that CUDA kernel launches don’t block the calling CPU thread. This means that once the kernel is launched, the control is returned
-to the CPU thread and the code will resume. In order to ensure that the GPU kernel has completed its task, a synchronsation barrier might be
-needed using `cudaDeviceSynchronize()`.
+Remember that CUDA kernel launches don’t block the calling CPU thread. This means that once the kernel is launched,
+the control is returned to the CPU thread and the code will resume. In order to ensure that the GPU kernel has
+completed its task, a synchronsation barrier might be needed using `cudaDeviceSynchronize()`.
 
 A discussion on the above as well as simple examples can be found from NVIDIA's website 
 
@@ -111,42 +205,26 @@ as well as from NVIDIA's CUDA Toolkit Documentation
 
 https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
 
-## GPU Memory Hierarchy - Memory Allocation in CUDA
-
-CUDA threads can access data from multiple memory spaces. As specified in NVIDIA's CUDA Toolkit Documentation 
-
-https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
-
-CUDA threads may access data from multiple memory spaces during their execution (see Figure below). Each thread has private local memory.
-Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All threads have access to
-the same global memory.
-
-There are also two additional read-only memory spaces accessible by all threads: the constant and texture memory spaces. The global, constant,
-and texture memory spaces are optimized for different memory usages (see Device Memory Accesses). Texture memory also offers different addressing
-modes, as well as data filtering, for some specific data formats (see Texture and Surface Memory).
-
-The global, constant, and texture memory spaces are persistent across kernel launches by the same application. The figure below is from NVIDIA's 
-CUDA Toolkit Documentation - GPU Memory hierarchy
-![image](https://user-images.githubusercontent.com/52040752/133094845-0b902979-f6a9-48c0-8b93-5be7546f8e48.png)
 
 ## CUDA Streams and Concurrency 
 
-A CUDA kernel when launched is placed in the default CUDA stream. A CUDA stream is like an execution path. All operations in the same stream need
-to be completed and executed in order, before moving forward.
+A CUDA kernel when launched is placed in the default CUDA stream. A CUDA stream is like an execution path. All 
+operations in the same stream need to be completed and executed in order, before moving forward.
 
-It is also possible, however, to launch kernels in different CUDA streams and by doing so these kernels may execute out of order with respect to 
-one another or concurrently. 
-An example of a launching a GPU CUDA kernel (`GPU_Cuda_Kernel_Name`) in a specified CUDA stream (name of stream `CUDA_stream_ID`) is provided here: 
+It is also possible, however, to launch kernels in different CUDA streams and by doing so these kernels may execute
+out of order with respect to one another or concurrently. An example of a launching a GPU CUDA kernel
+(`GPU_Cuda_Kernel_Name`) in a specified CUDA stream (name of stream `CUDA_stream_ID`) is provided here: 
 
 ~~~
 // Launch the GPU CUDA kernel in stream CUDA_stream_ID
-GPU_Cuda_Kernel_Name <<< nBlocks, nThreads, 0, CUDA_stream_ID>>> (Provide_Arguments_here); 
+GPU_Cuda_Kernel_Name <<< nBlocks, nThreads, 0, CUDA_stream_ID >>> (Provide_Arguments_here); 
 ~~~
 {: .source}
 
 ## Data Transfers in CUDA C/C++
 
-As mentioned above, when performing calculations on the GPU, memory needs to be allocated onto the GPU; then data that will be processed needs to be copied from the host to the device, perform the calculations  for th CUDA memory copies:
+As mentioned above, when performing calculations on the GPU, memory needs to be allocated onto the GPU; then data that
+will be processed needs to be copied from the host to the device, perform the calculations  for th CUDA memory copies:
 a. D2H: from the Device (GPU) to the Host (CPU) 
 b. H2D: from the Host (CPU) to the Device (GPU)
 
@@ -158,13 +236,10 @@ NVIDIA Nsight Systems **EXPAND**
 
 > ## A note on GPU Profiling
 > 
-> It should be noted that some HPC systems do not readily accommodate GPU profiling tools such as NVIDIA Nsight Systems, owing to that fact that root
-> directory access may be required. You should check with your system administrator of the different options available to you on your system for 
-> profiling GPU code.
+> It should be noted that some HPC systems do not readily accommodate GPU profiling tools such as NVIDIA Nsight
+> Systems, owing to that fact that root directory access may be required. You should check with your system 
+> administrator of the different options available to you on your system for profiling GPU code.
 {: .callout}
 
 CUDA files (extension .cu)
 Compile CUDA code (`nvcc - CUDA C++ compiler`), e.g. `nvcc cuda_example.cu -o cuda_example`
-
-
-
