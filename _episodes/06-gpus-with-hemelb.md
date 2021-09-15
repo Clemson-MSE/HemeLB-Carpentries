@@ -138,21 +138,23 @@ defining a GPU CUDA kernel would be as follows;
 ~~~
 global void GPU_Cuda_Kernel_Name(kernel's_arguments)
 ~~~
-{: .cuda}
+{: .source}
 
 ### GPU Memory Hierarchy - Memory Allocation in CUDA
 
-Before we carry onto how to launch a kernel, we need to discuss the memory hierachy of a GPU, as an understanding of
+Before we carry onto how to launch a kernel, we need to discuss the memory hierarchy of a GPU, as an understanding of
 it is crucial to getting a CUDA code to actually run and work. In CUDA, the kernel is executed with the aid of CUDA
 threads, which represent the execution of the kernel. Every thread has an index which is used for calculating the
 memory address locations. Each thread has a private local memory, and may also access data from multiple memory spaces
-during their execution. NVIDIA's (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] page gives a good overview.
+during their execution. NVIDIA's (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] 
+page gives a good overview.
 
 One thread is never enough though when dealing with GPUs, as threads come in thread blocks, 
 which can be executed in serial or parallel. Depending on the GPU you are utilising, a thread block can contain either
 512 or 1024 of these threads.
 
-Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All threads have access to the same global memory. An overview of the memory Hierarchy is outlined below.
+Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All
+threads have access to the same global memory. An overview of the memory Hierarchy is outlined below.
 
 *There are also two additional read-only memory spaces accessible by all threads: the **constant** and **texture***
 *memory spaces. The global, constant, and texture memory spaces are optimized for different memory usages. Texture*
@@ -186,7 +188,7 @@ int nBlocks = (number_of_Elements)/nThreadsPerBlock	+ ((number_of_Elements % nTh
 // Launch the GPU CUDA kernel
 GPU_Cuda_Kernel_Name <<< nBlocks, nThreads >>> (Provide_Arguments_here); 
 ~~~
-{: .cuda}
+{: .source}
 
 The first argument in the execution configuration; `GPU_Cuda_Kernel_Name <<< nBlocks, nThreads>>>` specifies the 
 number of thread blocks (`nBlocks`), while (`nThreads`) specifies the number of threads in a thread block.
@@ -217,7 +219,7 @@ out of order with respect to one another or concurrently. An example of a launch
 // Launch the GPU CUDA kernel in stream CUDA_stream_ID
 GPU_Cuda_Kernel_Name <<< nBlocks, nThreads, 0, CUDA_stream_ID >>> (Provide_Arguments_here); 
 ~~~
-{: .cuda}
+{: .source}
 
 ## Data Transfers in CUDA C/C++
 
