@@ -11,29 +11,90 @@ keypoints:
   runtime is required before starting a GPU run"
 ---
 
-# GPUs - Why do we need GPUs?
+## GPUs - Why do we need GPUs?
 
-A Graphics Processing Unit (GPU) is a type of specialised processor originally designed to accelerate graphics rendering. However, it was gradually 
-realised that a GPU can also be used to accelerate other types of calculations as well, involving massive amounts of data, due to the way that it 
-is designed to operate. A GPU has nowadays hundreds to thousands processing cores. For example the NVIDIA A100 GPU has 6912 CUDA cores and 432 Tensor
-cores. We will not discuss the difference between the 2 now, but what does this mean is that a GPU has much more processing power to complete a given task.  
+A Graphics Processing Unit (GPU) is a type of specialised processor originally designed to accelerate
+graphics rendering, this includes video games. GPUs can have thousands of cores, which can perform tasks
+simultaneously, which at the time was very helpful for creating pixels on a screen for gaming purposes.
 
-If you need to perform a task on massive amounts of data, then the same analysis (calculations - set of code) will be executed on/for each one of the 
+Imagine you were playing a game using a CPU, which only has a handful of cores, compared to a GPU, which has
+thousands, you can get an idea why a GPU is more fit for purpose in that way. However, it was gradually realised
+that a GPU can also be used to accelerate other types of calculations as well, involving massive amounts of data,
+due to the way that it is designed to operate. 
+
+Top level GPUs nowadays, such as the NVIDIA A100 GPU has 6912 CUDA cores and 432 Tensor cores. A CUDA core is the
+NVIDIA version of a CPU core, and which can run CUDA code. A Tensor core is a more advanced core which is
+fundamental to AI and deep learning workflows, using such libraries as (TensorFlow)[https://www.tensorflow.org/]. 
+We will not discuss any further differences between these two now, but what you need to remember and understand is
+that a GPU has much more processing power than a CPU to complete a given task. 
+
+A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an NVIDIA conference: 
+
+If you need to perform a task on massive amounts of data, then the same analysis (calculations - set of code)
+will be executed on/for each one of the 
 elements/data that we have. A CPU would have to go through each one of the elements in a serial manner, i.e. perform the analysis on the first element,
 once finished move to the next one and so on and so forth, until it manages to process everything. 
 A GPU on the other hand, will do this in a parallel way (large scale parallelism), depending on how may cores it has. The same mathematical function
 will run over and over again but at a large scale, offering significant speed-up to the calculations.   
 
-A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an NVIDIA conference: 
+A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an
+NVIDIA conference in 2008. Although it is a big oversimplication of the internal processes and communications between
+a CPU and a GPU, it gives an ideal as to why GPUs are regarded so highly.
 
-Hence, in scientific computing, with GPUs we can achieve massive acceleration of our calculations. That is why GPUs are becoming commonplace
-on high-end HPC machines, with a number of GPUs installed on each node.  
+Hence, in scientific computing, with GPUs we can achieve massive acceleration of our calculations. That is why GPUs
+are becoming commonplace on high-end HPC machines, with a number of GPUs installed on each node.  
 
 ![image](https://user-images.githubusercontent.com/52040752/133001824-ac80d147-8444-4650-9a13-5c0b3ae53f68.png)
 
-The schematic Figure from NVIDIA (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] shows an example distribution
-of chip resources for a CPU versus a GPU.  
+The schematic Figure from NVIDIA (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] 
+shows an example distribution of chip resources for a CPU versus a GPU. 
 
+It is worth noting however that even though GPUs have more cores than a CPU, and can technically do things much
+quicker, their main disadvantage is their low memory, and this limits them to doing small, albeit vast amounts of
+smaller calculations at once. So you would not want to have a GPU running a long and complex calculation on a single
+core, as it will likely run out of memory and waste using a GPU in the first place, therefore a CPU is more practical.
+
+> ## CPUs vs GPUs
+> 
+> Look at the table below on the main differences between CPUs and GPUs. Some of these values are true and some
+> are false. Spend a few minutes sorting through them to match the answer to the correct column.
+> 
+> | CPU                                            | GPU                                    |
+> |-----------------------------------------------------------------------------------------|
+> | Central Processing Unit                        | Graphics Processing Unit               |
+> | Many cores                                     | Several cores                          |
+> | Low latency                                    | High throughput                        | 
+> | Good for parallel processing                   | Good for serial processing             | 
+> | Handful of operations at once                  | Thousands of operations at once        | 
+> | Consumes/needs more memory                     | Requires less memory                   |
+> | Lower speed                                    | Higher speed                           |
+> | Weak cores                                     | Powerful cores                         |
+> | Complements main brain to perform calculations | Considered as main 'brain' of computer |
+> | Explicit management of threads                 | Threads managed by hardware            |
+> | Data Parallelism                               | Task Parallelism                       |
+> | Few highly optimised instructions              | Diverse instruction sets               |
+> |-----------------------------------------------------------------------------------------|
+> 
+> > ## Solution
+> > 
+> > | CPU                                    | GPU                                            |
+> > |-----------------------------------------------------------------------------------------|
+> > | Central Processing Unit                | Graphics Processing Unit                       |
+> > | Several cores                          | Many cores                                     |
+> > | Low latency                            | High throughput                                | 
+> > | Good for serial processing             | Good for parallel processing                   | 
+> > | Handful of operations at once          | Thousands of operations at once                | 
+> > | Consumes/needs more memory             | Requires less memory                           |
+> > | Lower speed                            | Higher speed                                   |
+> > | Powerful cores                         | Weak cores                                     |
+> > | Considered as main 'brain' of computer | Complements main brain to perform calculations |
+> > | Explicit management of threads         | Threads managed by hardware                    |
+> > | Task Parallelism                       | Data Parallelism                               |
+> > | Diverse instruction sets               | Few highly optimised instructions              |
+> > |-----------------------------------------------------------------------------------------|
+> > 
+> {: .solution}
+{: .challenge}
 
 ## HemeLB and GPUs
 
@@ -165,6 +226,3 @@ NVIDIA Nsight Systems **EXPAND**
 
 CUDA files (extension .cu)
 Compile CUDA code (`nvcc - CUDA C++ compiler`), e.g. `nvcc cuda_example.cu -o cuda_example`
-
-
-
