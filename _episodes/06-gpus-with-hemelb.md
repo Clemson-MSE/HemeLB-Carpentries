@@ -162,7 +162,7 @@ b. D2H: from the Device (GPU) to the Host (CPU)
 
 `cudaMemcpy(h_A, d_A, size_of_d_A_in_Bytes, cudaMemcpyDeviceToHost)`
 
-These memory copies can be Synchronous (as above) or Asynchronous (`cudaMemcpyAsync`). In the case of asynchronous memory copy, the developed should provide the CUDA stream as a last argument to the `cudaMemcpyAsync` function call.    
+These memory copies can be Synchronous (as above) or Asynchronous (`cudaMemcpyAsync`). In the case of asynchronous memory copy, the developer should provide the CUDA stream as a last argument to the `cudaMemcpyAsync` function call. This allows overlapping the memory copies with other operations (kernels or mem.copies) on the GPU running on different CUDA streams.     
 
 
 ## Simple CUDA code example
