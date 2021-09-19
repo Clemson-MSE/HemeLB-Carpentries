@@ -64,13 +64,13 @@ With the above in mind, a typical sequence of operations for a CUDA C++ program 
 
 **GPU CUDA kernel - CUDA function** 
 
-The specifier `global` is added in front of the function, which tells the CUDA C++ compiler that this is a function that runs on the GPU and can
+The specifier `__global__` is added in front of the function, which tells the CUDA C++ compiler that this is a function that runs on the GPU and can
 be called from CPU code.
 
 A full example of defining a GPU CUDA kernel would be as follows;
 
 ~~~
-global void GPU_Cuda_Kernel_Name(kernel's_arguments)
+__global__ void GPU_Cuda_Kernel_Name(kernel's_arguments)
 ~~~
 {: .source}
 
@@ -111,6 +111,7 @@ as well as from NVIDIA's CUDA Toolkit Documentation
 
 https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
 
+
 ## GPU Memory Hierarchy - Memory Allocation in CUDA
 
 CUDA threads can access data from multiple memory spaces. As specified in NVIDIA's CUDA Toolkit Documentation 
@@ -146,15 +147,97 @@ GPU_Cuda_Kernel_Name <<< nBlocks, nThreads, 0, CUDA_stream_ID>>> (Provide_Argume
 
 ## Data Transfers in CUDA C/C++
 
-As mentioned above, when performing calculations on the GPU, memory needs to be allocated onto the GPU; then data that will be processed needs to be copied from the host to the device, perform the calculations  for th CUDA memory copies:
-a. D2H: from the Device (GPU) to the Host (CPU) 
-b. H2D: from the Host (CPU) to the Device (GPU)
+As mentioned above, when performing calculations on the GPU, memory needs to be allocated onto the GPU (`cudaMalloc()`); then data that will be processed needs to be copied from the host to the device (`cudaMemcpyHostToDevice`), perform the calculations (execute the CUDA kernels on the device/GPU) and finally copy the results from the device to the host (`cudaMemcpyDeviceToHost`). 
+Data transfers are performed using `cudaMemcpy` function. The syntaxt of `cudaMemcpy` is as follows:
 
-These memory copies can be Synchronous or Asynchronous.  
+`cudaMemcpy(void *dst, void *src, size_t count, cudaMemcpyKind kind)`
+
+`cudaMemcpyKind` is either `cudaMemcpyHostToDevice` or `cudaMemcpyDeviceToHost`. The 2 possible kinds of CUDA memory copies are:
+
+a. H2D: from the Host (CPU) to the Device (GPU)
+
+`cudaMemcpy(d_A, h_A, size_of_h_A_in_Bytes, cudaMemcpyHostToDevice)`
+
+b. D2H: from the Device (GPU) to the Host (CPU)
+
+`cudaMemcpy(h_A, d_A, size_of_d_A_in_Bytes, cudaMemcpyDeviceToHost)`
+
+These memory copies can be Synchronous (as above) or Asynchronous (`cudaMemcpyAsync`). In the case of asynchronous memory copy, the developed should provide the CUDA stream as a last argument to the `cudaMemcpyAsync` function call.    
+
+
+## Simple CUDA code example
+Here, we provide a simple example of a CUDA code. It contains the main features discussed above: allocate input vectors in host memory and initialise them, allocate memory on the GPU, memory copies (H2D and D2H), defining and launching a GPU CUDA kernel.  
+
+~~~
+// Device code
+__global__ void VecAdd(float* A, float* B, float* C, int N)
+{
+    int i = blockDim.x * blockIdx.x + threadIdx.x;
+    if (i < N)
+        C[i] = A[i] + B[i];
+}
+            
+// Host code
+int main()
+{
+    int N = ...;
+    size_t size = N * sizeof(float);
+
+    // Allocate input vectors h_A and h_B in host memory
+    float* h_A = (float*)malloc(size);
+    float* h_B = (float*)malloc(size);
+
+    // Initialize input vectors
+    ...
+
+    // Allocate vectors in device memory
+    float* d_A;
+    cudaMalloc(&d_A, size);
+    float* d_B;
+    cudaMalloc(&d_B, size);
+    float* d_C;
+    cudaMalloc(&d_C, size);
+
+    // Copy vectors from host memory to device memory
+    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+
+    // Invoke kernel
+    int threadsPerBlock = 256;
+    int nblocks = (N + threadsPerBlock - 1) / threadsPerBlock;
+    VecAdd<<<nblocks, threadsPerBlock>>>(d_A, d_B, d_C, N);
+
+    // Copy result from device memory to host memory
+    // h_C contains the result in host memory
+    cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+
+    // Free device memory
+    cudaFree(d_A);
+    cudaFree(d_B);
+    cudaFree(d_C);
+            
+    // Free host memory
+    ...
+}
+~~~
+{: .source}
+
+
+##  Compile CUDA code
+CUDA code (typically in a file with extension `.cu`) can be compiled using the `nvcc` compiler. 
+For example
+~~~
+nvcc CUDA_code.cu -o CUDA_code
+~~~
 
 ## Profiling CUDA code
+Profiling the CUDA code can be done using tools provided by NVIDIA.    
+**NVIDIA Nsight Systems** for GPU and CPU sampling and tracing and **NVIDIA Nsight Compute** for GPU kernel profiling. 
 
-NVIDIA Nsight Systems **EXPAND**
+A more detailed description on the above tools can be provided from NVIDIA's CUDA Toolkit Documentation 
+
+https://docs.nvidia.com/cuda/profiler-users-guide/index.html
+
 
 > ## A note on GPU Profiling
 > 
@@ -163,8 +246,15 @@ NVIDIA Nsight Systems **EXPAND**
 > profiling GPU code.
 {: .callout}
 
-CUDA files (extension .cu)
-Compile CUDA code (`nvcc - CUDA C++ compiler`), e.g. `nvcc cuda_example.cu -o cuda_example`
 
+##  Running HemeLB on HPC machines with NVIDIA's GPUs
+Job submission scripts (JUWELS Booster) 
 
+https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/Submission_Script_Juwels_Booster.sh
+
+and Summit (OLCF)
+
+https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/Submission_Script_OLCF.lsf
+
+When submitting a job script on an HPC machine with nodes containing NVIDIA's GPUs, the user should specify the number of GPUs to be used on each node. The format of the submission script depends on the HPC system.  
 
