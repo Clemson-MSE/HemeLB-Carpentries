@@ -351,7 +351,7 @@ and the speed-up observed compared to the smallest number of cores used.
 > Using the original job script run HemeLB jobs at least 6 different job sizes, preferably over 
 > multiple nodes. For the size of job provided here, we suggest aiming for a maximum of around
 > 200 cores. If your available hardware permits larger jobs, try this too up to a reasonable limit.
-> After each job, record the `Simulation Time` from the Report.txt file.
+> After each job, record the `Simulation Time` from the `Report.txt` file.
 >
 > Now that you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
 > the number of CPU cores on the X-axis and the simulation times on the Y-axis (use your

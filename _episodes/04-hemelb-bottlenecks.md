@@ -196,7 +196,7 @@ that causes this measure to increase. For small geometries, the initialisation t
 > 
 > Repeat the benchmarking tests conducted in the 
 > [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) using the gmy+ and ParMETIS
-> (edit the input.xml file so that it is looking for the gmy+ file when testing this, save as a separate file; when
+> (edit the `input.xml` file so that it is looking for the gmy+ file when testing this, save as a separate file; when
 > testing ParMETIS the original `input.xml` file can be used) and compare your results. 
 > 
 > Also examine how load distribution has changed as a result in the `report.txt` file.
@@ -250,8 +250,8 @@ steps and for the whole simulation domain every 1000 steps. This data is written
 > impact on performance is clear to observe. 
 >
 {: .challenge}
-**Chris, could you please add the figures fig/Bif_SNG_Walltime_semilog_dtSaving_MPI_10.png and/or fig/Bif_SNG_Walltime_semilog_dtSaving_MPI_40.png
-(outputting inlet/outlet and whole data at the same frequency)**
+
+<p align="center"><img src="../fig/04/Bif_SNG_Walltime_semilog_dtSaving_MPI_10_40.png" width="100%"/></p>
 
 > ## Effect of model size
 > 
