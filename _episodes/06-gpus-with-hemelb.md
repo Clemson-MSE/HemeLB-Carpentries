@@ -212,9 +212,9 @@ CUDA threads can access data from multiple memory spaces. As specified in NVIDIA
 
 https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
 
-CUDA threads may access data from multiple memory spaces during their execution (see Figure below). Each thread has private local memory.
-Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All threads have access to
-the same global memory.
+CUDA threads may access data from multiple memory spaces during their execution (see Figure below). 
+Each thread has private local memory. Each thread block has shared memory visible to all threads of the block and with
+the same lifetime as the block. All threads have access to the same global memory.
 
 There are also two additional read-only memory spaces accessible by all threads: the constant and texture memory spaces. The global, constant,
 and texture memory spaces are optimized for different memory usages (see Device Memory Accesses). Texture memory also offers different addressing
@@ -243,8 +243,10 @@ GPU_Cuda_Kernel_Name <<< nBlocks, nThreads, 0, CUDA_stream_ID >>> (Provide_Argum
 ## Data Transfers in CUDA C/C++
 
 
-As mentioned above, when performing calculations on the GPU, memory needs to be allocated onto the GPU (`cudaMalloc()`); then data that will be processed needs to be copied from the host to the device (`cudaMemcpyHostToDevice`), perform the calculations (execute the CUDA kernels on the device/GPU) and finally copy the results from the device to the host (`cudaMemcpyDeviceToHost`). 
-Data transfers are performed using `cudaMemcpy` function. The syntaxt of `cudaMemcpy` is as follows:
+As mentioned above, when performing calculations on the GPU, memory needs to be allocated onto the GPU (`cudaMalloc()`); 
+then data that will be processed needs to be copied from the host to the device (`cudaMemcpyHostToDevice`), perform the
+calculations (execute the CUDA kernels on the device/GPU) and finally copy the results from the device to the host
+(`cudaMemcpyDeviceToHost`). Data transfers are performed using `cudaMemcpy` function. The syntaxt of `cudaMemcpy` is as follows:
 
 `cudaMemcpy(void *dst, void *src, size_t count, cudaMemcpyKind kind)`
 
@@ -258,11 +260,16 @@ b. D2H: from the Device (GPU) to the Host (CPU)
 
 `cudaMemcpy(h_A, d_A, size_of_d_A_in_Bytes, cudaMemcpyDeviceToHost)`
 
-These memory copies can be Synchronous (as above) or Asynchronous (`cudaMemcpyAsync`). In the case of asynchronous memory copy, the developer should provide the CUDA stream as a last argument to the `cudaMemcpyAsync` function call. This allows overlapping the memory copies with other operations (kernels or mem.copies) on the GPU running on different CUDA streams.     
+These memory copies can be Synchronous (as above) or Asynchronous (`cudaMemcpyAsync`). In the case of asynchronous
+memory copy, the developer should provide the CUDA stream as a last argument to the `cudaMemcpyAsync` function call.
+This allows overlapping the memory copies with other operations (kernels or mem.copies) on the GPU running on different
+CUDA streams.     
 
 
 ## Simple CUDA code example
-Here, we provide a simple example of a CUDA code. It contains the main features discussed above: allocate input vectors in host memory and initialise them, allocate memory on the GPU, memory copies (H2D and D2H), defining and launching a GPU CUDA kernel.  
+Here, we provide a simple example of a CUDA code. It contains the main features discussed above: allocate input vectors
+in host memory and initialise them, allocate memory on the GPU, memory copies (H2D and D2H), defining and launching a 
+GPU CUDA kernel.  
 
 ~~~
 // Device code
@@ -327,9 +334,11 @@ b. H2D: from the Host (CPU) to the Device (GPU)
 ##  Compile CUDA code
 CUDA code (typically in a file with extension `.cu`) can be compiled using the `nvcc` compiler. 
 For example
+
 ~~~
 nvcc CUDA_code.cu -o CUDA_code
 ~~~
+{: .source}
 
 ## Profiling CUDA code
 Profiling the CUDA code can be done using tools provided by NVIDIA.    
@@ -340,16 +349,21 @@ A more detailed description on the above tools can be provided from NVIDIA's CUD
 https://docs.nvidia.com/cuda/profiler-users-guide/index.html
 
 ![Profiling_NsightSystems](https://user-images.githubusercontent.com/52040752/133961394-b057dee3-b51c-44f6-bf4b-91e1cfe1c021.png)
-Figure: (a) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Nsight Systems provides a broad description of the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis is the example here is 3 time-steps of the LB algorithm. 
+Figure: (a) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Nsight Systems provides a broad description of
+the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis is
+the example here is 3 time-steps of the LB algorithm. 
 
 ![Profiling_kernels_memCopies](https://user-images.githubusercontent.com/52040752/133961092-16dbeec9-134e-4a28-9991-ea9888b4e5f5.png)
-Figure: (b) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Focus of analysis is 1 time-step of the LB algorithm. Kernels and memory copies overlap during execution on the GPU, as shown in the area marked with the red box.
+Figure: (b) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Focus of analysis is 1 time-step of the LB algorithm.
+Kernels and memory copies overlap during execution on the GPU, as shown in the area marked with the red box.
 
 
 On a laptop **Nsight Systems** can be invoked during the CUDA code execution by issuing the following command line:
+
 ~~~
 nsys profile --trace=cuda,mpi,nvtx --stats=true mpirun -np $nCPUs  $PATH_EXE/$EXEC_FILE -in $INPUT_FILE -out results
 ~~~
+{: .source}
 
 On HPC systems it may be possible to perform the profiling analysis using **Nsight Systems** and/or **Nsight Compute** (see note below). 
 
@@ -370,6 +384,7 @@ and Summit (OLCF)
 
 https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/Submission_Script_OLCF.lsf
 
-When submitting a job script on an HPC machine with nodes containing NVIDIA's GPUs, the user should specify the number of GPUs to be used on each node. The format of the submission script depends on the HPC system.  
+When submitting a job script on an HPC machine with nodes containing NVIDIA's GPUs, the user should specify
+the number of GPUs to be used on each node. The format of the submission script depends on the HPC system.  
 
 
