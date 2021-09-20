@@ -238,6 +238,16 @@ A more detailed description on the above tools can be provided from NVIDIA's CUD
 
 https://docs.nvidia.com/cuda/profiler-users-guide/index.html
 
+![Profiling_NsightSystems](https://user-images.githubusercontent.com/52040752/133961394-b057dee3-b51c-44f6-bf4b-91e1cfe1c021.png)
+Figure: (a) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Nsight Systems provides a broad description of the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis is the example here is 3 time-steps of the LB algorithm. 
+
+![Profiling_kernels_memCopies](https://user-images.githubusercontent.com/52040752/133961092-16dbeec9-134e-4a28-9991-ea9888b4e5f5.png)
+Figure: (b) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Focus of analysis is 1 time-step of the LB algorithm. Kernels and memory copies overlap during execution on the GPU, as shown in the area marked with the red box.
+
+On a laptop Nsight Systems can be invoked during the CUDA code execution by issuing the following command line:
+~~~
+nsys profile --trace=cuda,mpi,nvtx --stats=true mpirun -np $nCPUs  $PATH_EXE/$EXEC_FILE -in $INPUT_FILE -out results
+~~~
 
 > ## A note on GPU Profiling
 > 
