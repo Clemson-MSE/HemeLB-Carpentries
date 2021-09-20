@@ -3,15 +3,21 @@ title: "GPUs with HemeLB"
 teaching: 15
 exercises: 15
 questions:
+- "Why do we need GPUs?"
+- "What is CUDA programming?"
+- "How is GPU code profiled?"
 - "How do I use the HemeLB library on a GPU?"
-objectives:
 - "What is the performance like?"
+- "What is a 1-to-1, 2-to-1 relationship in GPU programming"
+objectives:
+- "Understand and implement basic concepts of GPUs and CUDA"
+- "Implement HemeLB using a GPU"
 keypoints:
 - "Knowing the capabilities of your host, device and if you can use a CUDA-aware MPI
   runtime is required before starting a GPU run"
 ---
 
-## GPUs - Why do we need GPUs?
+## Why do we need GPUs?
 
 A Graphics Processing Unit (GPU) is a type of specialised processor originally designed to accelerate
 graphics rendering, this includes video games. GPUs can have thousands of cores, which can perform tasks
@@ -28,16 +34,14 @@ fundamental to AI and deep learning workflows, using such libraries as (TensorFl
 We will not discuss any further differences between these two now, but what you need to remember and understand is
 that a GPU has much more processing power than a CPU to complete a given task. 
 
-A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an NVIDIA conference: 
-
 If you need to perform a task on massive amounts of data, then the same analysis (calculations - set of code)
-will be executed on/for each one of the 
-elements/data that we have. A CPU would have to go through each one of the elements in a serial manner, i.e. perform the analysis on the first element,
-once finished move to the next one and so on and so forth, until it manages to process everything. 
-A GPU on the other hand, will do this in a parallel way (large scale parallelism), depending on how may cores it has. The same mathematical function
+will be executed on/for each one of the elements/data that we have. A CPU would have to go through each one of the 
+elements in a serial manner, i.e. perform the analysis on the first element, once finished move to the next one and
+so on and so forth, until it manages to process everything. A GPU on the other hand, will do this in parallel
+(large scale parallelism), depending on how may cores it has. The same mathematical function
 will run over and over again but at a large scale, offering significant speed-up to the calculations.   
 
-A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an
+A nice demonstration of the above was given by the [MythBusters](https://www.youtube.com/watch?v=0udMBdo0Rac) at an
 NVIDIA conference in 2008. Although it is a big oversimplication of the internal processes and communications between
 a CPU and a GPU, it gives an ideal as to why GPUs are regarded so highly.
 
@@ -46,7 +50,7 @@ are becoming commonplace on high-end HPC machines, with a number of GPUs install
 
 ![image](https://user-images.githubusercontent.com/52040752/133001824-ac80d147-8444-4650-9a13-5c0b3ae53f68.png)
 
-The schematic Figure from NVIDIA (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] 
+The schematic Figure from NVIDIA [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html)
 shows an example distribution of chip resources for a CPU versus a GPU. 
 
 It is worth noting however that even though GPUs have more cores than a CPU, and can technically do things much
