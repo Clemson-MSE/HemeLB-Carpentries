@@ -244,10 +244,13 @@ Figure: (a) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Nsight Sys
 ![Profiling_kernels_memCopies](https://user-images.githubusercontent.com/52040752/133961092-16dbeec9-134e-4a28-9991-ea9888b4e5f5.png)
 Figure: (b) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Focus of analysis is 1 time-step of the LB algorithm. Kernels and memory copies overlap during execution on the GPU, as shown in the area marked with the red box.
 
-On a laptop Nsight Systems can be invoked during the CUDA code execution by issuing the following command line:
+
+On a laptop **Nsight Systems** can be invoked during the CUDA code execution by issuing the following command line:
 ~~~
 nsys profile --trace=cuda,mpi,nvtx --stats=true mpirun -np $nCPUs  $PATH_EXE/$EXEC_FILE -in $INPUT_FILE -out results
 ~~~
+
+On HPC systems it may be possible to perform the profiling analysis using **Nsight Systems** and/or **Nsight Compute** (see note below). 
 
 > ## A note on GPU Profiling
 > 
