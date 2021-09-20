@@ -28,8 +28,6 @@ fundamental to AI and deep learning workflows, using such libraries as (TensorFl
 We will not discuss any further differences between these two now, but what you need to remember and understand is
 that a GPU has much more processing power than a CPU to complete a given task. 
 
-A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an NVIDIA conference: 
-
 If you need to perform a task on massive amounts of data, then the same analysis (calculations - set of code)
 will be executed on/for each one of the 
 elements/data that we have. A CPU would have to go through each one of the elements in a serial manner, i.e. perform the analysis on the first element,
@@ -131,7 +129,7 @@ CUDA programming can take a bit to get used to and as yet there are no Carpentri
 available, however here we will provide a brief lookover at the main functionalities and differences.
 
 
-The specifier `global` is added in front of the function, which tells the CUDA C++ compiler that this is a function 
+The specifier `__global__` is added in front of the function, which tells the CUDA C++ compiler that this is a function 
 that runs on the GPU and can be called from CPU code. The remainder of the code will be relatively similar, however
 when you are defining your function, the keyword will be required to run the function on a GPU. A full example of
 defining a GPU CUDA kernel would be as follows;
