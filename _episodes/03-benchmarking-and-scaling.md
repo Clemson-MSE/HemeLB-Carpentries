@@ -110,13 +110,19 @@ your local documentation for definitive advice on this for your HPC system.
 
 > ## Running a HemeLB job on your HPC
 > 
-> Examine the provided jobscript, which is located in `{{ site.files.jobscript }}` and run the job using
-> `{{ site.sched.submit.name }} myjob.sh`. You can track the progress of the job using 
-> `{{ site.sched.status}} {{ site.sched.user }}`. This job uses 10 cores and will take about 5 minutes.
+> Examine the provided jobscript, which is located in `files/2c-bif{{ site.files.jobscript }}`, and modify accordingly
+> so the correct modules are loaded and the path you where the `hemepure` executable is correct. You can run the job 
+> using `{{ site.sched.submit.name }} myjob.sh`. You can track the progress of the job using 
+> `{{ site.sched.status}} {{ site.sched.user }}`. This job uses 2 cores and will take about 10-15 minutes.
+>
+> Once you are confident that the details in the job script are correct, we will repeat this with 10 cores, so copt the
+> job script you have been working on and move it into `files/10core-bif` and modify it so that it runs on 10 cores.
+>
+> Do you notice a speedup?
 >
 {: .challenge}
 
-While this job is running, lets examine the input file to understand the HemeLB job we have submitted.
+While these job is running, lets examine the input file to understand the HemeLB job we have submitted.
 
 ```xml
 {% include {{ site.snippets }}/03/10c-bif_input.xml %}
@@ -224,13 +230,13 @@ for our study by changing the resources requested in the job submission scripts.
 
 > ## Editing the submission script
 > 
-> Make a directory called `2n-bif` and copy the input files and job script into used in the previous exercise into it.
+> Copy the jobscript into `files/2node-bif`. Modify the appropriate section in your submission script so that we now
+> utilise 2 nodes and investigate the effect of changing the requested resources in your output files.
 > 
 > It is important that when changing the resources requested, ensure that you also modify the execution line to use the 
 > desired resources. In {{ site.sched.name }}, this can be automated with the `{{ site.sched.ntasks }}` shortcut.
 >
-> Modify the appropriate section in your submission script so that we now utilise 2 nodes and investigate the effect of
-> changing the requested resources in your output files. How does the walltime differ, what are the changes?
+> How does the walltime differ between this and the 2 and 10 core versions, what are the changes?
 >
 {: .challenge}
 
