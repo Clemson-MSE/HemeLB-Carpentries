@@ -359,7 +359,7 @@ and the speed-up observed compared to the smallest number of cores used.
 > 200 cores. If your available hardware permits larger jobs, try this too up to a reasonable limit.
 > After each job, record the `Simulation Time` from the `Report.txt` file.
 >
-> Now that you have results for 1 core, 4 cores and 2 nodes, create a *scalability plot* with
+> Now that you have results for 2 cores, 10 cores and 2 nodes, create a *scalability plot* with
 > the number of CPU cores on the X-axis and the simulation times on the Y-axis (use your
 > favourite plotting tool, an online plotter or even pen and paper).
 >
