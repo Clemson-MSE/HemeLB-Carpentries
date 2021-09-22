@@ -3,15 +3,21 @@ title: "GPUs with HemeLB"
 teaching: 15
 exercises: 15
 questions:
+- "Why do we need GPUs?"
+- "What is CUDA programming?"
+- "How is GPU code profiled?"
 - "How do I use the HemeLB library on a GPU?"
-objectives:
 - "What is the performance like?"
+- "What is a 1-to-1, 2-to-1 relationship in GPU programming"
+objectives:
+- "Understand and implement basic concepts of GPUs and CUDA"
+- "Implement HemeLB using a GPU"
 keypoints:
 - "Knowing the capabilities of your host, device and if you can use a CUDA-aware MPI
   runtime is required before starting a GPU run"
 ---
 
-## GPUs - Why do we need GPUs?
+## Why do we need GPUs?
 
 A Graphics Processing Unit (GPU) is a type of specialised processor originally designed to accelerate
 graphics rendering, this includes video games. GPUs can have thousands of cores, which can perform tasks
@@ -29,22 +35,22 @@ We will not discuss any further differences between these two now, but what you 
 that a GPU has much more processing power than a CPU to complete a given task. 
 
 If you need to perform a task on massive amounts of data, then the same analysis (calculations - set of code)
-will be executed on/for each one of the 
-elements/data that we have. A CPU would have to go through each one of the elements in a serial manner, i.e. perform the analysis on the first element,
-once finished move to the next one and so on and so forth, until it manages to process everything. 
-A GPU on the other hand, will do this in a parallel way (large scale parallelism), depending on how may cores it has. The same mathematical function
+will be executed on/for each one of the elements/data that we have. A CPU would have to go through each one of the 
+elements in a serial manner, i.e. perform the analysis on the first element, once finished move to the next one and
+so on and so forth, until it manages to process everything. A GPU on the other hand, will do this in parallel
+(large scale parallelism), depending on how may cores it has. The same mathematical function
 will run over and over again but at a large scale, offering significant speed-up to the calculations.   
 
-A nice demonstration of the above was given by the (MythBusters)[https://www.youtube.com/watch?v=0udMBdo0Rac] at an
+A nice demonstration of the above was given by the [MythBusters](https://www.youtube.com/watch?v=0udMBdo0Rac) at an
 NVIDIA conference in 2008. Although it is a big oversimplication of the internal processes and communications between
 a CPU and a GPU, it gives an ideal as to why GPUs are regarded so highly.
 
 Hence, in scientific computing, with GPUs we can achieve massive acceleration of our calculations. That is why GPUs
 are becoming commonplace on high-end HPC machines, with a number of GPUs installed on each node.  
 
-![image](https://user-images.githubusercontent.com/52040752/133001824-ac80d147-8444-4650-9a13-5c0b3ae53f68.png)
+<p align="center"><img src="../fig/06/GPUvCPU.png" width="80%"/></p>
 
-The schematic Figure from NVIDIA (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] 
+The schematic Figure from NVIDIA [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html)
 shows an example distribution of chip resources for a CPU versus a GPU. 
 
 It is worth noting however that even though GPUs have more cores than a CPU, and can technically do things much
@@ -94,16 +100,6 @@ core, as it will likely run out of memory and waste using a GPU in the first pla
 > {: .solution}
 {: .challenge}
 
-## HemeLB and GPUs
-
-A GPU accelerated version of HemeLB has been developed using NVIDIA's CUDA platform. CUDA stands for Compute Unified
-Device Architecture and is a parallel computing platform and application programming interface model created by NVIDIA. 
-Hence our GPU HemeLB code is GPU-aware; it can only run on NVIDIA's GPUs. 
-
-CUDA does not require developers to have specialised graphics programming knowledge. Developers can use popular 
-programming languages, such as C/C++ and Fortran to exploit the GPU resources. The GPU accelerated version of HemeLB
-was developed using CUDA C++. 
-
 ## CUDA Programming Basics
 
 The most important concept to have in mind when it comes to CUDA and GPU programming, is that the compute 
@@ -145,7 +141,7 @@ Before we carry onto how to launch a kernel, we need to discuss the memory hiera
 it is crucial to getting a CUDA code to actually run and work. In CUDA, the kernel is executed with the aid of CUDA
 threads, which represent the execution of the kernel. Every thread has an index which is used for calculating the
 memory address locations. Each thread has a private local memory, and may also access data from multiple memory spaces
-during their execution. NVIDIA's (documentation)[https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html] 
+during their execution. NVIDIA's [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html) 
 page gives a good overview.
 
 One thread is never enough though when dealing with GPUs, as threads come in thread blocks, 
@@ -155,15 +151,8 @@ which can be executed in serial or parallel. Depending on the GPU you are utilis
 Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All
 threads have access to the same global memory. An overview of the memory Hierarchy is outlined below.
 
-*There are also two additional read-only memory spaces accessible by all threads: the **constant** and **texture***
-*memory spaces. The global, constant, and texture memory spaces are optimized for different memory usages. Texture*
-*memory also offers different addressing modes, as well as data filtering, for some specific data formats (see Texture*
-*and Surface Memory). The global, constant, and texture memory spaces are persistent across kernel launches by the*
-*same application.*
 
-**THE ABOVE IS LIKELY TOO ADVANCED, IS IT REQUIRED FOR UNDERSTANDING?**
-
-![image](https://user-images.githubusercontent.com/52040752/133094845-0b902979-f6a9-48c0-8b93-5be7546f8e48.png)
+<p align="center"><img src="../fig/06/GPUHierarchy.png" width="50%"/></p>
 
 
 ### Launching the GPU kernel
@@ -174,7 +163,7 @@ between the triple angle brackets is the execution configuration, which determin
 will execute the kernel in parallel. These threads are arranged in what are thread blocks, hence the developer should
 specify how many threads there are per block.   
 
-An example of a launching a GPU CUDA kernel (GPU_Cuda_Kernel_Name) is as follows: 
+An example of a launching a GPU CUDA kernel (`GPU_Cuda_Kernel_Name`) is as follows: 
 
 ~~~
 // Cuda kernel set-up
@@ -196,31 +185,9 @@ Remember that CUDA kernel launches don’t block the calling CPU thread. This me
 the control is returned to the CPU thread and the code will resume. In order to ensure that the GPU kernel has
 completed its task, a synchronsation barrier might be needed using `cudaDeviceSynchronize()`.
 
-A discussion on the above as well as simple examples can be found from NVIDIA's website 
-
-https://developer.nvidia.com/blog/easy-introduction-cuda-c-and-c/
-
-as well as from NVIDIA's CUDA Toolkit Documentation 
-
-https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
-
-## GPU Memory Hierarchy - Memory Allocation in CUDA
-
-CUDA threads can access data from multiple memory spaces. As specified in NVIDIA's CUDA Toolkit Documentation 
-
-https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html
-
-CUDA threads may access data from multiple memory spaces during their execution (see Figure below). 
-Each thread has private local memory. Each thread block has shared memory visible to all threads of the block and with
-the same lifetime as the block. All threads have access to the same global memory.
-
-There are also two additional read-only memory spaces accessible by all threads: the constant and texture memory spaces. The global, constant,
-and texture memory spaces are optimized for different memory usages (see Device Memory Accesses). Texture memory also offers different addressing
-modes, as well as data filtering, for some specific data formats (see Texture and Surface Memory).
-
-The global, constant, and texture memory spaces are persistent across kernel launches by the same application. The figure below is from NVIDIA's 
-CUDA Toolkit Documentation - GPU Memory hierarchy
-![image](https://user-images.githubusercontent.com/52040752/133094845-0b902979-f6a9-48c0-8b93-5be7546f8e48.png)
+NVIDIA's website provides plentiful discussions and simple  
+[examples](https://developer.nvidia.com/blog/easy-introduction-cuda-c-and-c/) and guides on the NVIDIA 
+[CUDA Toolkit](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html). We will not 
 
 
 ## CUDA Streams and Concurrency 
@@ -268,6 +235,9 @@ CUDA streams.
 Here, we provide a simple example of a CUDA code. It contains the main features discussed above: allocate input vectors
 in host memory and initialise them, allocate memory on the GPU, memory copies (H2D and D2H), defining and launching a 
 GPU CUDA kernel.  
+
+- D2H: from the Device (GPU) to the Host (CPU) 
+- H2D: from the Host (CPU) to the Device (GPU)
 
 ~~~
 // Device code
@@ -323,11 +293,8 @@ int main()
 ~~~
 {: .source}
 
-
 As mentioned above, when performing calculations on the GPU, memory needs to be allocated onto the GPU; then data that
-will be processed needs to be copied from the host to the device, perform the calculations  for th CUDA memory copies:
-a. D2H: from the Device (GPU) to the Host (CPU) 
-b. H2D: from the Host (CPU) to the Device (GPU)
+will be processed needs to be copied from the host to the device, perform the calculations for the CUDA memory copies:
 
 ##  Compile CUDA code
 CUDA code (typically in a file with extension `.cu`) can be compiled using the `nvcc` compiler. 
@@ -339,19 +306,21 @@ nvcc CUDA_code.cu -o CUDA_code
 {: .source}
 
 ## Profiling CUDA code
-Profiling the CUDA code can be done using tools provided by NVIDIA.    
-**NVIDIA Nsight Systems** for GPU and CPU sampling and tracing and **NVIDIA Nsight Compute** for GPU kernel profiling. 
+Profiling the CUDA code can be done using tools provided by NVIDIA. **NVIDIA Nsight Systems** for GPU and CPU sampling
+and tracing and **NVIDIA Nsight Compute** for GPU kernel profiling. 
 
-A more detailed description on the above tools can be provided from NVIDIA's CUDA Toolkit Documentation 
+A more detailed description on the above tools can be provided from NVIDIA's CUDA Toolkit 
+[Documentation](https://docs.nvidia.com/cuda/profiler-users-guide/index.html)
 
-https://docs.nvidia.com/cuda/profiler-users-guide/index.html
+<p align="center"><img src="../fig/06/NsightProfile.png" width="75%"/></p>
 
-![Profiling_NsightSystems](https://user-images.githubusercontent.com/52040752/133961394-b057dee3-b51c-44f6-bf4b-91e1cfe1c021.png)
+
 Figure: (a) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Nsight Systems provides a broad description of
 the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis is
 the example here is 3 time-steps of the LB algorithm. 
 
-![Profiling_kernels_memCopies](https://user-images.githubusercontent.com/52040752/133961092-16dbeec9-134e-4a28-9991-ea9888b4e5f5.png)
+<p align="center"><img src="../fig/06/ProfileKernelMemCopy.png" width="75%"/></p>
+
 Figure: (b) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Focus of analysis is 1 time-step of the LB algorithm.
 Kernels and memory copies overlap during execution on the GPU, as shown in the area marked with the red box.
 
@@ -373,16 +342,36 @@ On HPC systems it may be possible to perform the profiling analysis using **Nsig
 {: .callout}
 
 
-##  Running HemeLB on HPC machines with NVIDIA's GPUs
-Job submission scripts (JUWELS Booster) 
+## Running HemeLB on HPC machines with NVIDIA's GPUs
 
-https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/Submission_Script_Juwels_Booster.sh
+A GPU accelerated version of HemeLB has been developed using NVIDIA's CUDA platform. CUDA stands for Compute Unified
+Device Architecture and is a parallel computing platform and application programming interface model created by NVIDIA. 
+Hence our GPU HemeLB code is GPU-aware; it can only run on NVIDIA's GPUs. 
 
-and Summit (OLCF)
+CUDA does not require developers to have specialised graphics programming knowledge. Developers can use popular 
+programming languages, such as C/C++ and Fortran to exploit the GPU resources. The GPU accelerated version of HemeLB
+was developed using CUDA C++. 
 
-https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/Submission_Script_OLCF.lsf
+> ## Submitting a HemeLB job on GPUs
+>
+> **Clearer descriptions needed here!**
+> https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/Submission_Script_Juwels_Booster.sh
+>
+> and Summit (OLCF)
+> 
+> https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/Submission_Script_OLCF.lsf
+> 
+> When submitting a job script on an HPC machine with nodes containing NVIDIA's GPUs, the user should specify
+> the number of GPUs to be used on each node. The format of the submission script depends on the HPC system.  
+>
+{: .challenge}
 
-When submitting a job script on an HPC machine with nodes containing NVIDIA's GPUs, the user should specify
-the number of GPUs to be used on each node. The format of the submission script depends on the HPC system.  
+## 1-to-1 and 2-to-1
+
+> ## Running a 1-to-1 and 2-to-1 relationship
+>
+> **EDITME**
+>
+{: .challenge}
 
 
