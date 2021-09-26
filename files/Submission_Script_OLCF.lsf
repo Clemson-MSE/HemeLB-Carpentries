@@ -8,9 +8,6 @@
 #BSUB -o aorta_NoCuAw_v1_27a.%J
 #BSUB -e aorta_NoCuAw_v1_27a.%J
 
-
-Cuda_Aware_MPI=false
-
 date
 
 module load gcc cuda cmake/3.14.2
@@ -20,14 +17,7 @@ EXEC=hemepure_gpu_VelPresBCs_NoCuAwMPI_F1e4_SwapPoint
 
 rm -r results
 
-if [ "Cuda_Aware_MPI" = true ]
-then
-echo 'CUDA Aware MPI option!'
-jsrun --smpiargs="-gpu" --nrs 384 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --rs_per_host 6  --launch_dis\
-tribution packed --bin\
-d packed:1 $EXEC_PATH/$EXEC -in input.xml -out results
-else
 jsrun --nrs 384 --tasks_per_rs 1 --cpu_per_rs 1 --gpu_per_rs 1 --rs_per_host 6  --launch_distribution packed -\
 -bin\
 d packed:1 $EXEC_PATH/$EXEC -in input.xml -out results
-fi
+
