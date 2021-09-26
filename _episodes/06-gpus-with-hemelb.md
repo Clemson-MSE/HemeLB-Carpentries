@@ -529,7 +529,7 @@ A further testing of the code could be performed by using a bigger simulation do
 
 
 > ## Exercise 3
-> We could also examine situations where multiple CPU cores (MPI tasks) use the same GPU. This can be achieved by simply specifying the number of MPI tasks on the > nodes being different to the number of available GPUs. For example using the job submission script from Juwels Booster and modifying the following lines 
+> We could also examine situations where multiple CPU cores (MPI tasks) use the same GPU. This can be achieved by simply specifying the number of MPI tasks on the  nodes being different to the number of available GPUs. For example using the job submission script from Juwels Booster and modifying the following lines 
 > ~~~
 > #SBATCH --nodes=16
 > #SBATCH --ntasks=128
