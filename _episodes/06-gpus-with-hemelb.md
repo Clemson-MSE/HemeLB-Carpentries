@@ -549,7 +549,6 @@ was developed using CUDA C++.
 > which contains 60 million fluid sites. 
 {: .challenge}
 
-
 > ## Exercise 3
 > 
 > We could also examine situations where multiple CPU cores (MPI tasks) use the same GPU. This can be achieved by
@@ -570,6 +569,7 @@ was developed using CUDA C++.
 > 
 > Provide the timings for running the GPU code using a 2-to-1 and 4-to-1 situation. Report the scaling of the code,
 > as well as the performance (MLUPS per computing core and MLUPS per node, where for the later just divide the performance by the number of nodes used). 
+{: .challenge}
 
 ## 1-to-1 and 2-to-1
 
