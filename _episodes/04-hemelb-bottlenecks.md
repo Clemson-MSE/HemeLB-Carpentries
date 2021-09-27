@@ -128,7 +128,7 @@ geometry data format from `*.gmy` to `*.gmy+`.
 > Download the code for the gmy2gmy+ converter from 
 > [`files/gmy2gmy+`]({{page.root}}{% link files/gmy2gmy+/gmy2gmy+.cc %}) along with its corresponding
 > [Makefile]({{page.root}}{% link files/gmy2gmy+/Makefile %}) and compile it on your machine. This script is run
-> with the following instruction (where `DOMAIN` is your test domain name):
+> with the following instruction (where `DOMAIN` is your test domain name, eg. bifurcation.gmy):
 > 
 > ~~~
 > ./gmy2gmy+ DOMAIN.gmy DOMAIN.gmy+ 1 2 4 4 4 4 
@@ -139,7 +139,8 @@ geometry data format from `*.gmy` to `*.gmy+`.
 > (in order: `Inlet`, `Outlet`, `Inlet+Wall`, `Outlet+Wall`).
 >
 > Recompile HemeLB so that it knows to read `gmy+` files. To keep your old executable, rename the 
-> `build` folder to `buildGMYPLUS`. Edit the build script in `buildGMYPLUS`to include the option;
+> `build` folder to `build_DEFAULT`, so you can have a `buildGMYPLUS` directory for two executables. Edit the build
+> script in `buildGMYPLUS`to change the flag from `OFF` to;
 >
 > ~~~
 > -DHEMELB_USE_GMYPLUS=ON
@@ -157,9 +158,10 @@ An example of the improved load balance using the gmy+ format are shown below:
 > ## Testing the performance of gmy+
 > 
 > Repeat the benchmarking tests conducted in the 
-> [previous episode]({{ page.root }}{% link _episodes/03-benchmarking-and-scaling.md %}) using the `gmy+` format. You
-> will need to edit the `input.xml` file accordingly) and compare your results. Also examine how load distribution has
-> changed as a result in the `report.txt` file.
+> [previous episode]({{ page.root }}{% link _episodes/03-benchmarking-and-scaling.md %}) using the `gmy+` format. 
+> Rename the `results` folder previously created to a folder name of your choice to keep your old results. You
+> will also need to edit the `input.xml` file accordingly) and compare your results. Also examine how load distribution
+> has changed as a result in the `report.txt` file.
 >
 > Try different choices of the weights to see how this impacts your results.
 >
@@ -195,11 +197,12 @@ that causes this measure to increase. For small geometries, the initialisation t
 > ## Testing the performance of gmy+ and ParMETIS
 > 
 > Repeat the benchmarking tests conducted in the 
-> [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) using the gmy+ and ParMETIS
-> (edit the `input.xml` file so that it is looking for the gmy+ file when testing this, save as a separate file; when
-> testing ParMETIS the original `input.xml` file can be used) and compare your results. 
+> [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %}) using the gmy+ and ParMETIS.
+> Once again, rename the `results` folder so you can keep the original and gmy+ simualtion results. Similarly,
+> edit the `input.xml` file so that it is looking for the gmy+ file when testing this, save as a separate file; when
+> testing ParMETIS the original `input.xml` file can be used and compare your results. 
 > 
-> Also examine how load distribution has changed as a result in the `report.txt` file.
+> You should also spend some time examining how load distribution has changed as a result in the `report.txt` file.
 >
 > Try different choices of the gmy+ weights to see how this impacts your results.
 > See how your results vary when a larger geometry is used (see `files/biggerBif` for `gmy` and input files).

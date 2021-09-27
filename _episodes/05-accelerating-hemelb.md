@@ -84,6 +84,8 @@ obtained when the explicit intrinsics are used for the key computational kernels
 > {: .solution} 
 {: .challenge}
 
+<p align="center"><img src="../fig/05/Bifurcation_SNG_Walltime_loglog_linear_SSE3.png" width="75%"/></p>
+
 ## Monitoring in HemeLB
 In the input file provided for the benchmarking case, you will notice the following section:
 
@@ -145,6 +147,7 @@ The value for the velocity stated here is the reference value against which the 
 
 
 ## Tuning MPI Communications
+
 Depending on your systems, another option that **may** yield performance gains is in the modification of 
 how the underlying MPI communications are managed. For general operation however, the default settings
 provided in the compilation options for HemeLB have been found to work very well in most applications.
