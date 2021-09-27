@@ -443,7 +443,7 @@ int main()
 }
 ~~~
 
-**Answer**
+**Solution**
 Here we request memory for 3 vectors, with the total being `3*N*sizeof(float)` in bytes; see the part `cudaMalloc(&d_A to &d_C, size);`. 
 
 
@@ -511,7 +511,7 @@ was developed using CUDA C++.
 > #SBATCH --partition=booster
 > #SBATCH --gres=gpu:4
 > ~~~
-> so that we specify the partition on the HPC machine that contains the GPU accelerated nodes, as well as how many GPUs to use per node, and the number of MPI ranks (`ntasks` and `ntasks-per-node`) 
+> so that we specify the partition on the HPC machine that contains the GPU accelerated nodes (eg `--partition=booster`), as well as how many GPUs to use per node (`--gres=gpu:4`), and the number of MPI ranks (`--ntasks` and `--ntasks-per-node`) 
 >
 > 2. A job script for running GPU simulations on Summit (OLCF)
 > 
@@ -520,12 +520,13 @@ was developed using CUDA C++.
 {: .challenge}
 
 
-## Exercise 2
-Run a HemeLB GPU simulation and measure the performance of the code in terms of MLUPS (Millions of Lattice sites Updates per second) per computing core. This can give us a measure of the acceleration achieved by using the GPUs compared to the CPU only simulation. 
-To enable comparison of the performance of the CPU and GPU versions of HemeLB, use the simulation geometry used in the previous episodes (`bifurcation.gmy`). Try running the GPU code using up to ... GPUs and report the scaling achieved. 
-Why do you think a tapering of the performance occurs at the largest GPU counts? 
-
-A further testing of the code could be performed by using a bigger simulation domain, e.g. the `CBM2019_Arteries_patched.gmy` which contains 60 million fluid sites. 
+> ## Exercise 2
+> Run a HemeLB GPU simulation and measure the performance of the code in terms of MLUPS (Millions of Lattice sites Updates per second) per computing core. This can give us a measure of the acceleration achieved by using the GPUs compared to the CPU only simulation. 
+To enable comparison of the performance of the CPU and GPU versions of HemeLB, use the simulation geometry used in the previous episodes (eg the `bifurcation.gmy` from [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %})). Try running the GPU code using up to ... GPUs and report the scaling achieved. 
+>
+> Why do you think a tapering of the performance occurs at the largest GPU counts? 
+> 
+> A further testing of the code could be performed by using a bigger simulation domain, e.g. the `CBM2019_Arteries_patched.gmy` which contains 60 million fluid sites. 
 
 
 > ## Exercise 3
