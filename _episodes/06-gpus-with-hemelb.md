@@ -305,146 +305,155 @@ nvcc CUDA_code.cu -o CUDA_code
 ~~~
 {: .source}
 
-## Exercise 1
-As mentioned earlier, one of the limitations regarding using GPUs is their memory.
-Memory should be allocated on the GPU, as the data processed during calculations on the GPU should physically reside on the GPU. Hence, we should ensure that there is sufficient GPU memory for the type of calculations that we would like to execute. For example, the NVIDIA Tesla P100 has 16 GB of memory, the V100 comes in 16 and 32GB configurations, while the A100's specs are enhanced further by providing a 40 GB and 80 GB configurations. 
-
-Usefull information regarding the type/s of NVIDIA GPUs installed on a node and their specs can be obtained using functionalities provided by NVIDIA (using `cudaGetDeviceProperties`). 
-
-For example, we can query the GPUs' properties using the following in our code:
-
-~~~
-    // Get the GPUs properties:
-    //    Device name, Compute Capability, Global Memory (GB) etc
-    int nDevices;
-    cudaGetDeviceCount(&nDevices);
-    for (int i = 0; i < nDevices; i++) {
-        cudaDeviceProp prop;
-        cudaGetDeviceProperties(&prop, i);
-        printf("Device Number: %d\n", i);
-        printf("  Device name:        %s\n", prop.name);
-        printf("  Compute Capability: %d.%d\n", prop.major, prop.minor);
-    		printf("  Total Global Mem:   %.1fGB\n\n", ((double)prop.totalGlobalMem/1073741824.0));
-        printf("  Memory Clock Rate (KHz): %d\n",
-               prop.memoryClockRate);
-        printf("  Memory Bus Width (bits): %d\n",
-               prop.memoryBusWidth);
-        printf("  Peak Memory Bandwidth (GB/s): %f\n\n",
-               2.0*prop.memoryClockRate*(prop.memoryBusWidth/8)/1.0e6);
-
-        printf("  Max Number of Threads per Block:  %d\n", prop.maxThreadsPerBlock);
-        printf("  Max Number of Blocks allowed in x-dir:  %d\n", prop.maxGridSize[0]);
-        printf("  Max Number of Blocks allowed in y-dir:  %d\n", prop.maxGridSize[1]);
-        printf("  Max Number of Blocks allowed in z-dir:  %d\n", prop.maxGridSize[2]);
-        printf("  Warp Size:  %d\n",  prop.warpSize);
-        printf("===============================================\n\n");
-      }
-~~~
-
-A more complete example of CUDA code is the following. 
-Can you evaluate the amount of GPU memory that will be required by the following code (allocated using the command `cudaMalloc`)? 
-
-~~~
-#include <stdio.h>
-
-// Device code
-__global__ void VecAdd(float* A, float* B, float* C, int N)
-{
-    int i = blockDim.x * blockIdx.x + threadIdx.x;
-    if (i < N)
-        C[i] = A[i] + B[i];
-}
-
-// Initialise the input vectors
-void initialise_input_vect(float* A, float* B, int N)
-{
-  for(int i=0; i<N; i++){
-    A[i]=i;
-    B[i]=2*i;
-  }
-}
-
-
-// Host code
-int main()
-{
-    int N = 1000;   // Number of elements to process
-    bool print_results = 0; // Boolean variable for printing the results
-
-    size_t size = N * sizeof(float);
-
-    //==========================================================================
-    // Get the GPUs properties:
-    //    Device name, Compute Capability, Global Memory (GB) etc
-    int nDevices;
-    cudaGetDeviceCount(&nDevices);
-    for (int i = 0; i < nDevices; i++) {
-        cudaDeviceProp prop;
-        cudaGetDeviceProperties(&prop, i);
-        printf("Device Number: %d\n", i);
-        printf("  Device name:        %s\n", prop.name);
-        printf("  Compute Capability: %d.%d\n", prop.major, prop.minor);
-    		printf("  Total Global Mem:   %.1fGB\n\n", ((double)prop.totalGlobalMem/1073741824.0));
-        printf("  Memory Clock Rate (KHz): %d\n",
-               prop.memoryClockRate);
-        printf("  Memory Bus Width (bits): %d\n",
-               prop.memoryBusWidth);
-        printf("  Peak Memory Bandwidth (GB/s): %f\n\n",
-               2.0*prop.memoryClockRate*(prop.memoryBusWidth/8)/1.0e6);
-
-        printf("  Max Number of Threads per Block:  %d\n", prop.maxThreadsPerBlock);
-        printf("  Max Number of Blocks allowed in x-dir:  %d\n", prop.maxGridSize[0]);
-        printf("  Max Number of Blocks allowed in y-dir:  %d\n", prop.maxGridSize[1]);
-        printf("  Max Number of Blocks allowed in z-dir:  %d\n", prop.maxGridSize[2]);
-        printf("  Warp Size:  %d\n",  prop.warpSize);
-        printf("===============================================\n\n");
-      }
-    //==========================================================================
-
-    // Allocate input vectors h_A and h_B in host memory
-    float* h_A = new float[N];
-    float* h_B = new float[N];
-    float* h_C = new float[N];
-
-    // Initialize input vectors
-    initialise_input_vect(h_A, h_B, N);
-
-    // Allocate vectors in device memory
-    float* d_A;
-    cudaMalloc(&d_A, size);
-    float* d_B;
-    cudaMalloc(&d_B, size);
-    float* d_C;
-    cudaMalloc(&d_C, size);
-
-    // Copy vectors from host memory to device memory
-    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
-    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
-
-    // Invoke kernel
-    int nThreadsPerBlock = 256;
-    int nblocks = (N / nThreadsPerBlock) + ((N % nThreadsPerBlock > 0) ? 1 : 0);
-    VecAdd<<<nblocks, nThreadsPerBlock>>>(d_A, d_B, d_C, N);
-
-    // Copy result from device memory to host memory
-    // h_C contains the result in host memory
-    cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
-
-    // Print the results
-    if(print_results) for (int i=0; i<N; i++) printf("h_C[%d] = %2.2f \n", i, h_C[i] );
-
-    // Free device memory
-    cudaFree(d_A);
-    cudaFree(d_B);
-    cudaFree(d_C);
-
-    // Free host memory
-    delete[] h_A, h_B, h_C;
-}
-~~~
-
-**Solution**
-Here we request memory for 3 vectors, with the total being `3*N*sizeof(float)` in bytes; see the part `cudaMalloc(&d_A to &d_C, size);`. 
+> ## Exercise 1
+> 
+> As mentioned earlier, one of the limitations regarding using GPUs is their memory.
+> Memory should be allocated on the GPU, as the data processed during calculations on the GPU should physically
+> reside on the GPU. Hence, we should ensure that there is sufficient GPU memory for the type of calculations that
+> we would like to execute. For example, the NVIDIA Tesla P100 has 16 GB of memory, the V100 comes in 16 and 32GB
+> configurations, while the A100's specs are enhanced further by providing a 40 GB and 80 GB configurations. 
+> 
+> Useful information regarding the type/s of NVIDIA GPUs installed on a node and their specs can be obtained using
+> functionalities provided by NVIDIA (using `cudaGetDeviceProperties`). 
+>
+> For example, we can query the GPUs' properties using the following in our code:
+> 
+> ~~~
+>    // Get the GPUs properties:
+>    //    Device name, Compute Capability, Global Memory (GB) etc
+>    int nDevices;
+>    cudaGetDeviceCount(&nDevices);
+>    for (int i = 0; i < nDevices; i++) {
+>        cudaDeviceProp prop;
+>        cudaGetDeviceProperties(&prop, i);
+>        printf("Device Number: %d\n", i);
+>        printf("  Device name:        %s\n", prop.name);
+>        printf("  Compute Capability: %d.%d\n", prop.major, prop.minor);
+>    		 printf("  Total Global Mem:   %.1fGB\n\n", ((double)prop.totalGlobalMem/1073741824.0));
+>        printf("  Memory Clock Rate (KHz): %d\n",
+>               prop.memoryClockRate);
+>        printf("  Memory Bus Width (bits): %d\n",
+>               prop.memoryBusWidth);
+>        printf("  Peak Memory Bandwidth (GB/s): %f\n\n",
+>               2.0*prop.memoryClockRate*(prop.memoryBusWidth/8)/1.0e6);
+>
+>        printf("  Max Number of Threads per Block:  %d\n", prop.maxThreadsPerBlock);
+>        printf("  Max Number of Blocks allowed in x-dir:  %d\n", prop.maxGridSize[0]);
+>        printf("  Max Number of Blocks allowed in y-dir:  %d\n", prop.maxGridSize[1]);
+>        printf("  Max Number of Blocks allowed in z-dir:  %d\n", prop.maxGridSize[2]);
+>        printf("  Warp Size:  %d\n",  prop.warpSize);
+>        printf("===============================================\n\n");
+>      }
+> ~~~
+> {: .source}
+>
+> A more complete example of CUDA code is the following. 
+> Can you evaluate the amount of GPU memory that will be required by the following code (allocated using the command `cudaMalloc`)? 
+>
+> ~~~
+> #include <stdio.h>
+>
+> // Device code
+> __global__ void VecAdd(float* A, float* B, float* C, int N)
+> {
+>    int i = blockDim.x * blockIdx.x + threadIdx.x;
+>    if (i < N)
+>        C[i] = A[i] + B[i];
+> }
+> 
+> // Initialise the input vectors
+> void initialise_input_vect(float* A, float* B, int N)
+> {
+>   for(int i=0; i<N; i++){
+>     A[i]=i;
+>     B[i]=2*i;
+>  }
+> }
+>
+>
+> // Host code
+> int main()
+> {
+>    int N = 1000;   // Number of elements to process
+>    bool print_results = 0; // Boolean variable for printing the results
+>
+>    size_t size = N * sizeof(float);
+>
+>    //==========================================================================
+>    // Get the GPUs properties:
+>    //    Device name, Compute Capability, Global Memory (GB) etc
+>    int nDevices;
+>    cudaGetDeviceCount(&nDevices);
+>    for (int i = 0; i < nDevices; i++) {
+>        cudaDeviceProp prop;
+>        cudaGetDeviceProperties(&prop, i);
+>        printf("Device Number: %d\n", i);
+>        printf("  Device name:        %s\n", prop.name);
+>        printf("  Compute Capability: %d.%d\n", prop.major, prop.minor);
+>        printf("  Total Global Mem:   %.1fGB\n\n", ((double)prop.totalGlobalMem/1073741824.0));
+>        printf("  Memory Clock Rate (KHz): %d\n",
+>               prop.memoryClockRate);
+>        printf("  Memory Bus Width (bits): %d\n",
+>               prop.memoryBusWidth);
+>        printf("  Peak Memory Bandwidth (GB/s): %f\n\n",
+>               2.0*prop.memoryClockRate*(prop.memoryBusWidth/8)/1.0e6);
+>
+>        printf("  Max Number of Threads per Block:  %d\n", prop.maxThreadsPerBlock);
+>        printf("  Max Number of Blocks allowed in x-dir:  %d\n", prop.maxGridSize[0]);
+>        printf("  Max Number of Blocks allowed in y-dir:  %d\n", prop.maxGridSize[1]);
+>        printf("  Max Number of Blocks allowed in z-dir:  %d\n", prop.maxGridSize[2]);
+>        printf("  Warp Size:  %d\n",  prop.warpSize);
+>        printf("===============================================\n\n");
+>      }
+>    //==========================================================================
+>
+>    // Allocate input vectors h_A and h_B in host memory
+>    float* h_A = new float[N];
+>    float* h_B = new float[N];
+>    float* h_C = new float[N];
+>
+>    // Initialize input vectors
+>    initialise_input_vect(h_A, h_B, N);
+>
+>    // Allocate vectors in device memory
+>    float* d_A;
+>    cudaMalloc(&d_A, size);
+>    float* d_B;
+>    cudaMalloc(&d_B, size);
+>    float* d_C;
+>    cudaMalloc(&d_C, size);
+>
+>    // Copy vectors from host memory to device memory
+>    cudaMemcpy(d_A, h_A, size, cudaMemcpyHostToDevice);
+>    cudaMemcpy(d_B, h_B, size, cudaMemcpyHostToDevice);
+>
+>    // Invoke kernel
+>    int nThreadsPerBlock = 256;
+>    int nblocks = (N / nThreadsPerBlock) + ((N % nThreadsPerBlock > 0) ? 1 : 0);
+>    VecAdd<<<nblocks, nThreadsPerBlock>>>(d_A, d_B, d_C, N);
+>
+>    // Copy result from device memory to host memory
+>    // h_C contains the result in host memory
+>    cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
+>
+>    // Print the results
+>    if(print_results) for (int i=0; i<N; i++) printf("h_C[%d] = %2.2f \n", i, h_C[i] );
+>
+>    // Free device memory
+>    cudaFree(d_A);
+>    cudaFree(d_B);
+>    cudaFree(d_C);
+>
+>    // Free host memory
+>    delete[] h_A, h_B, h_C;
+> }
+> ~~~
+> {: .source}
+>
+>> ## Solution
+>> Here we request memory for 3 vectors, with the total being `3*N*sizeof(float)` in bytes; see the part `cudaMalloc(&d_A to &d_C, size);`. 
+> {: .solution}
+{: .challenge}
 
 
 ## Profiling CUDA code
@@ -495,7 +504,7 @@ programming languages, such as C/C++ and Fortran to exploit the GPU resources. T
 was developed using CUDA C++. 
 
 > ## Submitting a HemeLB job on GPUs
-
+>
 > When submitting a job script on an HPC machine with nodes containing NVIDIA's GPUs, the user should specify
 > the number of GPUs to be used on each node. The format of the submission script depends on the HPC system. For example 
 > **Clearer descriptions needed here!**
@@ -511,7 +520,10 @@ was developed using CUDA C++.
 > #SBATCH --partition=booster
 > #SBATCH --gres=gpu:4
 > ~~~
-> so that we specify the partition on the HPC machine that contains the GPU accelerated nodes (eg `--partition=booster`), as well as how many GPUs to use per node (`--gres=gpu:4`), and the number of MPI ranks (`--ntasks` and `--ntasks-per-node`) 
+> {: .source}
+> 
+> so that we specify the partition on the HPC machine that contains the GPU accelerated nodes (eg `--partition=booster`), 
+> as well as how many GPUs to use per node (`--gres=gpu:4`), and the number of MPI ranks (`--ntasks` and `--ntasks-per-node`) 
 >
 > 2. A job script for running GPU simulations on Summit (OLCF)
 > 
@@ -521,16 +533,29 @@ was developed using CUDA C++.
 
 
 > ## Exercise 2
-> Run a HemeLB GPU simulation and measure the performance of the code in terms of MLUPS (Millions of Lattice sites Updates per second) per computing core. This can give us a measure of the acceleration achieved by using the GPUs compared to the CPU only simulation. 
-To enable comparison of the performance of the CPU and GPU versions of HemeLB, use the simulation geometry used in the previous episodes (eg the `bifurcation.gmy` from [previous episode]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %})). Try running the GPU code using up to ... GPUs and report the scaling achieved. 
+> 
+> Run a HemeLB GPU simulation and measure the performance of the code in terms of MLUPS (Millions of Lattice sites 
+> Updates per second) per computing core. This can give us a measure of the acceleration achieved by using the GPUs
+> compared to the CPU only simulation. 
+> 
+> To enable comparison of the performance of the CPU and GPU versions of HemeLB, use the simulation geometry used in
+> the previous episodes (eg the `bifurcation.gmy` from 
+> [episode 3]({{page.root}}{% link _episodes/03-benchmarking-and-scaling.md %})). Try running the GPU code using up to
+> 4 GPUs and report the scaling achieved. 
 >
 > Why do you think a tapering of the performance occurs at the largest GPU counts? 
 > 
-> A further testing of the code could be performed by using a bigger simulation domain, e.g. the `CBM2019_Arteries_patched.gmy` which contains 60 million fluid sites. 
+> A further testing of the code could be performed by using a bigger simulation domain, e.g. the `CBM2019_Arteries_patched.gmy`
+> which contains 60 million fluid sites. 
+{: .challenge}
 
 
 > ## Exercise 3
-> We could also examine situations where multiple CPU cores (MPI tasks) use the same GPU. This can be achieved by simply specifying the number of MPI tasks on the  nodes being different to the number of available GPUs. For example using the job submission script from Juwels Booster and modifying the following lines 
+> 
+> We could also examine situations where multiple CPU cores (MPI tasks) use the same GPU. This can be achieved by
+> specifying the number of MPI tasks on the  nodes being different to the number of available GPUs. For example using the
+> job submission script from Juwels Booster and modifying the following lines.
+> 
 > ~~~
 > #SBATCH --nodes=16
 > #SBATCH --ntasks=128
@@ -538,9 +563,13 @@ To enable comparison of the performance of the CPU and GPU versions of HemeLB, u
 > #SBATCH --partition=booster
 > #SBATCH --gres=gpu:4
 > ~~~
+> {: .source}
 > 
-> would result in running the simulation with 8 MPI tasks per node and only 4 GPUs per node. This means that we encounter a situation of 2-to-1 CPUs to GPUs.  
-> Provide the timings for running the GPU code using a 2-to-1 and 4-to-1 situation. Report the scaling of the code, as well as the performance (MLUPS per computing core and MLUPS per node, where for the later just divide the performance by the number of nodes used). 
+> would result in running the simulation with 8 MPI tasks per node and only 4 GPUs per node. This means that
+> we encounter a situation of 2-to-1 CPUs to GPUs.  
+> 
+> Provide the timings for running the GPU code using a 2-to-1 and 4-to-1 situation. Report the scaling of the code,
+> as well as the performance (MLUPS per computing core and MLUPS per node, where for the later just divide the performance by the number of nodes used). 
 
 ## 1-to-1 and 2-to-1
 
