@@ -22,7 +22,7 @@ local:
   prompt: "[user@laptop ~]$"
 
 files:
-  jobscript: "/files/JobScript-slurm.sh"
+  jobscript: "JobScript-slurm.sh"
 
 remote:
   name: "SuperMUC-NG"
