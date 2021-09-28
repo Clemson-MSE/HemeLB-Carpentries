@@ -423,7 +423,7 @@ was developed using CUDA C++.
 >
 > When submitting a job script on an HPC machine with nodes containing NVIDIA's GPUs, the user should specify;
 > - the number of GPUs to be used on each node
-> - the specific partition that contains the GPU acclerated nodes.
+> - the specific partition that contains the GPU accelerated nodes.
 > - the number of MPI ranks
 > - the number of tasks per node
 >
