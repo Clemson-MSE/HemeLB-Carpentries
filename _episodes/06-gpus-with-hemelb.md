@@ -135,17 +135,17 @@ __global__ void GPU_Cuda_Kernel_Name(kernel's_arguments)
 ~~~
 {: .source}
 
+
 ### GPU Memory Hierarchy - Memory Allocation in CUDA
 
 Before we carry onto how to launch a kernel, we need to discuss the memory hierarchy of a GPU, as an understanding of
 it is crucial to getting a CUDA code to actually run and work. In CUDA, the kernel is executed with the aid of CUDA
-threads, which represent the execution of the kernel. Every thread has an index which is used for calculating the
-memory address locations. Each thread has a private local memory, and may also access data from multiple memory spaces
-during their execution. NVIDIA's [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html) 
+threads. Each thread is given a unique thread ID, which is accessible within the GPU kernel through built-in variables. Using the thread's index we can access different GPU memory locations, either for loading or writing data.      
+Each thread has also a private local memory. NVIDIA's [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html) 
 page gives a good overview.
 
 One thread is never enough though when dealing with GPUs, as threads come in thread blocks, 
-which can be executed in serial or parallel. Depending on the GPU you are utilising, a thread block can contain either
+which can be executed in serial or parallel. Depending on the GPU you are utilising, a thread block can contain a maximum of either
 512 or 1024 of these threads.
 
 Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All
