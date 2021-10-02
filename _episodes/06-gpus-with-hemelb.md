@@ -161,7 +161,8 @@ The GPU CUDA kernel is launched by using a specific syntax, the **triple angle b
 the compiler that the kernel that follows is a GPU kernel and will therefore be executed on the GPU. The information
 between the triple angle brackets is the execution configuration, which determines how many threads on the device (GPU) 
 will execute the kernel in parallel. These threads are arranged in what are thread blocks, hence the developer should
-specify how many threads there are per block.   
+specify how many threads there are per block. 
+The number of threads per block should be a round multiple of 32 (the warp size).
 
 An example of a launching a GPU CUDA kernel (`GPU_Cuda_Kernel_Name`) is as follows: 
 
