@@ -140,7 +140,11 @@ __global__ void GPU_Cuda_Kernel_Name(kernel's_arguments)
 
 Before we carry onto how to launch a kernel, we need to discuss the memory hierarchy of a GPU, as an understanding of
 it is crucial to getting a CUDA code to actually run and work. In CUDA, the kernel is executed with the aid of CUDA
-threads. Each thread is given a unique thread ID, which is accessible within the GPU kernel through built-in variables. Using the thread's index we can access different GPU memory locations, either for loading or writing data.      
+threads, arranged in groups (blocks). Each thread is given a unique thread ID, which is accessible within the GPU kernel through built-in variables. 
+CUDA defines the following built-in variables: `blockDim`, `blockIdx`, and `threadIdx`, which are predefined variables of type `dim3`. 
+`blockDim` contains the dimensions of each thread block, while `threadIdx` and `blockIdx` contain the index of the thread within its thread block and the thread block within the grid, respectively. 
+
+Using the thread's index we can access different GPU memory locations, either for loading or writing data.      
 Each thread has also a private local memory. NVIDIA's [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html) 
 page gives a good overview.
 
