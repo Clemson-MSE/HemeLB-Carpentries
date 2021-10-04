@@ -142,7 +142,7 @@ Before we carry onto how to launch a kernel, we need to discuss the memory hiera
 it is crucial to getting a CUDA code to actually run and work. In CUDA, the kernel is executed with the aid of CUDA
 threads, arranged in groups (blocks). Each thread is given a unique thread ID, which is accessible within the GPU kernel through built-in variables. 
 CUDA defines the following built-in variables: `blockDim`, `blockIdx`, and `threadIdx`, which are predefined variables of type `dim3`. 
-`blockDim` contains the dimensions of each thread block, while `threadIdx` and `blockIdx` contain the index of the thread within its thread block and the thread block within the grid, respectively. 
+`blockDim` contains the dimensions of each thread block, while `threadIdx` and `blockIdx` contain the index of the thread within its thread block and the thread block within the grid of blocks, respectively. 
 
 Using the thread's index we can access different GPU memory locations, either for loading or writing data.      
 Each thread has also a private local memory. NVIDIA's [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html) 
@@ -389,7 +389,7 @@ A more detailed description on the above tools can be provided from NVIDIA's CUD
 
 
 Figure: (a) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Nsight Systems provides a broad description of
-the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis is
+the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis in
 the example here is 3 time-steps of the LB algorithm. 
 
 <p align="center"><img src="../fig/06/ProfileKernelMemCopy.png" width="75%"/></p>
@@ -473,6 +473,9 @@ was developed using CUDA C++.
 > 
 > would result in running the simulation with 8 MPI tasks per node and only 4 GPUs per node. This means that
 > we encounter a situation of 2-to-1 CPUs to GPUs.  
+>
+> By using multiple CPU cores accessing the same GPU we can speed-up the corresponding part of the work, i.e. the work that needs to be completed on the host (CPU). The work on the device (GPU) should not be affected significantly. 
+>
 > 
 > Provide the timings for running the GPU code using a 2-to-1 and 4-to-1 situation. Report the scaling of the code,
 > as well as the performance (MLUPS per computing core and MLUPS per node, where for the later just divide the
