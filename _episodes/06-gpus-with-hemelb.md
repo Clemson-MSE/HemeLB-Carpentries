@@ -190,9 +190,10 @@ Remember that CUDA kernel launches don’t block the calling CPU thread. This me
 the control is returned to the CPU thread and the code will resume. In order to ensure that the GPU kernel has
 completed its task, a synchronsation barrier might be needed using `cudaDeviceSynchronize()`.
 
-NVIDIA's website provides plentiful discussions and simple  
+NVIDIA's website provides plentiful discussions and simple 
 [examples](https://developer.nvidia.com/blog/easy-introduction-cuda-c-and-c/) and guides on the NVIDIA 
-[CUDA Toolkit](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html). We will not 
+[CUDA Toolkit](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html). We will not go into
+durther details, however please feel free to check these out in your own time
 
 
 ## CUDA Streams and Concurrency 
@@ -354,7 +355,8 @@ nvcc CUDA_code.cu -o CUDA_code
 > ~~~
 > {: .source}
 >
-> Refer to the more complete example of the CUDA code located [here](), 
+> Refer to the more complete example of the CUDA code located 
+> [here](https://github.com/HemeLB-dev/HemeLB-Carpentries/blob/gh-pages/files/GPU_memory_challenge.cu), 
 > and;
 > 
 > - Identify the section of the code which refers to memory allocation
