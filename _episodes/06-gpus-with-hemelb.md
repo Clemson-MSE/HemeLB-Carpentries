@@ -452,14 +452,15 @@ was developed using CUDA C++.
 
 
 
-## 1-to-1 and 2-to-1
+## Using multiple CPUs to access the same GPU
 
-**EDIT ME**
+By using multiple CPU cores accessing the same GPU we can speed-up the corresponding part of the work, 
+i.e. the work that needs to be completed on the host (CPU). The work on the device (GPU) should not be affected significantly. 
 
 > ## Running a 2-to-1 and 4-to-1 relationship
 > 
 > We could also examine situations where multiple CPU cores (MPI tasks) use the same GPU. This can be achieved by
-> specifying the number of MPI tasks on the  nodes being different to the number of available GPUs. For example using the
+> specifying the number of MPI tasks on the nodes being different to the number of available GPUs. For example using the
 > job submission script from Juwels Booster and modifying the following lines.
 > 
 > ~~~
@@ -472,10 +473,7 @@ was developed using CUDA C++.
 > {: .source}
 > 
 > would result in running the simulation with 8 MPI tasks per node and only 4 GPUs per node. This means that
-> we encounter a situation of 2-to-1 CPUs to GPUs.  
->
-> By using multiple CPU cores accessing the same GPU we can speed-up the corresponding part of the work, i.e. the work that needs to be completed on the host (CPU). The work on the device (GPU) should not be affected significantly. 
->
+> we encounter a situation of 2-to-1 CPUs to GPUs. 
 > 
 > Provide the timings for running the GPU code using a 2-to-1 and 4-to-1 situation. Report the scaling of the code,
 > as well as the performance (MLUPS per computing core and MLUPS per node, where for the later just divide the
