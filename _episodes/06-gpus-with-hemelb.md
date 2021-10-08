@@ -135,17 +135,21 @@ __global__ void GPU_Cuda_Kernel_Name(kernel's_arguments)
 ~~~
 {: .source}
 
+
 ### GPU Memory Hierarchy - Memory Allocation in CUDA
 
 Before we carry onto how to launch a kernel, we need to discuss the memory hierarchy of a GPU, as an understanding of
 it is crucial to getting a CUDA code to actually run and work. In CUDA, the kernel is executed with the aid of CUDA
-threads, which represent the execution of the kernel. Every thread has an index which is used for calculating the
-memory address locations. Each thread has a private local memory, and may also access data from multiple memory spaces
-during their execution. NVIDIA's [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html) 
+threads, arranged in groups (blocks). Each thread is given a unique thread ID, which is accessible within the GPU kernel through built-in variables. 
+CUDA defines the following built-in variables: `blockDim`, `blockIdx`, and `threadIdx`, which are predefined variables of type `dim3`. 
+`blockDim` contains the dimensions of each thread block, while `threadIdx` and `blockIdx` contain the index of the thread within its thread block and the thread block within the grid of blocks, respectively. 
+
+Using the thread's index we can access different GPU memory locations, either for loading or writing data.      
+Each thread has also a private local memory. NVIDIA's [documentation](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html) 
 page gives a good overview.
 
 One thread is never enough though when dealing with GPUs, as threads come in thread blocks, 
-which can be executed in serial or parallel. Depending on the GPU you are utilising, a thread block can contain either
+which can be executed in serial or parallel. Depending on the GPU you are utilising, a thread block can contain a maximum of either
 512 or 1024 of these threads.
 
 Each thread block has shared memory visible to all threads of the block and with the same lifetime as the block. All
@@ -161,7 +165,8 @@ The GPU CUDA kernel is launched by using a specific syntax, the **triple angle b
 the compiler that the kernel that follows is a GPU kernel and will therefore be executed on the GPU. The information
 between the triple angle brackets is the execution configuration, which determines how many threads on the device (GPU) 
 will execute the kernel in parallel. These threads are arranged in what are thread blocks, hence the developer should
-specify how many threads there are per block.   
+specify how many threads there are per block. 
+The number of threads per block should be a round multiple of 32 (the warp size).
 
 An example of a launching a GPU CUDA kernel (`GPU_Cuda_Kernel_Name`) is as follows: 
 
@@ -384,7 +389,7 @@ A more detailed description on the above tools can be provided from NVIDIA's CUD
 
 
 Figure: (a) Profiling HemeLB using NVIDIA Nsight Systems on a laptop. Nsight Systems provides a broad description of
-the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis is
+the GPU code's performance (timeline with kernels' execution, memory copies, cuda streams etc). Focus of analysis in
 the example here is 3 time-steps of the LB algorithm. 
 
 <p align="center"><img src="../fig/06/ProfileKernelMemCopy.png" width="75%"/></p>
@@ -447,14 +452,15 @@ was developed using CUDA C++.
 
 
 
-## 1-to-1 and 2-to-1
+## Using multiple CPUs to access the same GPU
 
-**EDIT ME**
+By using multiple CPU cores accessing the same GPU we can speed-up the corresponding part of the work, 
+i.e. the work that needs to be completed on the host (CPU). The work on the device (GPU) should not be affected significantly. 
 
 > ## Running a 2-to-1 and 4-to-1 relationship
 > 
 > We could also examine situations where multiple CPU cores (MPI tasks) use the same GPU. This can be achieved by
-> specifying the number of MPI tasks on the  nodes being different to the number of available GPUs. For example using the
+> specifying the number of MPI tasks on the nodes being different to the number of available GPUs. For example using the
 > job submission script from Juwels Booster and modifying the following lines.
 > 
 > ~~~
@@ -467,7 +473,7 @@ was developed using CUDA C++.
 > {: .source}
 > 
 > would result in running the simulation with 8 MPI tasks per node and only 4 GPUs per node. This means that
-> we encounter a situation of 2-to-1 CPUs to GPUs.  
+> we encounter a situation of 2-to-1 CPUs to GPUs. 
 > 
 > Provide the timings for running the GPU code using a 2-to-1 and 4-to-1 situation. Report the scaling of the code,
 > as well as the performance (MLUPS per computing core and MLUPS per node, where for the later just divide the
